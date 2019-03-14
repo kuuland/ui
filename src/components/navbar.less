@@ -1,0 +1,27 @@
+.navbar {
+  position: fixed;
+  display: inline-block;
+  right: 0;
+  .item {
+    display: inline-block;
+    user-select: none;
+    cursor: pointer;
+  }
+  @userinfo-height: 32px;
+  .userinfo {
+    cursor: pointer;
+    height: @userinfo-height;
+    line-height: @userinfo-height;
+    display: inline-block;
+    .username {
+      padding: 0px 8px;
+    }
+  }
+
+}
+
+:global(.ant-dropdown-menu-item) {
+  >a>span {
+    margin-left: 5px;
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "org_table",
+  "type": "table",
+  "defaultSort": "Sort",
+  "pageMode": false,
+  "props": {
+    "urls": {
+      "list": "/api/org?range=ALL",
+      "remove": "/api/org"
+    },
+    "height": 680,
+    "columns": [
+      {
+        "dataIndex": "rowNo",
+        "display": false
+      },
+      {
+        "title": "组织名称",
+        "dataIndex": "Name",
+        "sorter": false
+      },
+      {
+        "title": "组织编码",
+        "dataIndex": "Code",
+        "sorter": false
+      },
+      {
+        "title": "排序",
+        "dataIndex": "Sort",
+        "filter": false,
+        "align": "center"
+      }
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "name": "param_modal",
+  "type": "form",
+  "container": [
+    {
+      "name": "_id",
+      "type": "hidden"
+    },
+    {
+      "name": "Code",
+      "type": "input",
+      "label": "参数编码",
+      "props": {
+        "span": 12,
+        "disabled": "{{_.get(rootValue, 'IsBuiltIn') === true}}"
+      }
+    },
+    {
+      "name": "Name",
+      "type": "input",
+      "label": "参数名称",
+      "props": {
+        "span": 12,
+        "disabled": "{{_.get(rootValue, 'IsBuiltIn') === true}}"
+      }
+    },
+    {
+      "name": "Value",
+      "type": "textarea",
+      "label": "参数值",
+      "props": {
+        "span": 24,
+        "disabled": "{{_.get(rootValue, 'IsBuiltIn') === true}}"
+      }
+    },
+    {
+      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "name": "IsBuiltIn",
+      "type": "switch",
+      "label": "系统内置",
+      "props": {
+        "span": 24,
+        "disabled": true
+      }
+    },
+    {
+      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "name": "CreatedBy.Name",
+      "type": "text",
+      "label": "创建人",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "name": "CreatedAt",
+      "type": "text",
+      "label": "创建时间",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "name": "UpdatedBy.Name",
+      "type": "text",
+      "label": "修改人",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "name": "UpdatedAt",
+      "type": "text",
+      "label": "修改时间",
+      "props": {
+        "span": 12
+      }
+    }
+  ]
+}

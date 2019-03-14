@@ -1,0 +1,46 @@
+{
+  "name": "org_modal",
+  "type": "form",
+  "container": [
+    {
+      "name": "_id",
+      "type": "hidden"
+    },
+    {
+      "name": "Pid",
+      "type": "treeselect",
+      "label": "上级组织",
+      "props": {
+        "expandAll": true,
+        "simpleMode": true,
+        "allowInput": true,
+        "url": "/api/org?range=ALL&sort=Sort&project=Code,Name,Pid",
+        "span": 24
+      }
+    },
+    {
+      "name": "Code",
+      "type": "input",
+      "label": "组织编码",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "Name",
+      "type": "input",
+      "label": "组织名称",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "Sort",
+      "type": "number",
+      "label": "排序",
+      "props": {
+        "span": 12
+      }
+    }
+  ]
+}

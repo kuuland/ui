@@ -1,1 +1,1 @@
-# Kuu UI
+# Kuu UI Framework

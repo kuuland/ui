@@ -1,0 +1,76 @@
+[
+  {
+    "ID": "-1",
+    "Code": "root",
+    "Name": "默认菜单",
+    "URI": "/",
+    "Pid": "",
+    "Icon": "file",
+    "Closeable": false
+  },
+  {
+    "Code": "dash",
+    "Name": "默认主页",
+    "URI": "/",
+    "Pid": "-1",
+    "Icon": "file",
+    "Closeable": false
+  },
+  {
+    "ID": "about",
+    "Code": "about",
+    "Name": "关于页面",
+    "URI": "/about",
+    "Icon": "file",
+    "Pid": "-1"
+  },
+  {
+    "ID": "test",
+    "Code": "test",
+    "Name": "测试页面",
+    "URI": "/test",
+    "Icon": "file",
+    "Pid": "-1"
+  },
+  {
+    "Code": "about-01",
+    "Name": "关于页面01",
+    "URI": "/about",
+    "Icon": "file",
+    "Pid": "about",
+    "Group": "关于组1"
+  },
+  {
+    "Code": "test-02",
+    "Name": "测试页面02",
+    "URI": "/test",
+    "Icon": "file",
+    "Pid": "test"
+  },
+  {
+    "ID": "about-03",
+    "Code": "about-03",
+    "Name": "关于页面03",
+    "URI": "/about",
+    "Icon": "file",
+    "Pid": "about",
+    "Group": "关于组2"
+  },
+  {
+    "ID": "about-05",
+    "Code": "about-05",
+    "Name": "关于页面05",
+    "URI": "/about",
+    "Icon": "file",
+    "Pid": "about",
+    "Group": "关于组1"
+  },
+  {
+    "ID": "test-04",
+    "Code": "test-04",
+    "Name": "测试页面024",
+    "URI": "/test",
+    "Icon": "file",
+    "Pid": "test"
+  }
+]

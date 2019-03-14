@@ -1,0 +1,112 @@
+{
+  "name": "menu_modal",
+  "type": "form",
+  "container": [
+    {
+      "name": "_id",
+      "type": "hidden"
+    },
+    {
+      "name": "Pid",
+      "type": "treeselect",
+      "label": "上级菜单",
+      "props": {
+        "expandAll": true,
+        "simpleMode": true,
+        "url": "/api/menu?range=ALL&sort=Sort&project=Name,Pid,Icon",
+        "span": 24
+      }
+    },
+    {
+      "name": "Type",
+      "type": "radio",
+      "label": "菜单类型",
+      "props": {
+        "url": "/api/dict?size=1&cond={\"Code\":\"sys_menu_type\"}",
+        "span": 12
+      }
+    },
+    {
+      "name": "Name",
+      "type": "input",
+      "label": "菜单名称",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "URI",
+      "type": "input",
+      "label": "菜单链接",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "IsLink",
+      "type": "switch",
+      "label": "是否外链",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "Sort",
+      "type": "number",
+      "label": "排序",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "Code",
+      "type": "input",
+      "label": "权限标识",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "Icon",
+      "type": "text",
+      "label": "菜单图标",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "Disable",
+      "type": "radio",
+      "label": "可见性",
+      "props": {
+        "span": 12,
+        "options": [
+          {
+            "value": "1",
+            "label": "显示"
+          },
+          {
+            "value": "2",
+            "label": "隐藏"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IsDefaultOpen",
+      "type": "switch",
+      "label": "默认打开",
+      "props": {
+        "span": 12
+      }
+    },
+    {
+      "name": "Closeable",
+      "type": "switch",
+      "label": "可关闭",
+      "props": {
+        "span": 12
+      }
+    }
+  ]
+}
