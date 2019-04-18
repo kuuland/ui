@@ -51,7 +51,6 @@ class Login extends React.Component {
   }
 
   handleLoginRedirect () {
-    // const { loginData } = this.state
     const redirectUri = _.get(this.props, 'location.query.redirect_uri')
     if (!redirectUri) {
       router.push('/')
@@ -89,6 +88,7 @@ class Login extends React.Component {
         <OrgModal
           source='login'
           visible={this.state.orgModalVisible}
+          loginData={this.state.loginData}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           onError={() => {

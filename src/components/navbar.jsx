@@ -50,12 +50,69 @@ class Navbar extends React.Component {
       avatarProps.src = loginData.Avatar
     } else {
       avatarProps.icon = 'user'
-      // avatarProps.style = { backgroundColor: '#87d068' }
+    }
+    const rawItems = []
+    if (_.get(loginOrg.Name)) {
+      rawItems.push(
+        <div
+          key={'org'}
+          className={styles.item}
+          onClick={e => this.setState({ orgModalVisible: true })}
+        >
+          <Icon type='home' style={{ fontSize: 17 }} /> {loginOrg.Name}
+        </div>
+      )
+    }
+    rawItems.push(
+      <div className={styles.item} key={'username'}>
+        <Dropdown
+          overlay={
+            <Menu onClick={this.handleClick}>
+              <Menu.Item key={'userinfo'}>
+                <Icon type='user' />{window.L('个人中心')}
+              </Menu.Item>
+              <Menu.Item key={'password'}>
+                <Icon type='lock' />{window.L('修改密码')}
+              </Menu.Item>
+              <Menu.Divider />
+              <Menu.Item key={'logout'}>
+                <Icon type='logout' />{window.L('退出登录')}
+              </Menu.Item>
+              {menusTree.length > 1 && <Menu.Divider />}
+              {menusTree.length > 1 && menusTree.map((item, index) => {
+                let theme = 'outlined'
+                if (index === activeMenuIndex) {
+                  theme = 'filled'
+                }
+                return (
+                  <Menu.Item key={`${menuKeyPrefix}${index}`}>
+                    <Icon type='check-circle' theme={theme} />{window.L(item.Name)}
+                  </Menu.Item>
+                )
+              })}
+            </Menu>
+          }
+          placement='bottomRight'
+        >
+          <div className={styles.userinfo}>
+            <Avatar {...avatarProps} className={styles.avatar} />
+            <span className={styles.username}>{loginData.Name}</span>
+          </div>
+        </Dropdown>
+      </div>
+    )
+    const items = []
+    for (let i = 0; i < rawItems.length; i++) {
+      items.push(rawItems[i])
+      if (i !== rawItems.length - 1) {
+        items.push(<Divider key={i} type='vertical' />)
+      }
     }
     return (
       <div className={styles.navbar}>
         <OrgModal
           visible={this.state.orgModalVisible}
+          loginData={loginData}
           onOk={loginOrg => {
             window.g_app._store.dispatch({
               type: 'user/LOGIN_ORG',
@@ -69,44 +126,7 @@ class Navbar extends React.Component {
             this.handleLogout()
           }}
         />
-        <div className={styles.item} onClick={e => this.setState({ orgModalVisible: true })}><Icon type='home' style={{ fontSize: 17 }} /> {loginOrg.Name}</div>
-        <Divider type='vertical' />
-        <div className={styles.item}>
-          <Dropdown
-            overlay={
-              <Menu onClick={this.handleClick}>
-                <Menu.Item key={'userinfo'}>
-                  <Icon type='user' />{window.L('个人中心')}
-                </Menu.Item>
-                <Menu.Item key={'password'}>
-                  <Icon type='lock' />{window.L('修改密码')}
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item key={'logout'}>
-                  <Icon type='logout' />{window.L('退出登录')}
-                </Menu.Item>
-                {menusTree.length > 1 && <Menu.Divider />}
-                {menusTree.length > 1 && menusTree.map((item, index) => {
-                  let theme = 'outlined'
-                  if (index === activeMenuIndex) {
-                    theme = 'filled'
-                  }
-                  return (
-                    <Menu.Item key={`${menuKeyPrefix}${index}`}>
-                      <Icon type='check-circle' theme={theme} />{window.L(item.Name)}
-                    </Menu.Item>
-                  )
-                })}
-              </Menu>
-            }
-            placement='bottomRight'
-          >
-            <div className={styles.userinfo}>
-              <Avatar {...avatarProps} className={styles.avatar} />
-              <span className={styles.username}>{loginData.Name}</span>
-            </div>
-          </Dropdown>
-        </div>
+        {items}
       </div>
     )
   }

@@ -17,7 +17,7 @@ class OrgModal extends React.Component {
   fetchOrgs () {
     this.setState({ orgs: undefined, orgID: undefined }, async () => {
       const orgs = await get('/api/org/list')
-      if (_.isEmpty(orgs)) {
+      if (_.isEmpty(orgs) && !_.get(this.props.loginData, 'IsBuiltIn', false)) {
         if (_.isFunction(this.props.onError)) {
           this.props.onError()
         } else {
@@ -31,7 +31,7 @@ class OrgModal extends React.Component {
         visible = true
       }
       this.setState({ orgs, orgID: defaultOrgID, visible: visible }, () => {
-        if (_.size(orgs) === 1 && this.props.source === 'login') {
+        if (_.size(orgs) <= 1 && this.props.source === 'login') {
           this.handleOk()
         }
       })
@@ -45,13 +45,16 @@ class OrgModal extends React.Component {
   }
 
   handleOk () {
-    if (this.state.loading || !this.state.orgID) {
+    if (this.state.loading) {
       return
     }
     this.setState({ loading: true }, async () => {
-      const loginOrg = await post('/api/org/login', { org_id: this.state.orgID })
-      if (!loginOrg) {
-        return
+      let loginOrg = {}
+      if (this.state.orgID) {
+        loginOrg = await post('/api/org/login', { org_id: this.state.orgID })
+        if (!loginOrg) {
+          return
+        }
       }
       this.setState({ orgs: undefined, orgID: undefined, loading: false, visible: false })
       if (_.isFunction(this.props.onOk)) {
@@ -63,7 +66,8 @@ class OrgModal extends React.Component {
   }
 
   render () {
-    const { orgs = [], orgID, loading, visible } = this.state
+    const { orgID, loading, visible } = this.state
+    const orgs = this.state.orgs || []
     return (
       <Modal
         width={400}
