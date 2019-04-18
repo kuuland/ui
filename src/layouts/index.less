@@ -1,20 +1,24 @@
 .layout {
   height: 100vh;
   @header-height: 50px;
+
   .header {
     height: @header-height;
     line-height: @header-height;
     width: 100%;
     padding: 0px;
     color: #fff !important;
-    background: #4369B9;
+    background: #4963a2;
+
     >div {
       display: inline-block;
     }
   }
+
   .content {
     min-height: 280px;
   }
+
   .sider {
     overflow-x: hidden;
     overflow-y: auto;
@@ -23,71 +27,101 @@
     box-shadow: 1px 0 8px rgba(0, 21, 41, 0.25);
     background: #f0f2f5;
     display: flex;
+
     :global(.ant-layout-sider-children) {
       width: 100%;
     }
+
     height: calc(100vh - @header-height);
   }
+
   .logo {
     width: 200px;
     color: #fff !important;
     text-align: center;
+
     >div {
       display: flex;
       justify-content: center;
       align-items: center;
     }
+
     .appName {
       display: inline-block;
       font-size: 20px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       font-weight: 600;
+      width: calc(100% - 16px);
     }
   }
+
   .menu {
     overflow-x: hidden;
     overflow-y: auto;
     flex: 1 1;
   }
+
   .trigger {
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
     transition: color .3s;
     z-index: 1;
-    margin-left: 16px;
     position: relative;
   }
+
   .trigger:hover {
     color: #1890ff;
   }
+
   .menuTitle {
     user-select: none;
   }
-  .menuTitle>i{
+
+  .menuTitle>i {
     padding-left: 10px;
   }
+
   :global {
     .ant-layout {
       background: #fff;
     }
+
     .ant-tabs-bar {
       margin: 0;
+      padding-top: 5px;
     }
+
     .ant-tabs-content {
-      padding: 10px;
+      padding: 5px;
+      height: calc(100% - 45px);
+
+      .ant-tabs-tabpane.ant-tabs-tabpane-active {
+        height: 100%;
+
+        >div {
+          height: inherit;
+        }
+      }
     }
+
     .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
       border-radius: 0;
     }
+
     @menu-height: 35px;
-    .ant-menu-sub.ant-menu-inline > .ant-menu-item, .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+
+    .ant-menu-sub.ant-menu-inline>.ant-menu-item,
+    .ant-menu-sub.ant-menu-inline>.ant-menu-submenu>.ant-menu-submenu-title {
       height: @menu-height;
       line-height: @menu-height;
     }
+
     .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab:first-child {
       margin-left: 2px;
     }
-    .ant-menu-inline .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title {
+
+    .ant-menu-inline .ant-menu-item,
+    .ant-menu-inline .ant-menu-submenu-title {
       width: 100%;
     }
   }
@@ -96,30 +130,28 @@
 :global {
   .theme-light {
     background: #f0f2f5;
+
     .theme-header {
-      color: rgba(0,0,0,.65);
+      color: rgba(0, 0, 0, .65);
     }
+
     .theme-logo {
       color: #1890ff;
       border-bottom: 1px solid #e8e8e8;
     }
   }
+
   .theme-dark {
     color: #fff;
+
     .theme-trigger:hover {
       color: #fff;
     }
   }
+
   .ant-menu-inline,
   .ant-menu-vertical,
   .ant-menu-vertical-left {
     border-right: 0px;
-  }
-  .fano-table .fano-table-actions {
-    margin: 0;
-    margin-bottom: 10px;
-  }
-  .fano-table .fano-component-item .fano-component-control {
-    padding: 0;
   }
 }
