@@ -184,7 +184,7 @@ class BasicLayout extends React.Component {
             theme={theme}
             mode='inline'
             selectedKeys={[_.get(activePane, '_id')]}
-            inlineIndent={20}
+            inlineIndent={6}
             openKeys={openKeys}
             onOpenChange={openKeys => {
               this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
