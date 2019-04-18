@@ -167,50 +167,54 @@ class BasicLayout extends React.Component {
     const menuChildren = this.renderMenuChildren(_.get(currentTree, `[${activeMenuIndex}].Children`, []))
     const theme = 'light' // light、dark
     return (
-      <Layout className={`${styles.layout} theme-${theme}`} style={{ marginLeft: this.state.collapsed ? 0 : 200 }}>
-        <Sider
-          theme={theme}
-          collapsedWidth={0}
-          trigger={null}
-          collapsible
-          collapsed={this.state.collapsed}
-          className={styles.sider}
-        >
+      <Layout className={`${styles.layout} theme-${theme}`}>
+        <Header className={`${styles.header} theme-header`}>
           <div className={`${styles.logo} theme-logo`}>
-            <span>FHO</span>
+            <div>
+              <span className={`${styles.appName}`}>FHO</span>
+              <Icon
+                className={`${styles.trigger} theme-trigger`}
+                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                onClick={this.toggle}
+              />
+            </div>
           </div>
-          <Menu
-            className={`${styles.menu}`}
-            theme={theme}
-            mode='inline'
-            selectedKeys={[_.get(activePane, '_id')]}
-            inlineIndent={6}
-            openKeys={openKeys}
-            onOpenChange={openKeys => {
-              this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
-            }}
-          >
-            {menuChildren}
-          </Menu>
-        </Sider>
+          <Navbar />
+        </Header>
         <Layout>
-          <Header className={`${styles.header} theme-header`}>
-            <Icon
-              className={`${styles.trigger} theme-trigger`}
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
-            <Navbar />
-          </Header>
-          <Content className={styles.content}>
-            <LayoutTabs
-              activeKey={_.get(activePane, '_id')}
-              panes={this.props.panes || []}
-              onChange={this.handleTabsChange}
-              onContext={this.handleTabsContext}
-              onEdit={this.handleTabsRemove}
-            />
-          </Content>
+          <Sider
+            theme={theme}
+            collapsedWidth={0}
+            trigger={null}
+            collapsible
+            collapsed={this.state.collapsed}
+            className={styles.sider}
+          >
+            <Menu
+              className={`${styles.menu}`}
+              theme={theme}
+              mode='inline'
+              selectedKeys={[_.get(activePane, '_id')]}
+              inlineIndent={6}
+              openKeys={openKeys}
+              onOpenChange={openKeys => {
+                this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
+              }}
+            >
+              {menuChildren}
+            </Menu>
+          </Sider>
+          <Layout>
+            <Content className={styles.content}>
+              <LayoutTabs
+                activeKey={_.get(activePane, '_id')}
+                panes={this.props.panes || []}
+                onChange={this.handleTabsChange}
+                onContext={this.handleTabsContext}
+                onEdit={this.handleTabsRemove}
+              />
+            </Content>
+          </Layout>
         </Layout>
       </Layout>
     )

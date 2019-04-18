@@ -50,6 +50,7 @@ class Navbar extends React.Component {
       avatarProps.src = loginData.Avatar
     } else {
       avatarProps.icon = 'user'
+      // avatarProps.style = { backgroundColor: '#87d068' }
     }
     return (
       <div className={styles.navbar}>

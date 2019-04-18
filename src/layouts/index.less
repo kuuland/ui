@@ -1,46 +1,45 @@
 .layout {
   height: 100vh;
-  @header-height: 45px;
+  @header-height: 50px;
   .header {
     height: @header-height;
     line-height: @header-height;
-    position: fixed;
-    z-index: 1;
     width: 100%;
     padding: 0px;
-    color: #fff;
-    background: #fff;
+    color: #fff !important;
+    background: #4369B9;
     >div {
       display: inline-block;
     }
   }
   .content {
-    margin-top: @header-height;
     min-height: 280px;
   }
   .sider {
     overflow-x: hidden;
     overflow-y: auto;
-    position: fixed;
-    z-index: 1;
     left: 0;
-    border-right: 1px solid #e8e8e8;
+    margin-right: 2px;
+    box-shadow: 1px 0 8px rgba(0, 21, 41, 0.25);
+    background: #f0f2f5;
     display: flex;
     :global(.ant-layout-sider-children) {
       width: 100%;
     }
-    height: 100vh;
+    height: calc(100vh - @header-height);
   }
-  @logo-height: @header-height + 1px;
   .logo {
-    height: @logo-height;
-    background: rgba(255, 255, 255, .2);
-    color: #fff;
-    line-height: @logo-height;
+    width: 200px;
+    color: #fff !important;
     text-align: center;
-    >span {
+    >div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .appName {
       display: inline-block;
-      font-size: 16px;
+      font-size: 20px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       font-weight: 600;
     }
@@ -51,11 +50,11 @@
     flex: 1 1;
   }
   .trigger {
-    font-size: 18px;
-    padding: 0 24px;
+    font-size: 16px;
     cursor: pointer;
     transition: color .3s;
     z-index: 1;
+    margin-left: 16px;
     position: relative;
   }
   .trigger:hover {
@@ -85,14 +84,8 @@
       height: @menu-height;
       line-height: @menu-height;
     }
-    .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-nav-container {
-      height: 32px;
-    }
-    .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
-      line-height: 30px;
-    }
     .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab:first-child {
-      border-left: 0;
+      margin-left: 2px;
     }
     .ant-menu-inline .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title {
       width: 100%;
