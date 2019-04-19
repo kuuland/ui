@@ -17,9 +17,9 @@ class IframePage extends React.Component {
     return (
       <div className={styles.content}>
         <div className={styles.skeleton} style={{ display: this.state.loading ? 'block' : 'none' }}>
-          <Skeleton loading={this.state.loading} paragraph={{ rows: _.random(3, 6) }} avatar={{ shape: 'square', size: 'large' }} />
-          <Skeleton loading={this.state.loading} paragraph={{ rows: _.random(3, 6) }} avatar={{ shape: 'square', size: 'large' }} />
-          <Skeleton loading={this.state.loading} paragraph={{ rows: _.random(4, 8) }} avatar={{ shape: 'square', size: 'large' }} />
+          <Skeleton loading={this.state.loading} paragraph={{ rows: _.random(3, 5) }} avatar={{ shape: 'circle', size: 'large' }} active />
+          <Skeleton loading={this.state.loading} paragraph={{ rows: _.random(3, 5) }} avatar={{ shape: 'circle', size: 'large' }} active />
+          <Skeleton loading={this.state.loading} paragraph={{ rows: _.random(2, 4) }} avatar={{ shape: 'circle', size: 'large' }} active />
         </div>
         <iframe
           className={styles.iframe}
