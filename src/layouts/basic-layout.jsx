@@ -40,17 +40,35 @@ class BasicLayout extends React.Component {
       const name = key !== 'undefined' ? key : null
       let ret = []
       for (const value of data) {
+        const iconStyle = {}
+        if (this.state.collapsed) {
+          iconStyle.paddingLeft = 0
+        }
         if (value.Children) {
           const sub = this.renderMenuChildren(value.Children)
           if (Array.isArray(sub) && sub.length > 0) {
             ret.push(
-              <Menu.SubMenu key={value._id} title={<span className={styles.menuTitle}><Icon type={value.Icon} /><span>{window.L(value.Name)}</span></span>}>{sub}</Menu.SubMenu>
+              <Menu.SubMenu
+                key={value._id}
+                title={
+                  <span className={styles.menuTitle}>
+                    <Icon type={value.Icon} style={iconStyle} />
+                    <span>{window.L(value.Name)}</span>
+                  </span>
+                }
+              >
+                {sub}
+              </Menu.SubMenu>
             )
           }
         } else {
           ret.push(
-            <Menu.Item key={value._id} onClick={() => this.handleMenuItemClick(value)} className={styles.menuTitle}>
-              <Icon type={value.Icon} />
+            <Menu.Item
+              key={value._id}
+              onClick={() => this.handleMenuItemClick(value)}
+              className={styles.menuTitle}
+            >
+              <Icon type={value.Icon} style={iconStyle} />
               <span>{window.L(value.Name)}</span>
             </Menu.Item>
           )
@@ -196,6 +214,7 @@ class BasicLayout extends React.Component {
               mode='inline'
               selectedKeys={[_.get(activePane, '_id')]}
               inlineIndent={6}
+              inlineCollapsed={this.state.collapsed}
               openKeys={openKeys}
               onOpenChange={openKeys => {
                 this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
