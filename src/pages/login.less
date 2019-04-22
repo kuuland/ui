@@ -7,20 +7,27 @@
   background: #f0f2f5;
   flex-direction: column;
   align-items: center;
+  .content {
+    background-color: #fff;
+    color: #454545;
+    margin-top: calc((100vh - 620px)/ 2);
+    box-shadow: 0 0 10px rgba(61,61,61,.25);
+  }
   .title {
-    margin-top: 15vh;
     width: @width;
     text-align: center;
     padding: 20px;
     font-size: 33px;
-    color: rgba(0,0,0,.85);
     font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
     font-weight: 600;
   }
+  .welcome {
+    text-align: center;
+    color: #8b959c;
+    font-size: 1.2em;
+  }
   .loginForm {
-    padding: 30px;
-    padding-bottom: 10px;
-    background: #fff;
+    padding: 10px 30px;
     height: fit-content;
     width: @width;
   }
@@ -40,8 +47,12 @@
 @media (max-width: 768px) {
   .login {
     background: #fff;
+    .content {
+      box-shadow: none;
+      margin-top: calc((100vh - 500px)/ 2);
+    }
     .loginForm {
-      padding: 30px 40px;
+      padding: 10px 40px;
     }
   }
 }

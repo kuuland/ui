@@ -96,39 +96,42 @@ class Login extends React.Component {
             this.handleCancel()
           }}
         />
-        <div className={styles.title}>{config.appName}</div>
-        <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
-          <Form.Item>
-            {getFieldDecorator('username', {
-              rules: [{ required: true, message: window.L('请输入你的登录账号') }]
-            })(
-              <Input
-                prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
-                placeholder={window.L('账号')}
-              />
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('password', {
-              rules: [{ required: true, message: window.L('请输入你的登录密码') }]
-            })(
-              <Input
-                prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
-                type='password' placeholder={window.L('密码')}
-              />
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('remember', {
-              valuePropName: 'checked',
-              initialValue: true
-            })(
-              <Checkbox>{window.L('记住我')}</Checkbox>
-            )}
-            <a className={styles.forgot} href=''>{window.L('忘记密码')}</a>
-            <Button type='primary' htmlType='submit' loading={this.state.loginLoading} className={styles.submit}>{window.L('登录')}</Button>
-          </Form.Item>
-        </Form>
+        <div className={styles.content}>
+          <div className={styles.title}>{config.appName}</div>
+          <p className={styles.welcome} style={{ display: styles.welcome ? 'block' : 'none' }}>{config.welcome}</p>
+          <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
+            <Form.Item>
+              {getFieldDecorator('username', {
+                rules: [{ required: true, message: window.L('请输入你的登录账号') }]
+              })(
+                <Input
+                  prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  placeholder={window.L('账号')}
+                />
+              )}
+            </Form.Item>
+            <Form.Item>
+              {getFieldDecorator('password', {
+                rules: [{ required: true, message: window.L('请输入你的登录密码') }]
+              })(
+                <Input
+                  prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  type='password' placeholder={window.L('密码')}
+                />
+              )}
+            </Form.Item>
+            <Form.Item>
+              {getFieldDecorator('remember', {
+                valuePropName: 'checked',
+                initialValue: true
+              })(
+                <Checkbox>{window.L('记住我')}</Checkbox>
+              )}
+              <a className={styles.forgot} href=''>{window.L('忘记密码')}</a>
+              <Button type='primary' htmlType='submit' loading={this.state.loginLoading} className={styles.submit}>{window.L('登录')}</Button>
+            </Form.Item>
+          </Form>
+        </div>
         <div className={styles.footer}>
           Copyright <Icon type='copyright' /> {config.copyRight}
         </div>
