@@ -7,6 +7,7 @@ import { Layout, Menu, Icon } from 'antd'
 import styles from './index.less'
 import LayoutTabs from '@/components/layout-tabs'
 import Navbar from '@/components/navbar'
+import config from '@/config'
 const { Header, Sider, Content } = Layout
 
 class BasicLayout extends React.Component {
@@ -189,7 +190,7 @@ class BasicLayout extends React.Component {
         <Header className={`${styles.header} theme-header`}>
           <div className={`${styles.logo} theme-logo`}>
             <div>
-              <span className={`${styles.appName}`}>FHO</span>
+              <span className={`${styles.appName}`}>{config.appName}</span>
               <Icon
                 className={`${styles.trigger} theme-trigger`}
                 type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}

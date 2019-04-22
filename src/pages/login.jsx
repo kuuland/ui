@@ -96,7 +96,7 @@ class Login extends React.Component {
             this.handleCancel()
           }}
         />
-        <div className={styles.title}>FHO</div>
+        <div className={styles.title}>{config.appName}</div>
         <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
           <Form.Item>
             {getFieldDecorator('username', {

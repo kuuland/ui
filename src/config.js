@@ -1,4 +1,5 @@
 export default {
+  appName: 'Kuu',
   title: 'Kuu UI',
   simplePages: ['/login'],
   loginPathname: '/login',
