@@ -122,7 +122,9 @@ class RoleDetail extends React.Component {
       for (const index in orgs) {
         const item = orgs[index]
         const expandedKeys = [ item._id ]
-        fall(item.Children, expandedKeys)
+        if (!_.isEmpty(item.Children)) {
+          fall(item.Children, expandedKeys)
+        }
         splitOrgExpandedKeys[index] = expandedKeys
       }
       const orgDataPrivileges = _.chain(record.DataPrivileges).groupBy('OrgID').mapValues(item => _.head(item)).value()
@@ -131,7 +133,9 @@ class RoleDetail extends React.Component {
   }
 
   shieldLastLevel (orgs) {
+    let levelCount = 0
     const fall = (values) => {
+      levelCount++
       const arr = []
       for (const item of values) {
         if (!_.isEmpty(item.Children)) {
@@ -144,8 +148,8 @@ class RoleDetail extends React.Component {
       }
       return arr
     }
-    orgs = fall(orgs)
-    return orgs
+    const after = fall(orgs)
+    return levelCount <= 1 ? orgs : after
   }
 
   async fetchMetadata () {
