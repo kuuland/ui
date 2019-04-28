@@ -39,6 +39,7 @@
     width: 200px;
     color: #fff !important;
     text-align: center;
+    position: relative;
 
     >div {
       display: flex;
@@ -48,10 +49,10 @@
 
     .appName {
       display: inline-block;
-      font-size: 20px;
+      font-size: 24px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       font-weight: 600;
-      width: calc(100% - 16px);
+      width: 100%;
     }
   }
 
@@ -62,11 +63,12 @@
   }
 
   .trigger {
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
     transition: color .3s;
     z-index: 1;
-    position: relative;
+    position: absolute;
+    left: 20px;
   }
 
   .trigger:hover {

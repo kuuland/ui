@@ -4,7 +4,7 @@ import router from 'umi/router'
 import _ from 'lodash'
 import { Form, Icon, Input, Button, Checkbox, message } from 'antd'
 import styles from './login.less'
-import { post } from '@/utils/request'
+import { get, post } from '@/utils/request'
 import OrgModal from '@/components/org-modal'
 import config from '@/config'
 
@@ -45,9 +45,20 @@ class Login extends React.Component {
           this.setState({ loginLoading: false })
           return
         }
+        // 配合后端组织自动登录
+        const loginOrg = await this.checkAutoOrgLogin()
+        if (loginOrg && loginOrg._id) {
+          this.handleOk(loginOrg, data)
+          return
+        }
         this.setState({ loginData: data, orgModalVisible: true })
       })
     })
+  }
+
+  async checkAutoOrgLogin () {
+    const data = await get('/api/org/current')
+    return data
   }
 
   handleLoginRedirect () {
@@ -73,10 +84,10 @@ class Login extends React.Component {
     })
   }
 
-  handleOk (loginOrg) {
+  handleOk (loginOrg, loginData) {
     window.g_app._store.dispatch({
       type: 'user/LOGIN',
-      payload: { loginData: this.state.loginData, loginOrg }
+      payload: { loginData: loginData || this.state.loginData, loginOrg }
     })
     this.handleLoginRedirect()
   }
@@ -97,7 +108,7 @@ class Login extends React.Component {
           }}
         />
         <div className={styles.content}>
-          <div className={styles.title}>{config.appName}</div>
+          <div className={styles.title}>{config.fullName}</div>
           <p className={styles.welcome} style={{ display: styles.welcome ? 'block' : 'none' }}>{config.welcome}</p>
           <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
             <Form.Item>

@@ -6,5 +6,5 @@ import DocumentTitle from 'react-document-title'
 export default props => {
   const isSimple = config.simplePages.indexOf(props.location.pathname) >= 0
   const children = isSimple ? <SimpleLayout>{props.children}</SimpleLayout> : <BasicLayout>{props.children}</BasicLayout>
-  return <DocumentTitle title={config.title}>{children}</DocumentTitle>
+  return <DocumentTitle title={config.htmlTitle}>{children}</DocumentTitle>
 }

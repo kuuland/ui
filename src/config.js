@@ -1,6 +1,7 @@
 export default {
-  appName: 'Kuu',
-  title: 'Kuu UI',
+  shortName: 'Kuu',
+  fullName: 'Kuu UI',
+  htmlTitle: 'Kuu UI',
   simplePages: ['/login'],
   loginPathname: '/login',
   storageTokenKey: 'token',
