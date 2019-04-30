@@ -2,6 +2,12 @@
   height: 100vh;
   @header-height: 50px;
 
+  .loadingMask {
+    height: 100vh;
+    padding: 0 15px;
+    background: #fff;
+  }
+
   .header {
     height: @header-height;
     line-height: @header-height;
@@ -84,11 +90,6 @@
   }
 
   :global {
-    .ant-skeleton {
-      height: 100vh;
-      padding: 0 15px;
-      background: #fff;
-    }
     .ant-layout {
       background: #fff;
     }
@@ -101,6 +102,7 @@
     .ant-tabs-content {
       padding: 5px;
       height: calc(100% - 45px);
+      overflow: auto;
 
       .ant-tabs-tabpane.ant-tabs-tabpane-active {
         height: 100%;

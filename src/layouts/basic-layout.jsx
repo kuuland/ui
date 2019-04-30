@@ -191,6 +191,7 @@ class BasicLayout extends React.Component {
           active
           loading={!logged}
           paragraph={{ rows: 10 }}
+          className={styles.loadingMask}
         >
           <Header className={`${styles.header} theme-header`}>
             <div className={`${styles.logo} theme-logo`}>
