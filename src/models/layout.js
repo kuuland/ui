@@ -66,7 +66,7 @@ export default {
   effects: {
     * loadMenus ({ payload }, { put, call, select }) {
       const data = yield call(list, 'menu', { range: 'ALL', sort: 'Sort' })
-      const menus = Array.isArray(data.list) ? data.list : []
+      const menus = Array.isArray(_.get(data, 'list')) ? data.list : []
       yield put({ type: 'SET_MENUS', payload: menus })
     },
     * addPane ({ payload: value }, { put, select }) {
@@ -113,17 +113,17 @@ export default {
       const { dispatch, history } = ctx
       const listener = route => {
         if (route.pathname !== config.loginPathname) {
-          // 加载菜单
           const { layout, user } = window.g_app._store.getState()
-          if (!layout.menus) {
-            dispatch({
-              type: 'loadMenus'
-            })
-          }
           // 校验令牌
           if (!user.loginData) {
             dispatch({
               type: 'user/valid'
+            })
+          }
+          // 加载菜单
+          if (!layout.menus) {
+            dispatch({
+              type: 'loadMenus'
             })
           }
         }

@@ -3,7 +3,7 @@ import _ from 'lodash'
 import router from 'umi/router'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
-import { Layout, Menu, Icon } from 'antd'
+import { Layout, Menu, Icon, Skeleton } from 'antd'
 import styles from './index.less'
 import LayoutTabs from '@/components/layout-tabs'
 import Navbar from '@/components/navbar'
@@ -178,7 +178,7 @@ class BasicLayout extends React.Component {
   }
 
   render () {
-    const { menusTree = [], activeMenuIndex, activePane, openKeys = [] } = this.props
+    const { menusTree = [], activeMenuIndex, activePane, openKeys = [], loginData } = this.props
     if (activePane && activePane._id && !this.panesContent[activePane._id]) {
       this.cacheMenuPaneContent(activePane)
     }
@@ -187,58 +187,68 @@ class BasicLayout extends React.Component {
     const theme = 'light' // light、dark
     return (
       <Layout className={`${styles.layout} theme-${theme}`}>
-        <Header className={`${styles.header} theme-header`}>
-          <div className={`${styles.logo} theme-logo`}>
-            <div>
-              <Icon
-                className={`${styles.trigger} theme-trigger`}
-                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                onClick={this.toggle}
-              />
-              <span className={`${styles.appName}`}>{config.shortName}</span>
+        <Skeleton
+          active
+          loading={!loginData}
+          paragraph={{ rows: 10 }}
+        >
+          <Header className={`${styles.header} theme-header`}>
+            <div className={`${styles.logo} theme-logo`}>
+              <div>
+                <Icon
+                  className={`${styles.trigger} theme-trigger`}
+                  type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                  onClick={this.toggle}
+                />
+                <span className={`${styles.appName}`}>{config.shortName}</span>
+              </div>
             </div>
-          </div>
-          <Navbar />
-        </Header>
-        <Layout>
-          <Sider
-            theme={theme}
-            collapsedWidth={0}
-            trigger={null}
-            collapsible
-            collapsed={this.state.collapsed}
-            className={styles.sider}
-          >
-            <Menu
-              className={`${styles.menu}`}
-              theme={theme}
-              mode='inline'
-              selectedKeys={[_.get(activePane, '_id')]}
-              inlineIndent={6}
-              inlineCollapsed={this.state.collapsed}
-              openKeys={openKeys}
-              onOpenChange={openKeys => {
-                this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
-              }}
-            >
-              {menuChildren}
-            </Menu>
-          </Sider>
+            <Navbar />
+          </Header>
           <Layout>
-            <Content className={styles.content}>
-              <LayoutTabs
-                activeKey={_.get(activePane, '_id')}
-                panes={this.props.panes || []}
-                onChange={this.handleTabsChange}
-                onContext={this.handleTabsContext}
-                onEdit={this.handleTabsRemove}
-              />
-            </Content>
+            <Sider
+              theme={theme}
+              collapsedWidth={0}
+              trigger={null}
+              collapsible
+              collapsed={this.state.collapsed}
+              className={styles.sider}
+            >
+              <Menu
+                className={`${styles.menu}`}
+                theme={theme}
+                mode='inline'
+                selectedKeys={[_.get(activePane, '_id')]}
+                inlineIndent={6}
+                inlineCollapsed={this.state.collapsed}
+                openKeys={openKeys}
+                onOpenChange={openKeys => {
+                  this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
+                }}
+              >
+                {menuChildren}
+              </Menu>
+            </Sider>
+            <Layout>
+              <Content className={styles.content}>
+                <LayoutTabs
+                  activeKey={_.get(activePane, '_id')}
+                  panes={this.props.panes || []}
+                  onChange={this.handleTabsChange}
+                  onContext={this.handleTabsContext}
+                  onEdit={this.handleTabsRemove}
+                />
+              </Content>
+            </Layout>
           </Layout>
-        </Layout>
+        </Skeleton>
       </Layout>
     )
   }
 }
 
-export default withRouter(connect(state => state.layout || {})(BasicLayout))
+export default withRouter(connect(state => {
+  const ret = state.layout || {}
+  Object.assign(ret, _.pick(state.user, ['loginData', 'loginOrg']))
+  return ret
+})(BasicLayout))
