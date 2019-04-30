@@ -178,7 +178,7 @@ class BasicLayout extends React.Component {
   }
 
   render () {
-    const { menusTree = [], activeMenuIndex, activePane, openKeys = [], loginData } = this.props
+    const { menusTree = [], activeMenuIndex, activePane, openKeys = [], logged } = this.props
     if (activePane && activePane._id && !this.panesContent[activePane._id]) {
       this.cacheMenuPaneContent(activePane)
     }
@@ -189,7 +189,7 @@ class BasicLayout extends React.Component {
       <Layout className={`${styles.layout} theme-${theme}`}>
         <Skeleton
           active
-          loading={!loginData}
+          loading={!logged}
           paragraph={{ rows: 10 }}
         >
           <Header className={`${styles.header} theme-header`}>
@@ -249,6 +249,6 @@ class BasicLayout extends React.Component {
 
 export default withRouter(connect(state => {
   const ret = state.layout || {}
-  Object.assign(ret, _.pick(state.user, ['loginData', 'loginOrg']))
+  ret.logged = !!(window.localStorage.getItem(config.storageTokenKey) || _.get(state, 'user.loginData'))
   return ret
 })(BasicLayout))
