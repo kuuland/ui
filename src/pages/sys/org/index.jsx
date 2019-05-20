@@ -96,7 +96,7 @@ class Org extends React.Component {
       if (!_.isEmpty(dirtyValue)) {
         dirtyValue.FullPathPid = value.FullPathPid
         dirtyValue.FullPathName = value.FullPathName
-        await update('org', { _id: _.get(value, 'ID') }, dirtyValue)
+        await update('org', { ID: _.get(value, 'ID') }, dirtyValue)
       }
     } else if (!_.isEmpty(value)) {
       await create('org', value)

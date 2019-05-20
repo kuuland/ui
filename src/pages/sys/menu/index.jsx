@@ -175,7 +175,7 @@ class Menu extends React.Component {
         dirtyValue.Disable = dirtyValue.Disable === '2'
       }
       if (!_.isEmpty(dirtyValue)) {
-        await update('menu', { _id: _.get(value, 'ID') }, dirtyValue)
+        await update('menu', { ID: _.get(value, 'ID') }, dirtyValue)
       }
     } else if (!_.isEmpty(value)) {
       value.Disable = value.Disable === '2'

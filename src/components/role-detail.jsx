@@ -57,7 +57,7 @@ class RoleDetail extends React.Component {
   fetchMenus () {
     this.setState({ menusLoading: true }, async () => {
       const { record } = this.state
-      const data = await list('menu', { range: 'ALL', sort: 'sort', project: '_id,Pid,Icon,Code,Name,Disable,IsVirtual' })
+      const data = await list('menu', { range: 'ALL', sort: 'sort', project: 'ID,Pid,Icon,Code,Name,Disable,IsVirtual' })
       const raw = _.get(data, 'list', [])
       const menus = arrayToTree(raw, {
         customID: 'ID',
@@ -101,7 +101,7 @@ class RoleDetail extends React.Component {
   fetchOrgs () {
     this.setState({ orgsLoading: true }, async () => {
       const { record = { DataPrivileges: [] } } = this.state
-      const data = await list('org', { range: 'ALL', sort: 'sort', project: '_id,Pid,Code,Name' })
+      const data = await list('org', { range: 'ALL', sort: 'sort', project: 'ID,Pid,Code,Name' })
       const raw = _.get(data, 'list', [])
       this.orgsMap = _.chain(raw).groupBy('ID').mapValues(item => _.head(item)).value()
       let orgs = arrayToTree(raw, {
@@ -287,7 +287,7 @@ class RoleDetail extends React.Component {
 
       this.setState({ saveLoading: true }, async () => {
         if (_.get(record, 'ID')) {
-          await update('role', { _id: _.get(record, 'ID') }, values)
+          await update('role', { ID: _.get(record, 'ID') }, values)
         } else {
           await create('role', values)
         }

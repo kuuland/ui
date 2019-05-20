@@ -92,7 +92,7 @@ class User extends React.Component {
         if (dirtyValue.Password) {
           dirtyValue.Password = md5(dirtyValue.Password)
         }
-        await update('user', { _id: _.get(value, 'ID') }, dirtyValue)
+        await update('user', { ID: _.get(value, 'ID') }, dirtyValue)
       }
     } else if (!_.isEmpty(value)) {
       value.Password = md5(value.Password)
@@ -115,7 +115,7 @@ class User extends React.Component {
       return
     }
     const assigns = targetRolesKey.map(item => ({ RoleID: item }))
-    const data = await update('user', { _id: roleAssignUID }, { RoleAssigns: assigns })
+    const data = await update('user', { ID: roleAssignUID }, { RoleAssigns: assigns })
     if (!data) {
       return
     }

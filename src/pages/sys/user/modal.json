@@ -3,7 +3,7 @@
   "type": "form",
   "container": [
     {
-      "name": "_id",
+      "name": "ID",
       "type": "hidden"
     },
     {

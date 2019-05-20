@@ -29,7 +29,7 @@ class Role extends React.Component {
     let value
     if (record) {
       value = {
-        _id: `role-edit-${record.ID}`,
+        ID: `role-edit-${record.ID}`,
         Icon: 'team',
         Name: window.L('编辑角色', `编辑角色（${record.Name}）`),
         URI: `/sys/role/edit/${record.ID}`,
@@ -37,7 +37,7 @@ class Role extends React.Component {
       }
     } else {
       value = {
-        _id: 'role-add',
+        ID: 'role-add',
         Icon: 'team',
         Name: window.L('新增角色'),
         URI: '/sys/role/add'

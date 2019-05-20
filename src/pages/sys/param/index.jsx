@@ -63,7 +63,7 @@ class Param extends React.Component {
     const { value, dirtyValue } = this.ModalInst
     if (_.get(value, 'ID')) {
       if (!_.isEmpty(dirtyValue)) {
-        await update('param', { _id: _.get(value, 'ID') }, dirtyValue)
+        await update('param', { ID: _.get(value, 'ID') }, dirtyValue)
       }
     } else if (!_.isEmpty(value)) {
       await create('param', value)
