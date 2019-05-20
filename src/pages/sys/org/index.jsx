@@ -51,7 +51,7 @@ class Org extends React.Component {
         afterList: data => {
           data.list = data.list || []
           data.list = arrayToTree(data.list, {
-            customID: '_id',
+            customID: 'ID',
             parentProperty: 'Pid',
             childrenProperty: 'children'
           })
@@ -66,7 +66,7 @@ class Org extends React.Component {
   setFullPathPid (list) {
     const fall = (values, path = '', name) => {
       for (const item of values) {
-        item.FullPathPid = path ? `${path},${item._id}` : item._id
+        item.FullPathPid = path ? `${path},${item.ID}` : item.ID
         item.FullPathName = name ? `${name} > ${item.Name}` : item.Name
         if (!_.isEmpty(item.children)) {
           fall(item.children, item.FullPathPid, item.FullPathName)
@@ -81,7 +81,7 @@ class Org extends React.Component {
       'org_modal.Pid': {
         onFetch: data => {
           const options = data.map(item => {
-            return { title: item.Name, value: item._id, pid: item.Pid, code: item.Code }
+            return { title: item.Name, value: item.ID, pid: item.Pid, code: item.Code }
           })
           return options
         }
@@ -92,11 +92,11 @@ class Org extends React.Component {
 
   async handleModalOk () {
     const { value, dirtyValue } = this.ModalInst
-    if (_.get(value, '_id')) {
+    if (_.get(value, 'ID')) {
       if (!_.isEmpty(dirtyValue)) {
         dirtyValue.FullPathPid = value.FullPathPid
         dirtyValue.FullPathName = value.FullPathName
-        await update('org', { _id: _.get(value, '_id') }, dirtyValue)
+        await update('org', { _id: _.get(value, 'ID') }, dirtyValue)
       }
     } else if (!_.isEmpty(value)) {
       await create('org', value)

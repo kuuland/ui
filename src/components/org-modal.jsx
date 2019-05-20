@@ -25,7 +25,7 @@ class OrgModal extends React.Component {
         }
         return
       }
-      const defaultOrgID = _.get(_.head(orgs), '_id')
+      const defaultOrgID = _.get(_.head(orgs), 'ID')
       let visible = _.size(orgs) > 1
       if (this.props.source !== 'login') {
         visible = true
@@ -95,7 +95,7 @@ class OrgModal extends React.Component {
         ]}
       >
         <Select value={orgID} style={{ width: '100%' }} onChange={orgID => this.setState({ orgID })}>
-          {orgs.map(item => <Select.Option key={item._id} value={item._id}>{item.Name}</Select.Option>)}
+          {orgs.map(item => <Select.Option key={item.ID} value={item.ID}>{item.Name}</Select.Option>)}
         </Select>
       </Modal>
     )

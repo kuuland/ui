@@ -100,7 +100,7 @@ class Menu extends React.Component {
         onAdd: e => {
           const presetValue = { Type: 'menu', Disable: '1', Sort: 100, Icon: 'fire', Closeable: true }
           // if (this.state.preEditRecord) {
-          //   presetValue.Pid = this.state.preEditRecord._id
+          //   presetValue.Pid = this.state.preEditRecord.ID
           // }
           this.ModalInst.value = presetValue
           this.setState({ modalVisible: true })
@@ -115,7 +115,7 @@ class Menu extends React.Component {
         afterList: data => {
           data.list = data.list || []
           data.list = arrayToTree(data.list, {
-            customID: '_id',
+            customID: 'ID',
             parentProperty: 'Pid',
             childrenProperty: 'children'
           })
@@ -131,7 +131,7 @@ class Menu extends React.Component {
       'menu_modal.Pid': {
         onFetch: data => {
           const options = data.map(item => {
-            return { title: item.Name, value: item._id, pid: item.Pid, icon: item.Icon }
+            return { title: item.Name, value: item.ID, pid: item.Pid, icon: item.Icon }
           })
           return options
         },
@@ -170,12 +170,12 @@ class Menu extends React.Component {
   async handleModalOk () {
     const { value, dirtyValue } = this.ModalInst
     dirtyValue.Icon = value.Icon
-    if (_.get(value, '_id')) {
+    if (_.get(value, 'ID')) {
       if (dirtyValue.Disable) {
         dirtyValue.Disable = dirtyValue.Disable === '2'
       }
       if (!_.isEmpty(dirtyValue)) {
-        await update('menu', { _id: _.get(value, '_id') }, dirtyValue)
+        await update('menu', { _id: _.get(value, 'ID') }, dirtyValue)
       }
     } else if (!_.isEmpty(value)) {
       value.Disable = value.Disable === '2'

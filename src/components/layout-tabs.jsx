@@ -32,7 +32,7 @@ export default props => {
               </span>
             </Dropdown>
           }
-          key={pane._id}
+          key={pane.ID}
           closable={pane.Closeable !== false}>
           {pane.Content}
         </Tabs.TabPane>

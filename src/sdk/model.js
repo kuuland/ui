@@ -94,7 +94,7 @@ export async function list (name, query = {}) {
 }
 
 export async function id (name, idVal) {
-  const idKey = cache.get()['idKey'] || '_id'
+  const idKey = cache.get()['idKey'] || 'ID'
   const json = await list(name, { cond: { [idKey]: idVal } })
   return _.get(json, 'list[0]') || {}
 }

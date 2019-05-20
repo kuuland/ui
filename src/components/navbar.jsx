@@ -43,7 +43,7 @@ class Navbar extends React.Component {
   }
   render () {
     const { menuKeyPrefix } = this.state
-    const { menusTree = [], loginOrg = {}, loginData = {} } = this.props
+    const { menusTree, loginOrg, loginData } = this.props
     const activeMenuIndex = this.props.activeMenuIndex >= menusTree.length ? 0 : this.props.activeMenuIndex
     const avatarProps = {}
     if (_.get(loginData, 'Avatar')) {
@@ -133,8 +133,8 @@ class Navbar extends React.Component {
 }
 
 export default withRouter(connect(state => ({
-  loginData: state.user.loginData,
-  loginOrg: state.user.loginOrg,
-  menusTree: state.layout.menusTree,
+  loginData: state.user.loginData || {},
+  loginOrg: state.user.loginOrg || {},
+  menusTree: state.layout.menusTree || [],
   activeMenuIndex: state.layout.activeMenuIndex
 }))(Navbar))

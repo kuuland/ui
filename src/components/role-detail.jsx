@@ -16,7 +16,7 @@ class RoleDetail extends React.Component {
       orgsLoading: true,
       saveLoading: false,
       record,
-      orgDataPrivileges: _.get(record, '_id') ? _.chain(record.DataPrivileges).groupBy('OrgID').mapValues(item => _.head(item)).value() : {}
+      orgDataPrivileges: _.get(record, 'ID') ? _.chain(record.DataPrivileges).groupBy('OrgID').mapValues(item => _.head(item)).value() : {}
     }
     this.onMenuCheck = this.onMenuCheck.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -25,7 +25,7 @@ class RoleDetail extends React.Component {
     this.handleTableSelections = this.handleTableSelections.bind(this)
   }
   async componentDidMount () {
-    const idVal = _.get(this.state, 'record._id')
+    const idVal = _.get(this.state, 'record.ID')
     if (idVal) {
       await this.fetchDetail(idVal)
     }
@@ -57,10 +57,10 @@ class RoleDetail extends React.Component {
   fetchMenus () {
     this.setState({ menusLoading: true }, async () => {
       const { record } = this.state
-      const data = await list('menu', { range: 'ALL', sort: 'Sort', project: '_id,Pid,Icon,Code,Name,Disable,IsVirtual' })
+      const data = await list('menu', { range: 'ALL', sort: 'sort', project: '_id,Pid,Icon,Code,Name,Disable,IsVirtual' })
       const raw = _.get(data, 'list', [])
       const menus = arrayToTree(raw, {
-        customID: '_id',
+        customID: 'ID',
         parentProperty: 'Pid',
         childrenProperty: 'Children'
       })
@@ -70,17 +70,17 @@ class RoleDetail extends React.Component {
       const fall = (values, expandedKeys, checkedKeys) => {
         let checkedCount = 0
         for (const item of values) {
-          if (permissions.includes(item._id) || permissions.includes(item.Code)) {
+          if (permissions.includes(item.ID) || permissions.includes(item.Code)) {
             checkedCount++
             if (_.isEmpty(item.Children)) {
-              checkedKeys.push(item._id)
+              checkedKeys.push(item.ID)
             }
           }
           if (!_.isEmpty(item.Children)) {
-            expandedKeys.push(item._id)
+            expandedKeys.push(item.ID)
             const childrenCount = fall(item.Children, expandedKeys, checkedKeys)
             if (childrenCount === item.Children.length) {
-              checkedKeys.push(item._id)
+              checkedKeys.push(item.ID)
             }
           }
         }
@@ -88,7 +88,7 @@ class RoleDetail extends React.Component {
       }
       for (const index in menus) {
         const item = menus[index]
-        const expandedKeys = [ item._id ]
+        const expandedKeys = [ item.ID ]
         const checkedKeys = []
         fall(item.Children, expandedKeys, checkedKeys)
         splitMenuExpandedKeys[index] = expandedKeys
@@ -101,11 +101,11 @@ class RoleDetail extends React.Component {
   fetchOrgs () {
     this.setState({ orgsLoading: true }, async () => {
       const { record = { DataPrivileges: [] } } = this.state
-      const data = await list('org', { range: 'ALL', sort: 'Sort', project: '_id,Pid,Code,Name' })
+      const data = await list('org', { range: 'ALL', sort: 'sort', project: '_id,Pid,Code,Name' })
       const raw = _.get(data, 'list', [])
-      this.orgsMap = _.chain(raw).groupBy('_id').mapValues(item => _.head(item)).value()
+      this.orgsMap = _.chain(raw).groupBy('ID').mapValues(item => _.head(item)).value()
       let orgs = arrayToTree(raw, {
-        customID: '_id',
+        customID: 'ID',
         parentProperty: 'Pid',
         childrenProperty: 'Children'
       })
@@ -114,14 +114,14 @@ class RoleDetail extends React.Component {
       const fall = (values, expandedKeys) => {
         for (const item of values) {
           if (!_.isEmpty(item.Children)) {
-            expandedKeys.push(item._id)
+            expandedKeys.push(item.ID)
             fall(item.Children, expandedKeys)
           }
         }
       }
       for (const index in orgs) {
         const item = orgs[index]
-        const expandedKeys = [ item._id ]
+        const expandedKeys = [ item.ID ]
         if (!_.isEmpty(item.Children)) {
           fall(item.Children, expandedKeys)
         }
@@ -175,7 +175,7 @@ class RoleDetail extends React.Component {
             <Tree.TreeNode
               icon={<Icon type={value.Icon || 'fire'} />}
               title={`${value.Name} ${value.Code || ''}`}
-              key={value._id}
+              key={value.ID}
             >
               {sub}
             </Tree.TreeNode>
@@ -186,7 +186,7 @@ class RoleDetail extends React.Component {
           <Tree.TreeNode
             icon={<Icon type={value.Icon} />}
             title={`${value.Name} ${value.Code || ''}`}
-            key={value._id}
+            key={value.ID}
           />
         )
       }
@@ -199,7 +199,7 @@ class RoleDetail extends React.Component {
     values = _.sortBy(values, 'Sort')
     let ret = []
     for (const value of values) {
-      const current = orgDataPrivileges[value._id]
+      const current = orgDataPrivileges[value.ID]
       let stateIcon
       if (current) {
         stateIcon = <Icon type='check-circle' className={styles.checkIcon} size='small' />
@@ -216,13 +216,13 @@ class RoleDetail extends React.Component {
                     {stateIcon}
                     <Icon type='close-square' className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`} onClick={e => {
                       const { orgDataPrivileges } = this.state
-                      delete orgDataPrivileges[value._id]
+                      delete orgDataPrivileges[value.ID]
                       this.setState({ orgDataPrivileges })
                     }} />
                   </span>
                 </span>
               }
-              key={value._id}
+              key={value.ID}
             >
               {sub}
             </Tree.TreeNode>
@@ -238,13 +238,13 @@ class RoleDetail extends React.Component {
                   {stateIcon}
                   <Icon type='close-square' className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`} onClick={e => {
                     const { orgDataPrivileges } = this.state
-                    delete orgDataPrivileges[value._id]
+                    delete orgDataPrivileges[value.ID]
                     this.setState({ orgDataPrivileges })
                   }} />
                 </span>
               </span>
             }
-            key={value._id}
+            key={value.ID}
           />
         )
       }
@@ -270,11 +270,11 @@ class RoleDetail extends React.Component {
           if (!_.isEmpty(item.Children)) {
             const childrenHit = fall(item.Children, checkedKeys, collector)
             if (childrenHit) {
-              collector.push({ Permission: item._id, Desc: item.Name })
+              collector.push({ Permission: item.ID, Desc: item.Name })
               ret = true
             }
-          } else if (checkedKeys.includes(item._id) || checkedKeys.includes(item.Code)) {
-            collector.push({ Permission: item._id, Desc: item.Name })
+          } else if (checkedKeys.includes(item.ID) || checkedKeys.includes(item.Code)) {
+            collector.push({ Permission: item.ID, Desc: item.Name })
             ret = true
           }
         }
@@ -286,8 +286,8 @@ class RoleDetail extends React.Component {
       values.DataPrivileges = this.filterValidPrivileges(privileges)
 
       this.setState({ saveLoading: true }, async () => {
-        if (_.get(record, '_id')) {
-          await update('role', { _id: _.get(record, '_id') }, values)
+        if (_.get(record, 'ID')) {
+          await update('role', { _id: _.get(record, 'ID') }, values)
         } else {
           await create('role', values)
         }
@@ -324,7 +324,7 @@ class RoleDetail extends React.Component {
   handleClose () {
     window.g_app._store.dispatch({
       type: 'layout/delPane',
-      payload: _.get(this.props, 'location.state._id')
+      payload: _.get(this.props, 'location.state.ID')
     })
   }
 
@@ -346,11 +346,11 @@ class RoleDetail extends React.Component {
   }
 
   setAuthObject ({ key, value, orgDataPrivileges, orgSelectedData, rowData }) {
-    const orgSelectedPrivileges = orgDataPrivileges[orgSelectedData._id] || {}
+    const orgSelectedPrivileges = orgDataPrivileges[orgSelectedData.ID] || {}
     const authObjects = _.get(orgSelectedPrivileges, 'AuthObjects', [])
     let index = _.findIndex(authObjects, item => item.Name === rowData.Name)
     index = index >= 0 ? index : authObjects.length
-    const prefixKey = `${orgSelectedData._id}.AuthObjects[${index}]`
+    const prefixKey = `${orgSelectedData.ID}.AuthObjects[${index}]`
     if (value === 'follow_global') {
       const obj = _.get(orgDataPrivileges, prefixKey)
       if (obj) {
@@ -362,8 +362,8 @@ class RoleDetail extends React.Component {
     }
     _.set(orgDataPrivileges, `${prefixKey}.Name`, rowData.Name)
     _.set(orgDataPrivileges, `${prefixKey}.DisplayName`, rowData.DisplayName)
-    _.set(orgDataPrivileges, `${orgSelectedData._id}.OrgID`, orgSelectedData._id)
-    _.set(orgDataPrivileges, `${orgSelectedData._id}.OrgName`, orgSelectedData.Name)
+    _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgID`, orgSelectedData.ID)
+    _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgName`, orgSelectedData.Name)
   }
   handleMetaTableRadioOnChange (key, v, rowData) {
     const { orgDataPrivileges, orgSelectedData } = this.state
@@ -379,7 +379,7 @@ class RoleDetail extends React.Component {
 
   handleTableSelections (assigns) {
     const { metadata = {}, orgSelectedData = {}, orgDataPrivileges } = this.state
-    const orgSelectedPrivileges = orgDataPrivileges[orgSelectedData._id] || {}
+    const orgSelectedPrivileges = orgDataPrivileges[orgSelectedData.ID] || {}
     const orgSelectedAuthObjects = _.chain(orgSelectedPrivileges.AuthObjects || []).groupBy('Name').mapValues(item => _.head(item)).value()
 
     const selectedRowKeys = []
@@ -430,7 +430,7 @@ class RoleDetail extends React.Component {
         sm: { span: 16 }
       }
     }
-    const orgSelectedPrivileges = orgDataPrivileges[orgSelectedData._id] || {}
+    const orgSelectedPrivileges = orgDataPrivileges[orgSelectedData.ID] || {}
     const orgSelectedAuthObjects = _.chain(orgSelectedPrivileges.AuthObjects || []).groupBy('Name').mapValues(item => _.head(item)).value()
     const metaTableRowKey = 'Name'
     return (
@@ -541,12 +541,12 @@ class RoleDetail extends React.Component {
                     )
                   })}
                   <Col {...{ key: 'metadata', sm: 24, md: 16 }}>
-                    <div style={{ display: orgSelectedData._id ? 'none' : 'block' }}>
+                    <div style={{ display: orgSelectedData.ID ? 'none' : 'block' }}>
                       <Icon type='arrow-left' />
                       <span style={{ marginLeft: 5, opacity: 0.8 }}>{window.L('请选择左侧组织')}</span>
                       <Skeleton />
                     </div>
-                    <Tabs animated={false} defaultActiveKey='all' style={{ display: orgSelectedData._id ? 'block' : 'none' }}>
+                    <Tabs animated={false} defaultActiveKey='all' style={{ display: orgSelectedData.ID ? 'block' : 'none' }}>
                       <Tabs.TabPane tab={window.L('全局授权')} key='all'>
                         <div className={styles.tabContentRow}>
                           <span className={styles.tabContentLabel}>{window.L('全局可读范围', '全局可读范围：')}</span>
@@ -555,8 +555,8 @@ class RoleDetail extends React.Component {
                             onChange={v => {
                               v = v.target.value
                               const { orgDataPrivileges } = this.state
-                              _.set(orgDataPrivileges, `${orgSelectedData._id}.OrgID`, orgSelectedData._id)
-                              _.set(orgDataPrivileges, `${orgSelectedData._id}.AllReadableRange`, v)
+                              _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgID`, orgSelectedData.ID)
+                              _.set(orgDataPrivileges, `${orgSelectedData.ID}.AllReadableRange`, v)
                               this.setState({ orgDataPrivileges })
                             }}
                           >
@@ -564,9 +564,9 @@ class RoleDetail extends React.Component {
                           </Radio.Group>
                           <Icon type='close-circle' className={styles.clearIcon} onClick={e => {
                             const { orgDataPrivileges } = this.state
-                            const obj = _.get(orgDataPrivileges, `${orgSelectedData._id}`, {})
+                            const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
                             delete obj.AllReadableRange
-                            _.set(orgDataPrivileges, `${orgSelectedData._id}`, obj)
+                            _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
                             this.setState({ orgDataPrivileges })
                           }} />
                         </div>
@@ -577,8 +577,8 @@ class RoleDetail extends React.Component {
                             onChange={v => {
                               v = v.target.value
                               const { orgDataPrivileges } = this.state
-                              _.set(orgDataPrivileges, `${orgSelectedData._id}.OrgID`, orgSelectedData._id)
-                              _.set(orgDataPrivileges, `${orgSelectedData._id}.AllWritableRange`, v)
+                              _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgID`, orgSelectedData.ID)
+                              _.set(orgDataPrivileges, `${orgSelectedData.ID}.AllWritableRange`, v)
                               this.setState({ orgDataPrivileges })
                             }}
                           >
@@ -586,9 +586,9 @@ class RoleDetail extends React.Component {
                           </Radio.Group>
                           <Icon type='close-circle' className={styles.clearIcon} onClick={e => {
                             const { orgDataPrivileges } = this.state
-                            const obj = _.get(orgDataPrivileges, `${orgSelectedData._id}`, {})
+                            const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
                             delete obj.AllWritableRange
-                            _.set(orgDataPrivileges, `${orgSelectedData._id}`, obj)
+                            _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
                             this.setState({ orgDataPrivileges })
                           }} />
                         </div>

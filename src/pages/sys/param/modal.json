@@ -34,7 +34,7 @@
       }
     },
     {
-      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "condition": "{{!_.isEmpty(_.get(rootValue, 'ID'))}}",
       "name": "IsBuiltIn",
       "type": "switch",
       "label": "系统内置",
@@ -44,7 +44,7 @@
       }
     },
     {
-      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "condition": "{{!_.isEmpty(_.get(rootValue, 'ID'))}}",
       "name": "CreatedBy.Name",
       "type": "text",
       "label": "创建人",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "condition": "{{!_.isEmpty(_.get(rootValue, 'ID'))}}",
       "name": "CreatedAt",
       "type": "text",
       "label": "创建时间",
@@ -62,7 +62,7 @@
       }
     },
     {
-      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "condition": "{{!_.isEmpty(_.get(rootValue, 'ID'))}}",
       "name": "UpdatedBy.Name",
       "type": "text",
       "label": "修改人",
@@ -71,7 +71,7 @@
       }
     },
     {
-      "condition": "{{!_.isEmpty(_.get(rootValue, '_id'))}}",
+      "condition": "{{!_.isEmpty(_.get(rootValue, 'ID'))}}",
       "name": "UpdatedAt",
       "type": "text",
       "label": "修改时间",

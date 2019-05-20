@@ -29,10 +29,10 @@ class Role extends React.Component {
     let value
     if (record) {
       value = {
-        _id: `role-edit-${record._id}`,
+        _id: `role-edit-${record.ID}`,
         Icon: 'team',
         Name: window.L('编辑角色', `编辑角色（${record.Name}）`),
-        URI: `/sys/role/edit/${record._id}`,
+        URI: `/sys/role/edit/${record.ID}`,
         Record: record
       }
     } else {

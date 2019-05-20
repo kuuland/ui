@@ -61,9 +61,9 @@ class Param extends React.Component {
 
   async handleModalOk () {
     const { value, dirtyValue } = this.ModalInst
-    if (_.get(value, '_id')) {
+    if (_.get(value, 'ID')) {
       if (!_.isEmpty(dirtyValue)) {
-        await update('param', { _id: _.get(value, '_id') }, dirtyValue)
+        await update('param', { _id: _.get(value, 'ID') }, dirtyValue)
       }
     } else if (!_.isEmpty(value)) {
       await create('param', value)

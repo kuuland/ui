@@ -23,11 +23,11 @@ export default {
   ],
   proxy: {
     '/api': {
-      target: 'http://localhost:8888',
+      target: 'http://localhost:8080',
       changeOrigin: true
     },
     '/assets': {
-      target: 'http://localhost:8888',
+      target: 'http://localhost:8080',
       changeOrigin: true
     },
   }

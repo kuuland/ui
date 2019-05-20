@@ -21,7 +21,7 @@ export default {
   reducers: {
     SET_MENUS (state, { payload: menus }) {
       const menusTree = arrayToTree(_.cloneDeep(menus), {
-        customID: '_id',
+        customID: 'ID',
         parentProperty: 'Pid',
         childrenProperty: 'Children'
       })
@@ -65,14 +65,14 @@ export default {
   },
   effects: {
     * loadMenus ({ payload }, { put, call, select }) {
-      const data = yield call(list, 'menu', { range: 'ALL', sort: 'Sort' })
+      const data = yield call(list, 'menu', { range: 'ALL', sort: 'sort' })
       const menus = Array.isArray(_.get(data, 'list')) ? data.list : []
       yield put({ type: 'SET_MENUS', payload: menus })
     },
     * addPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
       const { panes, menus } = state
-      let activePane = panes.find(p => p._id === value._id)
+      let activePane = panes.find(p => p.ID === value.ID)
 
       if (!activePane) {
         activePane = value
@@ -84,7 +84,7 @@ export default {
       // 保存到本地缓存
       savePanesData(activePane, openKeys, panes)
       // 路由跳转
-      const pathname = value.IsLink ? `/sys/iframe/${value._id}` : value.URI
+      const pathname = value.IsLink ? `/sys/iframe/${value.ID}` : value.URI
       const data = _.omit(value, 'Content')
       yield router.push({
         pathname,
@@ -94,7 +94,7 @@ export default {
     * delPane ({ payload: targetKey }, { put, select }) {
       const state = yield select(state => state.layout)
       const { panes } = state
-      const index = panes.findIndex(p => p._id === targetKey)
+      const index = panes.findIndex(p => p.ID === targetKey)
       if (index >= 0) {
         const activePane = _.get(panes, `[${index + 1}]`) || _.get(panes, `[${index - 1}]`) || _.get(panes, `[0]`) || null
         panes.splice(index, 1)
@@ -155,12 +155,12 @@ function calcOpenKeys (activePane, menus) {
     return
   }
   const openKeys = []
-  const menusMap = _.chain(menus, '_id').groupBy('_id').mapValues(v => _.head(v)).value()
+  const menusMap = _.chain(menus, 'ID').groupBy('ID').mapValues(v => _.head(v)).value()
   const pick = (menu, menusMap, openKeys) => {
     if (!menu) {
       return
     }
-    openKeys.push(menu._id)
+    openKeys.push(`${menu.ID}`)
     if (menu.Pid) {
       pick(menusMap[menu.Pid], menusMap, openKeys)
     }

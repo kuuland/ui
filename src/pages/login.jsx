@@ -47,7 +47,7 @@ class Login extends React.Component {
         }
         // 配合后端组织自动登录
         const loginOrg = await this.checkAutoOrgLogin()
-        if (loginOrg && loginOrg._id) {
+        if (loginOrg && loginOrg.ID) {
           this.handleOk(loginOrg, data)
           return
         }

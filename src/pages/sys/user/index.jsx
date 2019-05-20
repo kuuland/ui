@@ -58,17 +58,17 @@ class User extends React.Component {
         },
         customRowActions: [
           (record, index) => (
-            <Tooltip title={window.L('角色分配')} key={record._id + index}>
+            <Tooltip title={window.L('角色分配')} key={record.ID + index}>
               <Icon type='key' className={styles.rolesAssign} onClick={e => {
                 e.stopPropagation()
                 this.setState({ roleAssignLoading: true }, async () => {
-                  this.setState({ roleAssignVisible: true, roleAssignUID: record._id })
+                  this.setState({ roleAssignVisible: true, roleAssignUID: record.ID })
                   // 查询角色列表
                   const data = await list('role')
                   const roles = data.list || []
                   // 查询已有角色列表
-                  const userRoles = await get(`/api/user/roles?${qs.stringify({ uid: record._id })}`)
-                  const targetRolesKey = userRoles.map(item => item._id)
+                  const userRoles = await get(`/api/user/roles?${qs.stringify({ uid: record.ID })}`)
+                  const targetRolesKey = userRoles.map(item => item.ID)
                   this.setState({ roles, targetRolesKey, roleAssignLoading: false })
                 })
               }} />
@@ -87,12 +87,12 @@ class User extends React.Component {
 
   async handleModalOk () {
     const { value, dirtyValue } = this.ModalInst
-    if (_.get(value, '_id')) {
+    if (_.get(value, 'ID')) {
       if (!_.isEmpty(dirtyValue)) {
         if (dirtyValue.Password) {
           dirtyValue.Password = md5(dirtyValue.Password)
         }
-        await update('user', { _id: _.get(value, '_id') }, dirtyValue)
+        await update('user', { _id: _.get(value, 'ID') }, dirtyValue)
       }
     } else if (!_.isEmpty(value)) {
       value.Password = md5(value.Password)
@@ -157,7 +157,7 @@ class User extends React.Component {
             spinning={this.state.roleAssignLoading}
           >
             <Transfer
-              rowKey={record => record._id}
+              rowKey={record => record.ID}
               dataSource={roles}
               titles={[window.L('系统角色'), window.L('已分配角色')]}
               showSearch
@@ -165,7 +165,6 @@ class User extends React.Component {
               targetKeys={targetRolesKey}
               onChange={(nextTargetKeys, direction, moveKeys) => {
                 this.setState({ targetRolesKey: nextTargetKeys })
-                console.log(nextTargetKeys, direction, moveKeys)
               }}
               render={item => item.Name}
             />

@@ -50,7 +50,7 @@ class BasicLayout extends React.Component {
           if (Array.isArray(sub) && sub.length > 0) {
             ret.push(
               <Menu.SubMenu
-                key={value._id}
+                key={value.ID}
                 title={
                   <span className={styles.menuTitle}>
                     <Icon type={value.Icon} style={iconStyle} />
@@ -65,7 +65,7 @@ class BasicLayout extends React.Component {
         } else {
           ret.push(
             <Menu.Item
-              key={value._id}
+              key={value.ID}
               onClick={() => this.handleMenuItemClick(value)}
               className={styles.menuTitle}
             >
@@ -92,7 +92,7 @@ class BasicLayout extends React.Component {
 
   cacheMenuPaneContent (activePane) {
     for (const pane of this.props.panes) {
-      if (pane._id === activePane._id) {
+      if (pane.ID === activePane.ID) {
         pane.Content = this.props.children
         this.panesContent[pane.key] = pane.Content
         break
@@ -101,7 +101,7 @@ class BasicLayout extends React.Component {
   }
 
   handleTabsChange (targetKey) {
-    const activePane = this.props.panes.find(p => p._id === targetKey)
+    const activePane = this.props.panes.find(p => p.ID === targetKey)
     this.handleMenuItemClick(activePane)
   }
 
@@ -119,7 +119,7 @@ class BasicLayout extends React.Component {
         router.go(0)
         break
       case 'close-others':
-        newPanes = this.props.panes.filter(item => item._id === pane._id || item.Closeable === false)
+        newPanes = this.props.panes.filter(item => item.ID === pane.ID || item.Closeable === false)
         break
       case 'close-left':
         newPanes = []
@@ -151,7 +151,7 @@ class BasicLayout extends React.Component {
     if (this.props.location.pathname !== nextProps.location.pathname || !this.props.activePane) {
       const nextActivePane = this.props.panes.find(p => {
         if (p.IsLink) {
-          return p._id === _.get(/^\/sys\/iframe\/(\w*).*$/i.exec(nextProps.location.pathname), '[1]')
+          return p.ID === _.get(/^\/sys\/iframe\/(\w*).*$/i.exec(nextProps.location.pathname), '[1]')
         } else {
           return p.URI === nextProps.location.pathname
         }
@@ -179,12 +179,16 @@ class BasicLayout extends React.Component {
 
   render () {
     const { menusTree = [], activeMenuIndex, activePane, openKeys = [], logged } = this.props
-    if (activePane && activePane._id && !this.panesContent[activePane._id]) {
+    if (activePane && activePane.ID && !this.panesContent[activePane.ID]) {
       this.cacheMenuPaneContent(activePane)
     }
     const currentTree = _.cloneDeep(menusTree)
     const menuChildren = this.renderMenuChildren(_.get(currentTree, `[${activeMenuIndex}].Children`, []))
     const theme = 'light' // light、dark
+    const selectedKeys = []
+    if (_.get(activePane, 'ID')) {
+      selectedKeys.push(`${_.get(activePane, 'ID')}`)
+    }
     return (
       <Layout className={`${styles.layout} theme-${theme}`}>
         <Skeleton
@@ -219,7 +223,7 @@ class BasicLayout extends React.Component {
                 className={`${styles.menu}`}
                 theme={theme}
                 mode='inline'
-                selectedKeys={[_.get(activePane, '_id')]}
+                selectedKeys={selectedKeys}
                 inlineIndent={6}
                 inlineCollapsed={this.state.collapsed}
                 openKeys={openKeys}
@@ -233,7 +237,7 @@ class BasicLayout extends React.Component {
             <Layout>
               <Content className={styles.content}>
                 <LayoutTabs
-                  activeKey={_.get(activePane, '_id')}
+                  activeKey={`${_.get(activePane, 'ID', '')}`}
                   panes={this.props.panes || []}
                   onChange={this.handleTabsChange}
                   onContext={this.handleTabsContext}
