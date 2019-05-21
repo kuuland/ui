@@ -114,7 +114,7 @@ class User extends React.Component {
     if (!roleAssignUID || !targetRolesKey) {
       return
     }
-    const assigns = targetRolesKey.map(item => ({ RoleID: item }))
+    const assigns = targetRolesKey.map(item => ({ UserID: roleAssignUID, RoleID: item }))
     const data = await update('user', { ID: roleAssignUID }, { RoleAssigns: assigns })
     if (!data) {
       return

@@ -482,8 +482,11 @@ class RoleDetail extends React.Component {
                     const colsProps = {
                       key: index, sm: 24, md: 12, lg: 8
                     }
-                    const expandedKeys = splitMenuExpandedKeys[index] || []
-                    const checkedKeys = splitMenuCheckedKeys[index] || []
+                    let expandedKeys = splitMenuExpandedKeys[index] || []
+                    let checkedKeys = splitMenuCheckedKeys[index] || []
+
+                    expandedKeys = expandedKeys.map(item => `${item}`)
+                    checkedKeys = checkedKeys.map(item => `${item}`)
                     return (
                       <Col {...colsProps}>
                         <Tree

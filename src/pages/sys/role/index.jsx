@@ -3,26 +3,54 @@ import { Switch } from 'antd'
 import Fano from 'fano-react'
 import moment from 'moment'
 import _ from 'lodash'
-import TableConfig from './table.json'
 import styles from './index.less'
+moment.locale('zh-cn')
 
 class Role extends React.Component {
   constructor (props) {
     super(props)
-    this.init()
+
+    this.TableComponent = Fano.fromJson({
+      name: 'role_table',
+      type: 'table',
+      props: {
+        urls: {
+          list: '/api/role',
+          remove: '/api/role'
+        },
+        columns: [
+          {
+            title: '角色名称',
+            dataIndex: 'Name'
+          },
+          {
+            title: '角色编码',
+            dataIndex: 'Code'
+          },
+          {
+            title: '更新时间',
+            dataIndex: 'UpdatedAt',
+            render: t => moment(t).fromNow()
+          },
+          {
+            title: '是否内置',
+            dataIndex: 'IsBuiltIn',
+            render: t => <Switch checked={t === true} />
+          }
+        ],
+        onAdd: e => {
+          this.goDetail()
+        },
+        onEdit: r => {
+          const item = _.clone(r)
+          item.CreatedAt = moment(item.CreatedAt).fromNow()
+          item.UpdatedAt = moment(item.UpdatedAt).fromNow()
+          this.goDetail(item)
+        }
+      }
+    }).render()
 
     this.state = {}
-  }
-  init () {
-    this.initTable()
-  }
-
-  formatUnix (t, defaultValue = '-') {
-    if (!t) {
-      return t
-    }
-    const u = moment.unix(t)
-    return u && u.isValid() ? u.format('YYYY-MM-DD HH:mm:ss') : defaultValue
   }
 
   goDetail (record) {
@@ -47,27 +75,6 @@ class Role extends React.Component {
       type: 'layout/addPane',
       payload: value
     })
-  }
-
-  initTable () {
-    this.TableInst = Fano.fromJson(TableConfig).enhance({
-      role_table: {
-        onColumnsRender: {
-          UpdatedAt: t => this.formatUnix(t),
-          IsBuiltIn: t => <Switch checked={t === true} />
-        },
-        onAdd: e => {
-          this.goDetail()
-        },
-        onEdit: r => {
-          const item = _.clone(r)
-          item.CreatedAt = this.formatUnix(r.CreatedAt)
-          item.UpdatedAt = this.formatUnix(r.UpdatedAt)
-          this.goDetail(item)
-        }
-      }
-    })
-    this.TableComponent = this.TableInst.render()
   }
 
   render () {

@@ -101,11 +101,12 @@ class BasicLayout extends React.Component {
   }
 
   handleTabsChange (targetKey) {
-    const activePane = this.props.panes.find(p => p.ID === targetKey)
+    const activePane = this.props.panes.find(p => `${p.ID}` === targetKey)
     this.handleMenuItemClick(activePane)
   }
 
   handleTabsRemove (targetKey, action) {
+    console.log(targetKey, action)
     if (action !== 'remove') {
       return
     }

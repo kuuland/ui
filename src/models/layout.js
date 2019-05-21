@@ -3,6 +3,7 @@ import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
 import router from 'umi/router'
 import config from '@/config'
+import { isWhiteRoute } from '@/utils/tools'
 
 const cacheData = window.localStorage.getItem('panes:data')
 const panesData = JSON.parse(cacheData || '{}')
@@ -72,7 +73,7 @@ export default {
     * addPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
       const { panes, menus } = state
-      let activePane = panes.find(p => p.ID === value.ID)
+      let activePane = panes.find(p => `${p.ID}` === `${value.ID}`)
 
       if (!activePane) {
         activePane = value
@@ -94,7 +95,7 @@ export default {
     * delPane ({ payload: targetKey }, { put, select }) {
       const state = yield select(state => state.layout)
       const { panes } = state
-      const index = panes.findIndex(p => p.ID === targetKey)
+      const index = panes.findIndex(p => `${p.ID}` === targetKey)
       if (index >= 0) {
         const activePane = _.get(panes, `[${index + 1}]`) || _.get(panes, `[${index - 1}]`) || _.get(panes, `[0]`) || null
         panes.splice(index, 1)
@@ -112,7 +113,7 @@ export default {
     setup (ctx) {
       const { dispatch, history } = ctx
       const listener = route => {
-        if (route.pathname !== config.loginPathname) {
+        if (route.pathname !== config.loginPathname && !isWhiteRoute(route.pathname)) {
           const { layout, user } = window.g_app._store.getState()
           // 校验令牌
           if (!user.loginData) {
