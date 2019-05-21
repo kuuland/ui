@@ -4,7 +4,6 @@ import Fano from 'fano-react'
 import moment from 'moment'
 import _ from 'lodash'
 import styles from './index.less'
-moment.locale('zh-cn')
 
 class Role extends React.Component {
   constructor (props) {

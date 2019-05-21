@@ -70,17 +70,17 @@ class RoleDetail extends React.Component {
       const fall = (values, expandedKeys, checkedKeys) => {
         let checkedCount = 0
         for (const item of values) {
-          if (permissions.includes(item.ID) || permissions.includes(item.Code)) {
+          if (permissions.includes(`${item.ID}`) || permissions.includes(item.Code)) {
             checkedCount++
             if (_.isEmpty(item.Children)) {
-              checkedKeys.push(item.ID)
+              checkedKeys.push(`${item.ID}`)
             }
           }
           if (!_.isEmpty(item.Children)) {
-            expandedKeys.push(item.ID)
+            expandedKeys.push(`${item.ID}`)
             const childrenCount = fall(item.Children, expandedKeys, checkedKeys)
             if (childrenCount === item.Children.length) {
-              checkedKeys.push(item.ID)
+              checkedKeys.push(`${item.ID}`)
             }
           }
         }
@@ -88,7 +88,7 @@ class RoleDetail extends React.Component {
       }
       for (const index in menus) {
         const item = menus[index]
-        const expandedKeys = [ item.ID ]
+        const expandedKeys = [ `${item.ID}` ]
         const checkedKeys = []
         fall(item.Children, expandedKeys, checkedKeys)
         splitMenuExpandedKeys[index] = expandedKeys
@@ -114,14 +114,14 @@ class RoleDetail extends React.Component {
       const fall = (values, expandedKeys) => {
         for (const item of values) {
           if (!_.isEmpty(item.Children)) {
-            expandedKeys.push(item.ID)
+            expandedKeys.push(`${item.ID}`)
             fall(item.Children, expandedKeys)
           }
         }
       }
       for (const index in orgs) {
         const item = orgs[index]
-        const expandedKeys = [ item.ID ]
+        const expandedKeys = [ `${item.ID}` ]
         if (!_.isEmpty(item.Children)) {
           fall(item.Children, expandedKeys)
         }
@@ -262,6 +262,7 @@ class RoleDetail extends React.Component {
         return
       }
       const { record, menus, totalMenusCheckedKeys, orgDataPrivileges } = this.state
+      const hisOps = _.groupBy(record.OperationPrivileges, 'Permission')
       const operationPrivileges = []
       const fall = (values, checkedKeys, collector) => {
         let ret = false
@@ -270,11 +271,21 @@ class RoleDetail extends React.Component {
           if (!_.isEmpty(item.Children)) {
             const childrenHit = fall(item.Children, checkedKeys, collector)
             if (childrenHit) {
-              collector.push({ Permission: item.ID, Desc: item.Name })
+              const doc = { Permission: `${item.ID}`, Desc: item.Name }
+              if (_.size(hisOps[doc.Permission]) > 0 && hisOps[doc.Permission][0]) {
+                doc.ID = hisOps[doc.Permission][0].ID
+                doc.RoleID = hisOps[doc.Permission][0].RoleID
+              }
+              collector.push(doc)
               ret = true
             }
-          } else if (checkedKeys.includes(item.ID) || checkedKeys.includes(item.Code)) {
-            collector.push({ Permission: item.ID, Desc: item.Name })
+          } else if (checkedKeys.includes(`${item.ID}`) || checkedKeys.includes(item.Code)) {
+            const doc = { Permission: `${item.ID}`, Desc: item.Name }
+            if (_.size(hisOps[doc.Permission]) > 0 && hisOps[doc.Permission][0]) {
+              doc.ID = hisOps[doc.Permission][0].ID
+              doc.RoleID = hisOps[doc.Permission][0].RoleID
+            }
+            collector.push(doc)
             ret = true
           }
         }
@@ -487,6 +498,8 @@ class RoleDetail extends React.Component {
 
                     expandedKeys = expandedKeys.map(item => `${item}`)
                     checkedKeys = checkedKeys.map(item => `${item}`)
+
+                    console.log(checkedKeys)
                     return (
                       <Col {...colsProps}>
                         <Tree
@@ -522,7 +535,8 @@ class RoleDetail extends React.Component {
                     const colsProps = {
                       key: index, sm: 24, md: 8
                     }
-                    const expandedKeys = splitOrgExpandedKeys[index] || []
+                    let expandedKeys = splitOrgExpandedKeys[index] || []
+                    expandedKeys = expandedKeys.map(item => `${item}`)
                     return (
                       <Col {...colsProps}>
                         <Tree

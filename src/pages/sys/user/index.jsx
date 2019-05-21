@@ -5,7 +5,6 @@ import Fano from 'fano-react'
 import moment from 'moment'
 import md5 from 'blueimp-md5'
 import _ from 'lodash'
-import TableConfig from './table.json'
 import ModalConfig from './modal.json'
 import styles from './index.less'
 import { list, create, update } from '@/sdk/model'
@@ -31,28 +30,46 @@ class User extends React.Component {
     this.initModal()
   }
 
-  formatUnix (t, defaultValue = '-') {
-    if (!t) {
-      return t
-    }
-    const u = moment.unix(t)
-    return u && u.isValid() ? u.format('YYYY-MM-DD HH:mm:ss') : defaultValue
-  }
-
   initTable () {
-    this.TableInst = Fano.fromJson(TableConfig).enhance({
-      user_table: {
-        onColumnsRender: {
-          IsBuiltIn: t => <Switch checked={t === true} />
+    this.TableInst = Fano.fromJson({
+      name: 'user_table',
+      type: 'table',
+      props: {
+        urls: {
+          list: '/api/user',
+          remove: '/api/user'
         },
+        columns: [
+          {
+            title: '账号',
+            dataIndex: 'Username'
+          },
+          {
+            title: '姓名',
+            dataIndex: 'Name'
+          },
+          {
+            title: '是否禁用',
+            dataIndex: 'Disable'
+          },
+          {
+            title: '是否内置',
+            dataIndex: 'IsBuiltIn',
+            render: t => <Switch checked={t === true} />
+          },
+          {
+            dataIndex: 'actions',
+            width: 100
+          }
+        ],
         onAdd: e => {
           this.ModalInst.value = {}
           this.setState({ modalVisible: true })
         },
         onEdit: r => {
           const item = _.clone(r)
-          item.CreatedAt = this.formatUnix(r.CreatedAt)
-          item.UpdatedAt = this.formatUnix(r.UpdatedAt)
+          item.CreatedAt = moment(r.CreatedAt).fromNow()
+          item.UpdatedAt = moment(r.UpdatedAt).fromNow()
           this.ModalInst.value = item
           this.setState({ modalVisible: true })
         },
@@ -62,10 +79,9 @@ class User extends React.Component {
               <Icon type='key' className={styles.rolesAssign} onClick={e => {
                 e.stopPropagation()
                 this.setState({ roleAssignLoading: true }, async () => {
-                  this.setState({ roleAssignVisible: true, roleAssignUID: record.ID })
+                  this.setState({ roleAssignVisible: true, roleAssignUser: record })
                   // 查询角色列表
-                  const data = await list('role')
-                  const roles = data.list || []
+                  const roles = (await list('role', { range: 'ALL' })).list
                   // 查询已有角色列表
                   const userRoles = await get(`/api/user/roles?${qs.stringify({ uid: record.ID })}`)
                   const targetRolesKey = userRoles.map(item => item.ID)
@@ -110,19 +126,26 @@ class User extends React.Component {
   }
 
   async handleRoleAssignOk () {
-    const { roleAssignUID, targetRolesKey } = this.state
-    if (!roleAssignUID || !targetRolesKey) {
+    const { roleAssignUser, targetRolesKey } = this.state
+    if (!_.get(roleAssignUser, 'ID') || !targetRolesKey) {
       return
     }
-    const assigns = targetRolesKey.map(item => ({ UserID: roleAssignUID, RoleID: item }))
-    const data = await update('user', { ID: roleAssignUID }, { RoleAssigns: assigns })
+    const hisAssigns = _.groupBy(roleAssignUser.RoleAssigns, 'RoleID')
+    const assigns = targetRolesKey.map(item => {
+      const assign = { UserID: roleAssignUser.ID, RoleID: item }
+      if (_.size(hisAssigns[item]) > 0 && hisAssigns[item][0].ID) {
+        assign.ID = hisAssigns[item][0].ID
+      }
+      return assign
+    })
+    const data = await update('user', { ID: roleAssignUser.ID }, { RoleAssigns: assigns })
     if (!data) {
       return
     }
     this.handleRoleAssignCancel()
   }
   handleRoleAssignCancel () {
-    this.setState({ roleAssignVisible: false, roleAssignUID: undefined, targetRolesKey: [], roles: [] })
+    this.setState({ roleAssignVisible: false, roleAssignUser: undefined, targetRolesKey: [], roles: [] })
   }
 
   render () {
