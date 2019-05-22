@@ -3,8 +3,6 @@ import { Modal } from 'antd'
 import Fano from 'fano-react'
 import moment from 'moment'
 import _ from 'lodash'
-import TableConfig from './table.json'
-import ModalConfig from './modal.json'
 import arrayToTree from 'array-to-tree'
 import styles from './index.less'
 import { create, update } from '@/sdk/model'
@@ -35,9 +33,39 @@ class Org extends React.Component {
   }
 
   initTable () {
-    this.TableInst = Fano.fromJson(TableConfig).enhance({
-      org_table: {
-        onColumnsRender: {},
+    this.TableInst = Fano.fromJson({
+      name: 'org_table',
+      type: 'table',
+      defaultSort: 'Sort',
+      pageMode: false,
+      props: {
+        urls: {
+          list: '/api/org?range=ALL',
+          remove: '/api/org'
+        },
+        height: 680,
+        columns: [
+          {
+            dataIndex: 'rowNo',
+            display: false
+          },
+          {
+            title: '组织名称',
+            dataIndex: 'Name',
+            sorter: false
+          },
+          {
+            title: '组织编码',
+            dataIndex: 'Code',
+            sorter: false
+          },
+          {
+            title: '排序',
+            dataIndex: 'Sort',
+            filter: false,
+            align: 'center'
+          }
+        ],
         onAdd: e => {
           const presetValue = { Sort: 100 }
           this.ModalInst.value = presetValue
@@ -77,15 +105,57 @@ class Org extends React.Component {
   }
 
   initModal () {
-    this.ModalInst = Fano.fromJson(ModalConfig).enhance({
-      'org_modal.Pid': {
-        onFetch: data => {
-          const options = data.map(item => {
-            return { title: item.Name, value: item.ID, pid: item.Pid, code: item.Code }
-          })
-          return options
+    this.ModalInst = Fano.fromJson({
+      name: 'org_modal',
+      type: 'form',
+      container: [
+        {
+          name: 'ID',
+          type: 'hidden'
+        },
+        {
+          name: 'Pid',
+          type: 'treeselect',
+          label: '上级组织',
+          props: {
+            expandAll: true,
+            simpleMode: true,
+            allowInput: true,
+            url: '/api/org?range=ALL&sort=Sort&project=Code,Name,Pid',
+            span: 24,
+            onFetch: data => {
+              const options = data.map(item => {
+                return { title: item.Name, value: item.ID, pid: item.Pid, code: item.Code }
+              })
+              return options
+            }
+          }
+        },
+        {
+          name: 'Code',
+          type: 'input',
+          label: '组织编码',
+          props: {
+            span: 12
+          }
+        },
+        {
+          name: 'Name',
+          type: 'input',
+          label: '组织名称',
+          props: {
+            span: 12
+          }
+        },
+        {
+          name: 'Sort',
+          type: 'number',
+          label: '排序',
+          props: {
+            span: 12
+          }
         }
-      }
+      ]
     })
     this.ModalComponent = this.ModalInst.render()
   }

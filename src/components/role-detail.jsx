@@ -262,7 +262,7 @@ class RoleDetail extends React.Component {
         return
       }
       const { record, menus, totalMenusCheckedKeys, orgDataPrivileges } = this.state
-      const hisOps = _.groupBy(record.OperationPrivileges, 'Permission')
+      const hisOps = _.groupBy(_.get(record, 'OperationPrivileges'), 'Permission')
       const operationPrivileges = []
       const fall = (values, checkedKeys, collector) => {
         let ret = false
@@ -302,8 +302,7 @@ class RoleDetail extends React.Component {
         } else {
           await create('role', values)
         }
-        this.setState({ saveLoading: false })
-        this.handleClose()
+        this.setState({ saveLoading: false }, this.handleClose)
       })
     })
   }

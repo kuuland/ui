@@ -3,8 +3,6 @@ import { Switch, Modal } from 'antd'
 import Fano from 'fano-react'
 import moment from 'moment'
 import _ from 'lodash'
-import TableConfig from './table.json'
-import ModalConfig from './modal.json'
 import styles from './index.less'
 import { create, update } from '@/sdk/model'
 
@@ -33,11 +31,33 @@ class Param extends React.Component {
   }
 
   initTable () {
-    this.TableInst = Fano.fromJson(TableConfig).enhance({
-      param_table: {
-        onColumnsRender: {
-          IsBuiltIn: t => <Switch checked={t === true} />
+    this.TableInst = Fano.fromJson({
+      name: 'param_table',
+      type: 'table',
+      props: {
+        urls: {
+          list: '/api/param',
+          remove: '/api/param'
         },
+        columns: [
+          {
+            title: '参数编码',
+            dataIndex: 'Code'
+          },
+          {
+            title: '参数名称',
+            dataIndex: 'Name'
+          },
+          {
+            title: '参数值',
+            dataIndex: 'Value'
+          },
+          {
+            title: '是否系统内置',
+            dataIndex: 'IsBuiltIn',
+            render: t => <Switch checked={t === true} />
+          }
+        ],
         onAdd: e => {
           this.ModalInst.value = {}
           this.setState({ modalVisible: true })
@@ -55,7 +75,89 @@ class Param extends React.Component {
   }
 
   initModal () {
-    this.ModalInst = Fano.fromJson(ModalConfig)
+    this.ModalInst = Fano.fromJson({
+      name: 'param_modal',
+      type: 'form',
+      container: [
+        {
+          name: 'ID',
+          type: 'hidden'
+        },
+        {
+          name: 'Code',
+          type: 'input',
+          label: '参数编码',
+          props: {
+            span: 12,
+            disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
+          }
+        },
+        {
+          name: 'Name',
+          type: 'input',
+          label: '参数名称',
+          props: {
+            span: 12,
+            disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
+          }
+        },
+        {
+          name: 'Value',
+          type: 'textarea',
+          label: '参数值',
+          props: {
+            span: 24,
+            disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
+          }
+        },
+        {
+          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+          name: 'IsBuiltIn',
+          type: 'switch',
+          label: '系统内置',
+          props: {
+            span: 24,
+            disabled: true
+          }
+        },
+        {
+          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+          name: 'CreatedBy.Name',
+          type: 'text',
+          label: '创建人',
+          props: {
+            span: 12
+          }
+        },
+        {
+          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+          name: 'CreatedAt',
+          type: 'text',
+          label: '创建时间',
+          props: {
+            span: 12
+          }
+        },
+        {
+          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+          name: 'UpdatedBy.Name',
+          type: 'text',
+          label: '修改人',
+          props: {
+            span: 12
+          }
+        },
+        {
+          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+          name: 'UpdatedAt',
+          type: 'text',
+          label: '修改时间',
+          props: {
+            span: 12
+          }
+        }
+      ]
+    })
     this.ModalComponent = this.ModalInst.render()
   }
 

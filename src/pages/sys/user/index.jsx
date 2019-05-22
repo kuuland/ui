@@ -75,7 +75,7 @@ class User extends React.Component {
         },
         customRowActions: [
           (record, index) => (
-            <Tooltip title={window.L('角色分配')} key={record.ID + index}>
+            <Tooltip title={window.L('角色分配')}>
               <Icon type='key' className={styles.rolesAssign} onClick={e => {
                 e.stopPropagation()
                 this.setState({ roleAssignLoading: true }, async () => {
