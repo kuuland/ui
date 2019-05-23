@@ -121,12 +121,15 @@ class Org extends React.Component {
             expandAll: true,
             simpleMode: true,
             allowInput: true,
-            url: '/api/org?range=ALL&sort=Sort&project=Code,Name,Pid',
+            url: '/api/org?range=ALL&sort=Sort&project=ID,Code,Name,Pid',
             span: 24,
             onFetch: data => {
-              const options = data.map(item => {
-                return { title: item.Name, value: item.ID, pid: item.Pid, code: item.Code }
-              })
+              const options = data.map(item => ({
+                title: item.Name,
+                value: item.ID,
+                pid: item.Pid || undefined,
+                code: item.Code
+              }))
               return options
             }
           }

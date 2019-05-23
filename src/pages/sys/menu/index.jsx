@@ -80,7 +80,7 @@ class Menu extends React.Component {
       type: 'table',
       props: {
         urls: {
-          list: '/api/menu?range=ALL',
+          list: '/api/user/menus',
           remove: '/api/menu'
         },
         defaultSort: 'Sort',
@@ -197,7 +197,7 @@ class Menu extends React.Component {
           props: {
             expandAll: true,
             simpleMode: true,
-            url: '/api/menu?range=ALL&sort=Sort&project=Name,Pid,Icon',
+            url: '/api/user/menus',
             span: 24,
             onFetch: data => {
               const options = data.map(item => {

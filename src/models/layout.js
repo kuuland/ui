@@ -1,4 +1,4 @@
-import { list } from '@/sdk/model'
+import { get } from '@/utils/request'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
 import router from 'umi/router'
@@ -66,8 +66,8 @@ export default {
   },
   effects: {
     * loadMenus ({ payload }, { put, call, select }) {
-      const data = yield call(list, 'menu', { range: 'ALL', sort: 'sort' })
-      const menus = Array.isArray(_.get(data, 'list')) ? data.list : []
+      const data = yield call(get, '/api/user/menus')
+      const menus = Array.isArray(data) ? data : []
       yield put({ type: 'SET_MENUS', payload: menus })
     },
     * addPane ({ payload: value }, { put, select }) {
