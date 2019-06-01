@@ -1,6 +1,7 @@
 import React from 'react'
-import { Tag, Modal, Input, Radio } from 'antd'
+import { Tag, Modal, Input, Radio, Icon, message } from 'antd'
 import Fano from 'fano-react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import moment from 'moment'
 import { post } from '@/utils/request'
 import styles from './index.less'
@@ -36,9 +37,13 @@ class APIKey extends React.Component {
         ],
         columns: [
           {
+            dataIndex: 'rowNo',
+            display: false
+          },
+          {
             title: '状态',
             dataIndex: 'State',
-            width: 80,
+            width: 100,
             sorter: false,
             filter: false,
             align: 'center',
@@ -60,9 +65,24 @@ class APIKey extends React.Component {
             title: '访问密钥',
             sorter: false,
             filter: false,
-            width: 300,
+            width: 400,
             dataIndex: 'Token',
-            render: t => <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t}</div>
+            render: (t, r) => {
+              return (
+                <Input
+                  onClick={e => e.stopPropagation()}
+                  disabled={!(moment().isBefore(moment.unix(r.Exp)) && r.Method !== 'LOGOUT')}
+                  addonAfter={
+                    <CopyToClipboard
+                      text={t}
+                      onCopy={() => message.info(window.L('已复制到剪贴板'), 0.5)}>
+                      <Icon type='copy' onClick={e => e.stopPropagation()} />
+                    </CopyToClipboard>
+                  }
+                  defaultValue={t}
+                />
+              )
+            }
           },
           {
             title: '描述',
