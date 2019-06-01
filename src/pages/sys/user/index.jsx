@@ -5,7 +5,6 @@ import Fano from 'fano-react'
 import moment from 'moment'
 import md5 from 'blueimp-md5'
 import _ from 'lodash'
-import ModalConfig from './modal.json'
 import styles from './index.less'
 import { list, create, update } from '@/sdk/model'
 import { get } from '@/utils/request'
@@ -97,7 +96,78 @@ class User extends React.Component {
   }
 
   initModal () {
-    this.ModalInst = Fano.fromJson(ModalConfig)
+    this.ModalInst = Fano.fromJson({
+      name: 'user_modal',
+      type: 'form',
+      container: [
+        {
+          name: 'ID',
+          type: 'hidden'
+        },
+        {
+          name: 'Username',
+          type: 'input',
+          label: '账号',
+          props: {
+            span: 12,
+            disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
+          }
+        },
+        {
+          name: 'Password',
+          type: 'password',
+          label: '密码',
+          props: {
+            span: 12
+          }
+        },
+        {
+          name: 'Name',
+          type: 'input',
+          label: '姓名',
+          props: {
+            span: 12,
+            disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
+          }
+        },
+        {
+          name: 'Disable',
+          type: 'switch',
+          label: '是否禁用',
+          props: {
+            span: 12
+          }
+        },
+        {
+          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+          name: 'IsBuiltIn',
+          type: 'switch',
+          label: '系统内置',
+          props: {
+            span: 24,
+            disabled: true
+          }
+        },
+        {
+          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+          name: 'CreatedAt',
+          type: 'text',
+          label: '创建时间',
+          props: {
+            span: 12
+          }
+        },
+        {
+          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+          name: 'UpdatedAt',
+          type: 'text',
+          label: '修改时间',
+          props: {
+            span: 12
+          }
+        }
+      ]
+    })
     this.ModalComponent = this.ModalInst.render()
   }
 

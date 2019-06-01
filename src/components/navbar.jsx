@@ -33,6 +33,17 @@ class Navbar extends React.Component {
         case 'logout':
           this.handleLogout()
           break
+        case 'apikey':
+          window.g_app._store.dispatch({
+            type: 'layout/addPane',
+            payload: {
+              ID: 'apikey',
+              Icon: 'key',
+              Name: window.L('APIKey', 'API & Keys'),
+              URI: '/sys/apikey'
+            }
+          })
+          break
       }
     }
   }
@@ -73,6 +84,9 @@ class Navbar extends React.Component {
               </Menu.Item>
               <Menu.Item key={'password'}>
                 <Icon type='lock' />{window.L('修改密码')}
+              </Menu.Item>
+              <Menu.Item key={'apikey'}>
+                <Icon type='key' />{window.L('APIKey', 'API & Keys')}
               </Menu.Item>
               <Menu.Divider />
               <Menu.Item key={'logout'}>

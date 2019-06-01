@@ -80,7 +80,7 @@ class Menu extends React.Component {
       type: 'table',
       props: {
         urls: {
-          list: '/api/user/menus',
+          list: '/api/menu',
           remove: '/api/menu'
         },
         defaultSort: 'Sort',
