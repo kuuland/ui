@@ -148,6 +148,7 @@ class APIKey extends React.Component {
     }
     const ret = await post('/api/apikey', newRecord)
     if (ret) {
+      this.TableInst.emit('apikey_table:refresh')
       this.handleCancel()
     }
   }
@@ -202,7 +203,10 @@ class APIKey extends React.Component {
                     value = moment().add(1, 'y').unix()
                     break
                 }
-                this.setState({ ExpStr: key, Exp: value })
+                const { newRecord = {} } = this.state
+                newRecord.ExpStr = key
+                newRecord.Exp = value
+                this.setState({ newRecord })
               }}
               value={newRecord.ExpStr || 'never'}
             >
