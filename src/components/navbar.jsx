@@ -35,7 +35,7 @@ class Navbar extends React.Component {
           break
         case 'apikey':
           window.g_app._store.dispatch({
-            type: 'layout/addPane',
+            type: 'layout/addOrActivatePane',
             payload: {
               ID: 'apikey',
               Icon: 'key',

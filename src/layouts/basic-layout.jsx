@@ -87,7 +87,7 @@ class BasicLayout extends React.Component {
     if (!value) {
       return
     }
-    this.props.dispatch({ type: 'layout/addPane', payload: value })
+    this.props.dispatch({ type: 'layout/addOrActivatePane', payload: value })
   }
 
   cacheMenuPaneContent (activePane) {
@@ -106,7 +106,6 @@ class BasicLayout extends React.Component {
   }
 
   handleTabsRemove (targetKey, action) {
-    console.log(targetKey, action)
     if (action !== 'remove') {
       return
     }
@@ -144,7 +143,7 @@ class BasicLayout extends React.Component {
     if (Array.isArray(newPanes)) {
       this.props.dispatch({ type: 'layout/SET_PANES', payload: newPanes })
     }
-    this.props.dispatch({ type: 'layout/addPane', payload: pane })
+    this.props.dispatch({ type: 'layout/addOrActivatePane', payload: pane })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -159,7 +158,7 @@ class BasicLayout extends React.Component {
       })
       if (nextActivePane && nextActivePane.URI) {
         if (_.get(this.props.activePane, 'URI') !== nextActivePane.URI) {
-          this.props.dispatch({ type: 'layout/addPane', payload: nextActivePane })
+          this.props.dispatch({ type: 'layout/addOrActivatePane', payload: nextActivePane })
         }
       }
     }

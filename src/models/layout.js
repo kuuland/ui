@@ -73,7 +73,7 @@ export default {
       const menus = Array.isArray(data) ? data : []
       yield put({ type: 'SET_MENUS', payload: menus })
     },
-    * addPane ({ payload: value }, { put, select }) {
+    * addOrActivatePane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
       const { panes, menus } = state
       let openKeys = state.openKeys
@@ -104,11 +104,14 @@ export default {
       const { panes } = state
       const index = panes.findIndex(p => `${p.ID}` === targetKey)
       if (index >= 0) {
-        const activePane = _.get(panes, `[${index + 1}]`) || _.get(panes, `[${index - 1}]`) || _.get(panes, `[0]`) || null
+        let activePane = _.get(panes, `[${index + 1}]`) || _.get(panes, `[${index - 1}]`) || _.get(panes, `[0]`) || null
         panes.splice(index, 1)
+        if (_.includes(panes, state.activePane)) {
+          activePane = state.activePane
+        }
         yield put({ type: 'SET_PANES', payload: panes })
         if (panes.length > 0) {
-          yield put({ type: 'addPane', payload: activePane })
+          yield put({ type: 'addOrActivatePane', payload: activePane })
         } else {
           yield put({ type: 'SET_ACTIVE_PANE', payload: { activePane: undefined, openKeys: [], panes } })
         }

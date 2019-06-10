@@ -71,7 +71,7 @@ class Role extends React.Component {
       }
     }
     window.g_app._store.dispatch({
-      type: 'layout/addPane',
+      type: 'layout/addOrActivatePane',
       payload: value
     })
   }
