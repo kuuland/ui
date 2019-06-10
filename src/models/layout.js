@@ -26,7 +26,7 @@ export default {
         parentProperty: 'Pid',
         childrenProperty: 'Children'
       })
-      let { activeMenuIndex } = state
+      let { activeMenuIndex, openKeys } = state
       let localActiveMenu = parseInt(window.localStorage.getItem(activeMenuKey))
       if (_.isFinite(localActiveMenu)) {
         activeMenuIndex = localActiveMenu
@@ -35,7 +35,10 @@ export default {
         activeMenuIndex = 0
       }
       saveActiveMenu(activeMenuIndex)
-      return { ...state, menus, menusTree, activeMenuIndex }
+      if (_.isEmpty(openKeys)) {
+        openKeys = _.get(menusTree, `[${activeMenuIndex}].Children`, []).map(item => `${item.ID}`)
+      }
+      return { ...state, menus, menusTree, openKeys, activeMenuIndex }
     },
     SET_PANES (state, { payload: panes }) {
       return { ...state, panes }
@@ -73,13 +76,17 @@ export default {
     * addPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
       const { panes, menus } = state
+      let openKeys = state.openKeys
       let activePane = panes.find(p => `${p.ID}` === `${value.ID}`)
 
       if (!activePane) {
         activePane = value
         panes.push(value)
       }
-      const openKeys = calcOpenKeys(activePane, menus)
+      const newOpenKeys = calcOpenKeys(activePane, menus)
+      if (!_.isEmpty(newOpenKeys)) {
+        openKeys = newOpenKeys
+      }
       // 更新启用标签
       yield put({ type: 'SET_ACTIVE_PANE', payload: { activePane, openKeys, panes } })
       // 保存到本地缓存
@@ -161,7 +168,9 @@ function calcOpenKeys (activePane, menus) {
     if (!menu) {
       return
     }
-    openKeys.push(`${menu.ID}`)
+    if (menusMap[menu.ID]) {
+      openKeys.push(`${menu.ID}`)
+    }
     if (menu.Pid) {
       pick(menusMap[menu.Pid], menusMap, openKeys)
     }

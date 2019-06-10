@@ -41,7 +41,21 @@ class User extends React.Component {
         columns: [
           {
             title: '账号',
-            dataIndex: 'Username'
+            dataIndex: 'Username',
+            render: t => {
+              return (
+                <div
+                  title={t}
+                  style={{
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis'
+                  }}
+                >
+                  {t}
+                </div>
+              )
+            }
           },
           {
             title: '姓名',

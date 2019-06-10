@@ -1,9 +1,10 @@
 import React from 'react'
-import { Tag, Modal, Input, Radio, Icon, message } from 'antd'
+import { Tag, Modal, Input, Radio, Icon, Popconfirm, message } from 'antd'
 import Fano from 'fano-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import moment from 'moment'
 import { post } from '@/utils/request'
+import { update } from '@/sdk/model'
 import styles from './index.less'
 
 class APIKey extends React.Component {
@@ -35,18 +36,52 @@ class APIKey extends React.Component {
           'table-refresh',
           'row-del'
         ],
+        customRowActions: [
+          record => (
+            <Popconfirm
+              title={window.L('令牌作废提示', '确定立即作废该令牌吗？')}
+              placement='left'
+              onConfirm={async () => {
+                if (record.ID) {
+                  await update('signsecret', { ID: record.ID }, { Method: 'LOGOUT' })
+                  this.TableInst.emit('apikey_table:refresh')
+                }
+              }}
+              okText={window.L('立即作废')}
+              cancelText={window.L('取消')}
+            >
+              <Icon
+                type='stop'
+                title={window.L('作废令牌')}
+              />
+            </Popconfirm>
+          ),
+          record => (
+            <CopyToClipboard
+              text={record.Token}
+              onCopy={() => message.info(window.L('已复制令牌到剪贴板'), 0.5)}
+            >
+              <Icon type='copy' title={window.L('点击复制令牌')} onClick={e => e.stopPropagation()} />
+            </CopyToClipboard>
+          )
+        ],
         columns: [
           {
             dataIndex: 'rowNo',
             display: false
           },
           {
-            title: '状态',
-            dataIndex: 'State',
-            width: 100,
+            title: '描述',
             sorter: false,
             filter: false,
-            align: 'center',
+            dataIndex: 'Desc',
+            render: t => t || window.L('用户登录')
+          },
+          {
+            title: '状态',
+            dataIndex: 'State',
+            sorter: false,
+            filter: false,
             render: (t, r) => {
               let children
               if (moment().isBefore(moment.unix(r.Exp)) && r.Method !== 'LOGOUT') {
@@ -62,42 +97,9 @@ class APIKey extends React.Component {
             }
           },
           {
-            title: '访问密钥',
-            sorter: false,
-            filter: false,
-            width: 400,
-            dataIndex: 'Token',
-            render: (t, r) => {
-              return (
-                <Input
-                  onClick={e => e.stopPropagation()}
-                  disabled={!(moment().isBefore(moment.unix(r.Exp)) && r.Method !== 'LOGOUT')}
-                  addonAfter={
-                    <CopyToClipboard
-                      text={t}
-                      onCopy={() => message.info(window.L('已复制到剪贴板'), 0.5)}>
-                      <Icon type='copy' onClick={e => e.stopPropagation()} />
-                    </CopyToClipboard>
-                  }
-                  defaultValue={t}
-                />
-              )
-            }
-          },
-          {
-            title: '描述',
-            width: 180,
-            sorter: false,
-            filter: false,
-            align: 'center',
-            dataIndex: 'Desc',
-            render: t => t || window.L('用户登录')
-          },
-          {
             title: '过期时间',
             sorter: false,
             filter: false,
-            width: 100,
             dataIndex: 'Exp',
             render: t => {
               let value = moment.unix(t)
@@ -119,7 +121,6 @@ class APIKey extends React.Component {
           },
           {
             title: '创建时间',
-            width: 100,
             sorter: false,
             filter: false,
             dataIndex: 'CreatedAt',
