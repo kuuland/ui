@@ -52,6 +52,11 @@ export default {
     },
     SET_ACTIVE_PANE (state, { payload }) {
       const { activePane, openKeys, panes } = payload
+      if (_.isEmpty(openKeys)) {
+        savePanesData(activePane, [], panes)
+        return { ...state, activePane, panes }
+      }
+      savePanesData(activePane, openKeys, panes)
       return { ...state, activePane, openKeys, panes }
     },
     CLEAR (state) {
@@ -89,8 +94,6 @@ export default {
       }
       // 更新启用标签
       yield put({ type: 'SET_ACTIVE_PANE', payload: { activePane, openKeys, panes } })
-      // 保存到本地缓存
-      savePanesData(activePane, openKeys, panes)
       // 路由跳转
       const pathname = value.IsLink ? `/sys/iframe/${value.ID}` : value.URI
       const data = _.omit(value, 'Content')
