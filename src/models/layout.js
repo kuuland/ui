@@ -80,13 +80,18 @@ export default {
     },
     * addOrActivatePane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
-      const { panes, menus } = state
+      const { panes, menus, activePane: currentActivePane } = state
       let openKeys = state.openKeys
       let activePane = panes.find(p => `${p.ID}` === `${value.ID}`)
 
       if (!activePane) {
         activePane = value
-        panes.push(value)
+        const currentIndex = _.findIndex(panes, p => `${p.ID}` === `${currentActivePane.ID}`)
+        if (currentIndex > 0 && (currentIndex + 1) < panes.length) {
+          panes.splice(currentIndex + 1, 0, value)
+        } else {
+          panes.push(value)
+        }
       }
       const newOpenKeys = calcOpenKeys(activePane, menus)
       if (!_.isEmpty(newOpenKeys)) {
@@ -107,7 +112,7 @@ export default {
       const { panes } = state
       const index = panes.findIndex(p => `${p.ID}` === targetKey)
       if (index >= 0) {
-        let activePane = _.get(panes, `[${index + 1}]`) || _.get(panes, `[${index - 1}]`) || _.get(panes, `[0]`) || null
+        let activePane = _.get(panes, `[${index - 1}]`) || _.get(panes, `[${index + 1}]`) || _.get(panes, `[0]`) || null
         panes.splice(index, 1)
         if (_.includes(panes, state.activePane)) {
           activePane = state.activePane

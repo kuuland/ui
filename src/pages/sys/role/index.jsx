@@ -59,7 +59,7 @@ class Role extends React.Component {
         ID: `role-edit-${record.ID}`,
         Icon: 'team',
         Name: window.L('编辑角色', `编辑角色（${record.Name}）`),
-        URI: `/sys/role/edit/${record.ID}`,
+        URI: `/sys/role/form/${record.ID}`,
         Record: record
       }
     } else {
@@ -67,7 +67,7 @@ class Role extends React.Component {
         ID: 'role-add',
         Icon: 'team',
         Name: window.L('新增角色'),
-        URI: '/sys/role/add'
+        URI: '/sys/role/form'
       }
     }
     window.g_app._store.dispatch({
