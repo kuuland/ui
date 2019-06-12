@@ -116,7 +116,7 @@ class RoleForm extends React.Component {
         }
         splitOrgExpandedKeys[index] = expandedKeys
       }
-      const orgDataPrivileges = _.chain(record.DataPrivileges).groupBy('OrgID').mapValues(item => _.head(item)).value()
+      const orgDataPrivileges = _.chain(record.DataPrivileges).groupBy('TargetOrgID').mapValues(item => _.head(item)).value()
       this.setState({ orgsLoading: false, orgs, splitOrgExpandedKeys, orgDataPrivileges })
     })
   }
@@ -248,16 +248,31 @@ class RoleForm extends React.Component {
       const { record, totalMenusCheckedKeys, orgDataPrivileges } = this.state
       // 处理OperationPrivileges
       const hisMenuCodes = _.groupBy(_.get(record, 'OperationPrivileges'), 'MenuCode')
-      values.OperationPrivileges = []
-      for (const menuKey of totalMenusCheckedKeys) {
-        if (_.size(hisMenuCodes[menuKey]) > 0) {
-          values.OperationPrivileges.push(hisMenuCodes[menuKey][0])
-          delete hisMenuCodes[menuKey]
-        } else {
-          values.OperationPrivileges.push({
-            MenuCode: menuKey
-          })
+      let isOperationPrivilegesChange = false
+      if (totalMenusCheckedKeys.length === record.OperationPrivileges.length) {
+        for (const key of totalMenusCheckedKeys) {
+          if (!hisMenuCodes[key]) {
+            isOperationPrivilegesChange = true
+            break
+          }
         }
+      } else {
+        isOperationPrivilegesChange = true
+      }
+      if (isOperationPrivilegesChange) {
+        values.OperationPrivileges = []
+        for (const menuKey of totalMenusCheckedKeys) {
+          if (_.size(hisMenuCodes[menuKey]) > 0) {
+            values.OperationPrivileges.push(hisMenuCodes[menuKey][0])
+            delete hisMenuCodes[menuKey]
+          } else {
+            values.OperationPrivileges.push({
+              MenuCode: menuKey
+            })
+          }
+        }
+      } else {
+        delete values.OperationPrivileges
       }
       // 处理DataPrivileges
       values.DataPrivileges = []
@@ -462,7 +477,6 @@ class RoleForm extends React.Component {
 
                     expandedKeys = expandedKeys.map(item => `${item}`)
                     checkedKeys = checkedKeys.map(item => `${item}`)
-                    console.log(checkedKeys)
 
                     return (
                       <Col {...colsProps}>
@@ -538,7 +552,7 @@ class RoleForm extends React.Component {
                               onChange={v => {
                                 v = v.target.value
                                 const { orgDataPrivileges } = this.state
-                                _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgID`, orgSelectedData.ID)
+                                _.set(orgDataPrivileges, `${orgSelectedData.ID}.TargetOrgID`, orgSelectedData.ID)
                                 _.set(orgDataPrivileges, `${orgSelectedData.ID}.ReadableRange`, v)
                                 this.setState({ orgDataPrivileges })
                               }}
@@ -562,7 +576,7 @@ class RoleForm extends React.Component {
                               onChange={v => {
                                 v = v.target.value
                                 const { orgDataPrivileges } = this.state
-                                _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgID`, orgSelectedData.ID)
+                                _.set(orgDataPrivileges, `${orgSelectedData.ID}.TargetOrgID`, orgSelectedData.ID)
                                 _.set(orgDataPrivileges, `${orgSelectedData.ID}.WritableRange`, v)
                                 this.setState({ orgDataPrivileges })
                               }}

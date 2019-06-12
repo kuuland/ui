@@ -30,6 +30,12 @@ class BasicLayout extends React.Component {
     })
   }
 
+  componentWillMount () {
+    if (_.get(this.props, 'location.pathname') !== _.get(this.props, 'activePane.URI')) {
+      router.replace(_.get(this.props, 'activePane.URI'))
+    }
+  }
+
   renderMenuChildren (values) {
     values = _.chain(values)
       .filter(item => !!item.Disable !== true || item.IsVirtual === true)

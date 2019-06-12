@@ -1,5 +1,4 @@
 import React from 'react'
-import qs from 'qs'
 import { Switch, Transfer, Modal, Icon, Tooltip, Spin } from 'antd'
 import Fano from 'fano-react'
 import moment from 'moment'
@@ -96,9 +95,9 @@ class User extends React.Component {
                   // 查询角色列表
                   const roles = (await list('role', { range: 'ALL' })).list
                   // 查询已有角色列表
-                  const userRoles = await get(`/api/user/roles?${qs.stringify({ uid: record.ID })}`)
-                  const targetRolesKey = userRoles.map(item => item.ID)
-                  this.setState({ roles, targetRolesKey, roleAssignLoading: false })
+                  const roleAssigns = await get(`/api/user/role_assigns/${record.ID}`)
+                  const targetRolesKey = roleAssigns.map(item => item.RoleID)
+                  this.setState({ roles, roleAssigns, targetRolesKey, roleAssignLoading: false })
                 })
               }} />
             </Tooltip>
@@ -210,15 +209,15 @@ class User extends React.Component {
   }
 
   async handleRoleAssignOk () {
-    const { roleAssignUser, targetRolesKey } = this.state
+    const { roleAssignUser, targetRolesKey, roleAssigns: historyRoleAssigns } = this.state
     if (!_.get(roleAssignUser, 'ID') || !targetRolesKey) {
       return
     }
-    const hisAssigns = _.groupBy(roleAssignUser.RoleAssigns, 'RoleID')
+    const hisAssigns = _.chain(historyRoleAssigns).groupBy('RoleID').mapValues(values => _.head(values)).value()
     const assigns = targetRolesKey.map(item => {
       const assign = { UserID: roleAssignUser.ID, RoleID: item }
-      if (_.size(hisAssigns[item]) > 0 && hisAssigns[item][0].ID) {
-        assign.ID = hisAssigns[item][0].ID
+      if (_.get(hisAssigns, 'ID')) {
+        assign.ID = _.get(hisAssigns, 'ID')
       }
       return assign
     })
@@ -229,7 +228,7 @@ class User extends React.Component {
     this.handleRoleAssignCancel()
   }
   handleRoleAssignCancel () {
-    this.setState({ roleAssignVisible: false, roleAssignUser: undefined, targetRolesKey: [], roles: [] })
+    this.setState({ roleAssignVisible: false, roleAssignUser: undefined, targetRolesKey: [], roles: [], roleAssigns: [] })
   }
 
   render () {

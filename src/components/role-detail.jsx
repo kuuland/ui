@@ -498,7 +498,6 @@ class RoleDetail extends React.Component {
                     expandedKeys = expandedKeys.map(item => `${item}`)
                     checkedKeys = checkedKeys.map(item => `${item}`)
 
-                    console.log(checkedKeys)
                     return (
                       <Col {...colsProps}>
                         <Tree
