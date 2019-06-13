@@ -94,6 +94,7 @@ class Menu extends React.Component {
           {
             title: '菜单名称',
             dataIndex: 'Name',
+            width: 280,
             sorter: false,
             render: (t, r) => r.Icon ? <span><Icon type={r.Icon} /> {t}</span> : t
           },
