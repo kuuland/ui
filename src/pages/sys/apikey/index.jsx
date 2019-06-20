@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tag, Modal, Input, Radio, Icon, Popconfirm, message } from 'antd'
+import { Modal, Input, Radio, Icon, Popconfirm, Progress, message } from 'antd'
 import Fano from 'fano-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import moment from 'moment'
@@ -78,45 +78,23 @@ class APIKey extends React.Component {
             render: t => t || window.L('用户登录')
           },
           {
-            title: '状态',
+            title: '有效状态',
             dataIndex: 'State',
             sorter: false,
             filter: false,
             render: (t, r) => {
-              let children
+              const props = { title: moment.unix(r.Exp).format('YYYY-MM-DD HH:mm:ss') }
               if (moment().isBefore(moment.unix(r.Exp)) && r.Method !== 'LOGOUT') {
-                children = (
-                  <Tag color={'#87d068'}>ACTIVE</Tag>
-                )
+                const createdAt = moment(r.CreatedAt).unix()
+                let percent = ((moment().unix() - createdAt) / (r.Exp - createdAt)) * 100
+                percent = percent < 1 ? 1 : parseInt(percent)
+                props.percent = percent
+                props.status = 'success'
               } else {
-                children = (
-                  <Tag color={'#f50'}>INACTIVE</Tag>
-                )
+                props.percent = 100
+                props.status = 'exception'
               }
-              return children
-            }
-          },
-          {
-            title: '过期时间',
-            sorter: false,
-            filter: false,
-            dataIndex: 'Exp',
-            render: t => {
-              let value = moment.unix(t)
-              let diff = value.diff(moment(), 'y')
-              if (diff > 500) {
-                value = window.L('永不过期')
-              } else {
-                value = value.fromNow()
-              }
-              return (
-                <div
-                  style={{ cursor: 'pointer' }}
-                  title={moment.unix(t).format('YYYY-MM-DD HH:mm:ss')}
-                >
-                  {value}
-                </div>
-              )
+              return <Progress {...props} />
             }
           },
           {

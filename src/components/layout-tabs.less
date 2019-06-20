@@ -4,4 +4,45 @@
     user-select: none;
     display: inline-block;
   }
+  :global {
+    .ant-tabs-bar {
+      margin: 0;
+      padding-top: 5px;
+    }
+
+    .ant-tabs-content {
+      padding: 5px;
+      height: calc(100% - 45px);
+      overflow: auto;
+
+      .ant-tabs-tabpane.ant-tabs-tabpane-active {
+        height: 100%;
+
+        >div {
+          height: inherit;
+        }
+      }
+    }
+
+    .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+      border-radius: 0;
+    }
+
+    @menu-height: 35px;
+
+    .ant-menu-sub.ant-menu-inline>.ant-menu-item,
+    .ant-menu-sub.ant-menu-inline>.ant-menu-submenu>.ant-menu-submenu-title {
+      height: @menu-height;
+      line-height: @menu-height;
+    }
+
+    .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab:first-child {
+      margin-left: 2px;
+    }
+
+    .ant-menu-inline .ant-menu-item,
+    .ant-menu-inline .ant-menu-submenu-title {
+      width: 100%;
+    }
+  }
 }
