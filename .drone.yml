@@ -36,7 +36,7 @@ steps:
     data: |
       [
         {
-          "name": "${DRONE_REPO_NAME}",
+          "name": "kuu-ui",
           "image": "registry.cn-hangzhou.aliyuncs.com/dexdev/kuu-ui:${DRONE_COMMIT_BRANCH}-${DRONE_BUILD_NUMBER}"
         }
       ]
