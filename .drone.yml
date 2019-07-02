@@ -5,10 +5,6 @@ clone:
   depth: 1
 
 steps:
-- name: prebuild
-  image: yinfxs/shino
-  pull: true
-
 - name: build  
   image: node:carbon
   commands:
