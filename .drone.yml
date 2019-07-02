@@ -1,0 +1,46 @@
+kind: pipeline
+name: default
+
+clone:
+  depth: 1
+
+steps:
+- name: prebuild
+  image: yinfxs/shino
+  pull: true
+
+- name: build  
+  image: node:carbon
+  commands:
+    - yarn
+    - yarn run build
+
+- name: docker  
+  image: plugins/docker
+  settings:
+    registry: registry.cn-hangzhou.aliyuncs.com
+    mirror:
+      from_secret: docker_mirror
+    username:
+      from_secret: docker_user
+    password:
+      from_secret: docker_pass
+    repo: registry.cn-hangzhou.aliyuncs.com/dexdev/${DRONE_REPO_NAME}
+    tags: ${DRONE_COMMIT_BRANCH}-${DRONE_BUILD_NUMBER}
+
+- name: deploy
+  image: ystyle/drone-plugin-rancher2
+  settings:
+    access_key:
+      from_secret: rancher_key
+    secret_key:
+      from_secret: rancher_secret
+    api:
+      from_secret: rancher_api
+    data: |
+      [
+        {
+          "name": "${DRONE_REPO_NAME}",
+          "image": "registry.cn-hangzhou.aliyuncs.com/dexdev/${DRONE_REPO_NAME}:${DRONE_COMMIT_BRANCH}-${DRONE_BUILD_NUMBER}"
+        }
+      ]
