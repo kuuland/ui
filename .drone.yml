@@ -8,7 +8,7 @@ steps:
 - name: build  
   image: node:carbon
   commands:
-    - yarn
+    - yarn --registry https://registry.npm.taobao.org/
     - yarn run build
 
 - name: docker  
