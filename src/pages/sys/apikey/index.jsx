@@ -3,8 +3,7 @@ import { Modal, Input, Radio, Icon, Popconfirm, Progress, message } from 'antd'
 import Fano from 'fano-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import moment from 'moment'
-import { post } from '@/utils/request'
-import { update } from '@/sdk/model'
+import { post, update } from 'kuu-tools'
 import styles from './index.less'
 
 class APIKey extends React.Component {
@@ -131,6 +130,7 @@ class APIKey extends React.Component {
       this.handleCancel()
     }
   }
+
   handleCancel () {
     this.setState({ modalVisible: false, newRecord: undefined })
   }
@@ -154,7 +154,7 @@ class APIKey extends React.Component {
           <div className={styles.formItem}>
             <div className={styles.itemLabel}>{window.L('描述')}</div>
             <Input
-              placeholder={window.L('描述占位符', '例如: 此密钥由应用服务器使用，用于容器部署。')}
+              placeholder={window.L('APIKey描述占位符', '例如: 此密钥由应用服务器使用，用于容器部署。')}
               value={newRecord.Desc}
               onChange={e => {
                 newRecord.Desc = e.target.value

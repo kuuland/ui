@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import router from 'umi/router'
 import config from '@/config'
-import { get, post } from '@/utils/request'
+import { get, post } from 'kuu-tools'
 
 export default {
   state: {

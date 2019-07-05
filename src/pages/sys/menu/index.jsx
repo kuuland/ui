@@ -6,8 +6,7 @@ import moment from 'moment'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
 import styles from './index.less'
-import { create, update } from '@/sdk/model'
-import { getDict } from '@/sdk/dict'
+import { create, update, getDict } from 'kuu-tools'
 
 class Menu extends React.Component {
   constructor (props) {
@@ -22,6 +21,7 @@ class Menu extends React.Component {
     this.handleModalOk = this.handleModalOk.bind(this)
     this.handleModalCancel = this.handleModalCancel.bind(this)
   }
+
   init () {
     this.initTable()
     this.initModal()
@@ -131,7 +131,8 @@ class Menu extends React.Component {
             sorter: false,
             filter: false,
             align: 'center',
-            render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 16, color: '#52c41a' }} /> : <Icon type='eye' style={{ fontSize: 16, color: '#52c41a' }} />
+            render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 16, color: '#52c41a' }} />
+              : <Icon type='eye' style={{ fontSize: 16, color: '#52c41a' }} />
           },
           {
             title: '菜单详情',
@@ -365,7 +366,8 @@ class Menu extends React.Component {
           okText={window.L('保存')}
           visible={modalVisible}
           onOk={this.handleModalOk}
-          onCancel={this.handleModalCancel}>
+          onCancel={this.handleModalCancel}
+        >
           <ModalComponent />
         </Modal>
       </div>

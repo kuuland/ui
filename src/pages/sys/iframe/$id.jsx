@@ -10,6 +10,7 @@ class IframePage extends React.Component {
       loading: true
     }
   }
+
   render () {
     const { location } = this.props
     const menuData = location.state

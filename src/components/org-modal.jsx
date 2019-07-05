@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { Modal, Button, Select } from 'antd'
-import { get, post } from '@/utils/request'
+import { get, post } from 'kuu-tools'
 
 class OrgModal extends React.Component {
   constructor (props) {

@@ -19,10 +19,18 @@ export default props => {
             <Dropdown
               overlay={
                 <Menu>
-                  <Menu.Item key='refresh' onClick={() => props.onContext(pane, index, 'refresh')}><Icon type='reload' />{window.L('刷新')}</Menu.Item>
-                  <Menu.Item key='close-others' onClick={() => props.onContext(pane, index, 'close-others')}><Icon type='close-circle' />{window.L('关闭其他')}</Menu.Item>
-                  <Menu.Item key='close-left' onClick={() => props.onContext(pane, index, 'close-left')}><Icon type='left-circle' />{window.L('关闭左侧')}</Menu.Item>
-                  <Menu.Item key='close-right' onClick={() => props.onContext(pane, index, 'close-right')}><Icon type='right-circle' />{window.L('关闭右侧')}</Menu.Item>
+                  <Menu.Item key='refresh' onClick={() => props.onContext(pane, index, 'refresh')}><Icon
+                    type='reload'
+                  />{window.L('刷新')}</Menu.Item>
+                  <Menu.Item key='close-others' onClick={() => props.onContext(pane, index, 'close-others')}><Icon
+                    type='close-circle'
+                  />{window.L('关闭其他')}</Menu.Item>
+                  <Menu.Item key='close-left' onClick={() => props.onContext(pane, index, 'close-left')}><Icon
+                    type='left-circle'
+                  />{window.L('关闭左侧')}</Menu.Item>
+                  <Menu.Item key='close-right' onClick={() => props.onContext(pane, index, 'close-right')}><Icon
+                    type='right-circle'
+                  />{window.L('关闭右侧')}</Menu.Item>
                 </Menu>
               }
               trigger={['contextMenu']}
@@ -33,7 +41,8 @@ export default props => {
             </Dropdown>
           }
           key={pane.ID}
-          closable={pane.Closeable !== false}>
+          closable={pane.Closeable !== false}
+        >
           {pane.Content}
         </Tabs.TabPane>
       ))}

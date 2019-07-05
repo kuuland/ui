@@ -1,7 +1,7 @@
 export default {
   shortName: 'Kuu',
-  fullName: 'Kuu UI',
-  htmlTitle: 'Kuu UI',
+  fullName: 'Kuu',
+  htmlTitle: 'Kuu',
   simplePages: ['/login'],
   whiteRoutes: [],
   loginPathname: '/login',

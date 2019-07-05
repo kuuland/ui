@@ -1,4 +1,3 @@
-
 @width: 400px;
 .login {
   // background: url(../assets/graphic-1714230.svg) center center no-repeat fixed;
@@ -8,7 +7,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  
+
   display: flex;
   width: 100%;
   height: 100vh;
@@ -20,46 +19,55 @@
   .content {
     background-color: #fff;
     color: #454545;
-    margin-top: calc((100vh - 500px)/ 2);
-    box-shadow: 0 0 10px rgba(61,61,61,.25);
+    margin-top: calc((100vh - 500px) / 2);
+    box-shadow: 0 0 10px rgba(61, 61, 61, .25);
   }
+
   .title {
     width: @width;
     text-align: center;
     padding: 20px;
     font-size: 33px;
-    font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
+    font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
     font-weight: 600;
   }
+
   .welcome {
     text-align: center;
     color: #8b959c;
     font-size: 1.2em;
   }
+
   .loginForm {
     padding: 10px 30px;
     height: fit-content;
     width: @width;
   }
+
   .forgot {
     float: right;
   }
+
   .submit {
     width: 100%;
   }
+
   .footer {
-    color: rgba(0,0,0,.45);
+    color: rgba(0, 0, 0, .45);
     font-size: 14px;
     position: fixed;
     bottom: 20px;
   }
 }
+
 @media (max-width: 768px) {
   .login {
     background: #fff;
+
     .content {
       box-shadow: none;
     }
+
     .loginForm {
       padding: 10px 40px;
     }

@@ -1,9 +1,11 @@
 .tabs {
   height: 100%;
+
   .title {
     user-select: none;
     display: inline-block;
   }
+
   :global {
     .ant-tabs-bar {
       margin: 0;
@@ -11,14 +13,13 @@
     }
 
     .ant-tabs-content {
-      padding: 5px;
       height: calc(100% - 45px);
       overflow: auto;
 
       .ant-tabs-tabpane.ant-tabs-tabpane-active {
         height: 100%;
 
-        >div {
+        > div {
           height: inherit;
         }
       }
@@ -30,8 +31,8 @@
 
     @menu-height: 35px;
 
-    .ant-menu-sub.ant-menu-inline>.ant-menu-item,
-    .ant-menu-sub.ant-menu-inline>.ant-menu-submenu>.ant-menu-submenu-title {
+    .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+    .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
       height: @menu-height;
       line-height: @menu-height;
     }

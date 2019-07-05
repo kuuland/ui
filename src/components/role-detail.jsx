@@ -1,9 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
-import { id, list, update, create } from '@/sdk/model'
-import { getDict } from '@/sdk/dict'
-import { get } from '@/utils/request'
+import { get, id, list, update, create, getDict } from 'kuu-tools'
 import { Form, Row, Col, Tree, Icon, Input, Button, Spin, Table, Radio, Dropdown, Menu, Tabs, Skeleton } from 'antd'
 import styles from './role-detail.less'
 
@@ -24,6 +22,7 @@ class RoleDetail extends React.Component {
     this.handleSelectedMeta = this.handleSelectedMeta.bind(this)
     this.handleTableSelections = this.handleTableSelections.bind(this)
   }
+
   async componentDidMount () {
     const idVal = _.get(this.state, 'record.ID')
     if (idVal) {
@@ -57,7 +56,11 @@ class RoleDetail extends React.Component {
   fetchMenus () {
     this.setState({ menusLoading: true }, async () => {
       const { record } = this.state
-      const data = await list('menu', { range: 'ALL', sort: 'sort', project: 'ID,Pid,Icon,Code,Name,Disable,IsVirtual' })
+      const data = await list('menu', {
+        range: 'ALL',
+        sort: 'sort',
+        project: 'ID,Pid,Icon,Code,Name,Disable,IsVirtual'
+      })
       const raw = _.get(data, 'list', [])
       const menus = arrayToTree(raw, {
         customID: 'ID',
@@ -88,13 +91,19 @@ class RoleDetail extends React.Component {
       }
       for (const index in menus) {
         const item = menus[index]
-        const expandedKeys = [ `${item.ID}` ]
+        const expandedKeys = [`${item.ID}`]
         const checkedKeys = []
         fall(item.Children, expandedKeys, checkedKeys)
         splitMenuExpandedKeys[index] = expandedKeys
         splitMenuCheckedKeys[index] = checkedKeys
       }
-      this.setState({ menusLoading: false, menus, splitMenuExpandedKeys, splitMenuCheckedKeys, totalMenusCheckedKeys: permissions })
+      this.setState({
+        menusLoading: false,
+        menus,
+        splitMenuExpandedKeys,
+        splitMenuCheckedKeys,
+        totalMenusCheckedKeys: permissions
+      })
     })
   }
 
@@ -121,7 +130,7 @@ class RoleDetail extends React.Component {
       }
       for (const index in orgs) {
         const item = orgs[index]
-        const expandedKeys = [ `${item.ID}` ]
+        const expandedKeys = [`${item.ID}`]
         if (!_.isEmpty(item.Children)) {
           fall(item.Children, expandedKeys)
         }
@@ -214,11 +223,15 @@ class RoleDetail extends React.Component {
                   <span>{`${value.Name} ${value.Code || ''}`}</span>
                   <span className={styles.customTreeIcon}>
                     {stateIcon}
-                    <Icon type='close-square' className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`} onClick={e => {
-                      const { orgDataPrivileges } = this.state
-                      delete orgDataPrivileges[value.ID]
-                      this.setState({ orgDataPrivileges })
-                    }} />
+                    <Icon
+                      type='close-square'
+                      className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`}
+                      onClick={e => {
+                        const { orgDataPrivileges } = this.state
+                        delete orgDataPrivileges[value.ID]
+                        this.setState({ orgDataPrivileges })
+                      }}
+                    />
                   </span>
                 </span>
               }
@@ -236,11 +249,15 @@ class RoleDetail extends React.Component {
                 <span>{`${value.Name} ${value.Code || ''}`}</span>
                 <span className={styles.customTreeIcon}>
                   {stateIcon}
-                  <Icon type='close-square' className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`} onClick={e => {
-                    const { orgDataPrivileges } = this.state
-                    delete orgDataPrivileges[value.ID]
-                    this.setState({ orgDataPrivileges })
-                  }} />
+                  <Icon
+                    type='close-square'
+                    className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`}
+                    onClick={e => {
+                      const { orgDataPrivileges } = this.state
+                      delete orgDataPrivileges[value.ID]
+                      this.setState({ orgDataPrivileges })
+                    }}
+                  />
                 </span>
               </span>
             }
@@ -375,6 +392,7 @@ class RoleDetail extends React.Component {
     _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgID`, orgSelectedData.ID)
     _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgName`, orgSelectedData.Name)
   }
+
   handleMetaTableRadioOnChange (key, v, rowData) {
     const { orgDataPrivileges, orgSelectedData } = this.state
     this.setAuthObject({
@@ -542,7 +560,11 @@ class RoleDetail extends React.Component {
                           defaultExpandedKeys={expandedKeys}
                           onSelect={selectedKeys => {
                             const selectedOrgID = _.get(selectedKeys, '[0]')
-                            const state = { orgSelectedData: undefined, metaSelectedRowKeys: undefined, metaSelectedRows: undefined }
+                            const state = {
+                              orgSelectedData: undefined,
+                              metaSelectedRowKeys: undefined,
+                              metaSelectedRows: undefined
+                            }
                             if (selectedOrgID) {
                               state.orgSelectedData = this.orgsMap[selectedOrgID]
                             }
@@ -561,7 +583,10 @@ class RoleDetail extends React.Component {
                       <span style={{ marginLeft: 5, opacity: 0.8 }}>{window.L('请选择左侧组织')}</span>
                       <Skeleton />
                     </div>
-                    <Tabs animated={false} defaultActiveKey='all' style={{ display: orgSelectedData.ID ? 'block' : 'none' }}>
+                    <Tabs
+                      animated={false} defaultActiveKey='all'
+                      style={{ display: orgSelectedData.ID ? 'block' : 'none' }}
+                    >
                       <Tabs.TabPane tab={window.L('全局授权')} key='all'>
                         <div className={styles.tabContentRow}>
                           <span className={styles.tabContentLabel}>{window.L('全局可读范围', '全局可读范围：')}</span>
@@ -575,15 +600,21 @@ class RoleDetail extends React.Component {
                               this.setState({ orgDataPrivileges })
                             }}
                           >
-                            {dataRangeDictValues.map(item => <Radio.Button key={item.Value} value={item.Value}>{item.Label}</Radio.Button>)}
+                            {dataRangeDictValues.map(item => <Radio.Button
+                              key={item.Value}
+                              value={item.Value}
+                            >{item.Label}</Radio.Button>)}
                           </Radio.Group>
-                          <Icon type='close-circle' className={styles.clearIcon} onClick={e => {
-                            const { orgDataPrivileges } = this.state
-                            const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
-                            delete obj.AllReadableRange
-                            _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
-                            this.setState({ orgDataPrivileges })
-                          }} />
+                          <Icon
+                            type='close-circle' className={styles.clearIcon}
+                            onClick={e => {
+                              const { orgDataPrivileges } = this.state
+                              const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
+                              delete obj.AllReadableRange
+                              _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
+                              this.setState({ orgDataPrivileges })
+                            }}
+                          />
                         </div>
                         <div className={styles.tabContentRow}>
                           <span className={styles.tabContentLabel}>{window.L('全局可写范围', '全局可写范围：')}</span>
@@ -597,15 +628,21 @@ class RoleDetail extends React.Component {
                               this.setState({ orgDataPrivileges })
                             }}
                           >
-                            {dataRangeDictValues.map(item => <Radio.Button key={item.Value} value={item.Value}>{item.Label}</Radio.Button>)}
+                            {dataRangeDictValues.map(item => <Radio.Button
+                              key={item.Value}
+                              value={item.Value}
+                            >{item.Label}</Radio.Button>)}
                           </Radio.Group>
-                          <Icon type='close-circle' className={styles.clearIcon} onClick={e => {
-                            const { orgDataPrivileges } = this.state
-                            const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
-                            delete obj.AllWritableRange
-                            _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
-                            this.setState({ orgDataPrivileges })
-                          }} />
+                          <Icon
+                            type='close-circle' className={styles.clearIcon}
+                            onClick={e => {
+                              const { orgDataPrivileges } = this.state
+                              const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
+                              delete obj.AllWritableRange
+                              _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
+                              this.setState({ orgDataPrivileges })
+                            }}
+                          />
                         </div>
                       </Tabs.TabPane>
                       <Tabs.TabPane tab={window.L('自定义授权')} key='custom'>
@@ -663,17 +700,21 @@ class RoleDetail extends React.Component {
                             },
                             {
                               title: (
-                                <Dropdown overlay={
-                                  <Menu onClick={({ key }) => this.handleSelectedMeta('ObjReadableRange', key)}>
-                                    <Menu.Item key={'follow_global'}>{window.L('跟随全局')}</Menu.Item>
-                                    {dataRangeDictValues.map(item => <Menu.Item key={item.Value}>{item.Label}</Menu.Item>)}
-                                    <Menu.Divider />
-                                    <Menu.Item key='0' disabled className={styles.redTips}>
-                                      <Icon type='info-circle' />
-                                      {window.L('批量设置选中行')}
-                                    </Menu.Item>
-                                  </Menu>
-                                }>
+                                <Dropdown
+                                  overlay={
+                                    <Menu onClick={({ key }) => this.handleSelectedMeta('ObjReadableRange', key)}>
+                                      <Menu.Item key={'follow_global'}>{window.L('跟随全局')}</Menu.Item>
+                                      {dataRangeDictValues.map(item => <Menu.Item
+                                        key={item.Value}
+                                      >{item.Label}</Menu.Item>)}
+                                      <Menu.Divider />
+                                      <Menu.Item key='0' disabled className={styles.redTips}>
+                                        <Icon type='info-circle' />
+                                        {window.L('批量设置选中行')}
+                                      </Menu.Item>
+                                    </Menu>
+                                  }
+                                >
                                   <a className='ant-dropdown-link' href='#'>
                                     {window.L('可读范围')} <Icon type='down' />
                                   </a>
@@ -707,17 +748,21 @@ class RoleDetail extends React.Component {
                             },
                             {
                               title: (
-                                <Dropdown overlay={
-                                  <Menu onClick={({ key }) => this.handleSelectedMeta('ObjWritableRange', key)}>
-                                    <Menu.Item key={'follow_global'}>{window.L('跟随全局')}</Menu.Item>
-                                    {dataRangeDictValues.map(item => <Menu.Item key={item.Value}>{item.Label}</Menu.Item>)}
-                                    <Menu.Divider />
-                                    <Menu.Item key='0' disabled className={styles.redTips}>
-                                      <Icon type='info-circle' />
-                                      {window.L('批量设置选中行')}
-                                    </Menu.Item>
-                                  </Menu>
-                                }>
+                                <Dropdown
+                                  overlay={
+                                    <Menu onClick={({ key }) => this.handleSelectedMeta('ObjWritableRange', key)}>
+                                      <Menu.Item key={'follow_global'}>{window.L('跟随全局')}</Menu.Item>
+                                      {dataRangeDictValues.map(item => <Menu.Item
+                                        key={item.Value}
+                                      >{item.Label}</Menu.Item>)}
+                                      <Menu.Divider />
+                                      <Menu.Item key='0' disabled className={styles.redTips}>
+                                        <Icon type='info-circle' />
+                                        {window.L('批量设置选中行')}
+                                      </Menu.Item>
+                                    </Menu>
+                                  }
+                                >
                                   <a className='ant-dropdown-link' href='#'>
                                     {window.L('可写范围')} <Icon type='down' />
                                   </a>
@@ -760,7 +805,10 @@ class RoleDetail extends React.Component {
           </div>
           <div className={styles.actions}>
             <div className={styles.buttons}>
-              <Button type='primary' htmlType='submit' icon='check' loading={this.state.saveLoading}>{window.L('保存')}</Button>
+              <Button
+                type='primary' htmlType='submit' icon='check'
+                loading={this.state.saveLoading}
+              >{window.L('保存')}</Button>
               <Button icon='undo' onClick={this.handleClose}>{window.L('取消')}</Button>
             </div>
           </div>

@@ -16,6 +16,7 @@ class Navbar extends React.Component {
     }
     this.handleClick = this.handleClick.bind(this)
   }
+
   handleClick (e) {
     const { menuKeyPrefix } = this.state
     if (e.key.startsWith(menuKeyPrefix)) {
@@ -47,11 +48,13 @@ class Navbar extends React.Component {
       }
     }
   }
+
   handleLogout () {
     window.g_app._store.dispatch({
       type: 'user/logout'
     })
   }
+
   render () {
     const { menuKeyPrefix } = this.state
     const { menusTree, loginOrg, loginData } = this.props

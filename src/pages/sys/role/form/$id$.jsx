@@ -1,9 +1,24 @@
 import React from 'react'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
-import { id, list, update, create } from '@/sdk/model'
-import { get } from '@/utils/request'
-import { Form, Row, Col, Tree, Icon, Input, Button, Spin, Table, Radio, Dropdown, Menu, Tabs, Skeleton, Empty } from 'antd'
+import { get, id, list, update, create } from 'kuu-tools'
+import {
+  Form,
+  Row,
+  Col,
+  Tree,
+  Icon,
+  Input,
+  Button,
+  Spin,
+  Table,
+  Radio,
+  Dropdown,
+  Menu,
+  Tabs,
+  Skeleton,
+  Empty
+} from 'antd'
 import styles from './$id$.less'
 
 class RoleForm extends React.Component {
@@ -23,6 +38,7 @@ class RoleForm extends React.Component {
     this.handleSelectedMeta = this.handleSelectedMeta.bind(this)
     this.handleTableSelections = this.handleTableSelections.bind(this)
   }
+
   async componentDidMount () {
     const idVal = _.get(this.state, 'record.ID') || _.get(this.props, 'match.params.id')
     if (idVal) {
@@ -78,13 +94,19 @@ class RoleForm extends React.Component {
       }
       for (const index in menus) {
         const item = menus[index]
-        const expandedKeys = [ item.Code ]
+        const expandedKeys = [item.Code]
         const checkedKeys = []
         fall(item.Children, expandedKeys, checkedKeys)
         splitMenuExpandedKeys[index] = expandedKeys
         splitMenuCheckedKeys[index] = checkedKeys
       }
-      this.setState({ menusLoading: false, menus, splitMenuExpandedKeys, splitMenuCheckedKeys, totalMenusCheckedKeys: permissions })
+      this.setState({
+        menusLoading: false,
+        menus,
+        splitMenuExpandedKeys,
+        splitMenuCheckedKeys,
+        totalMenusCheckedKeys: permissions
+      })
     })
   }
 
@@ -110,7 +132,7 @@ class RoleForm extends React.Component {
       }
       for (const index in orgs) {
         const item = orgs[index]
-        const expandedKeys = [ `${item.ID}` ]
+        const expandedKeys = [`${item.ID}`]
         if (!_.isEmpty(item.Children)) {
           fall(item.Children, expandedKeys)
         }
@@ -198,11 +220,15 @@ class RoleForm extends React.Component {
                   <span>{`${value.Name} ${value.Code || ''}`}</span>
                   <span className={styles.customTreeIcon}>
                     {stateIcon}
-                    <Icon type='close-square' className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`} onClick={e => {
-                      const { orgDataPrivileges } = this.state
-                      delete orgDataPrivileges[value.ID]
-                      this.setState({ orgDataPrivileges })
-                    }} />
+                    <Icon
+                      type='close-square'
+                      className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`}
+                      onClick={e => {
+                        const { orgDataPrivileges } = this.state
+                        delete orgDataPrivileges[value.ID]
+                        this.setState({ orgDataPrivileges })
+                      }}
+                    />
                   </span>
                 </span>
               }
@@ -220,11 +246,15 @@ class RoleForm extends React.Component {
                 <span>{`${value.Name} ${value.Code || ''}`}</span>
                 <span className={styles.customTreeIcon}>
                   {stateIcon}
-                  <Icon type='close-square' className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`} onClick={e => {
-                    const { orgDataPrivileges } = this.state
-                    delete orgDataPrivileges[value.ID]
-                    this.setState({ orgDataPrivileges })
-                  }} />
+                  <Icon
+                    type='close-square'
+                    className={`customTreeEmtpyIcon ${stateIcon === undefined && styles.forcedHidden}`}
+                    onClick={e => {
+                      const { orgDataPrivileges } = this.state
+                      delete orgDataPrivileges[value.ID]
+                      this.setState({ orgDataPrivileges })
+                    }}
+                  />
                 </span>
               </span>
             }
@@ -357,6 +387,7 @@ class RoleForm extends React.Component {
     _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgID`, orgSelectedData.ID)
     _.set(orgDataPrivileges, `${orgSelectedData.ID}.OrgName`, orgSelectedData.Name)
   }
+
   handleMetaTableRadioOnChange (key, v, rowData) {
     const { orgDataPrivileges, orgSelectedData } = this.state
     this.setAuthObject({
@@ -509,7 +540,8 @@ class RoleForm extends React.Component {
                   className={styles.authRow}
                   gutter={16}
                 >
-                  {orgs.length === 0 && <Empty description={window.L('暂无组织', '暂无组织，请先新增组织')} image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                  {orgs.length === 0 &&
+                  <Empty description={window.L('暂无组织', '暂无组织，请先新增组织')} image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                   {orgs.map((item, index) => {
                     const colsProps = {
                       key: index, sm: 24, md: 8
@@ -523,7 +555,11 @@ class RoleForm extends React.Component {
                           defaultExpandedKeys={expandedKeys}
                           onSelect={selectedKeys => {
                             const selectedOrgID = _.get(selectedKeys, '[0]')
-                            const state = { orgSelectedData: undefined, metaSelectedRowKeys: undefined, metaSelectedRows: undefined }
+                            const state = {
+                              orgSelectedData: undefined,
+                              metaSelectedRowKeys: undefined,
+                              metaSelectedRows: undefined
+                            }
                             if (selectedOrgID) {
                               state.orgSelectedData = this.orgsMap[selectedOrgID]
                             }
@@ -543,7 +579,10 @@ class RoleForm extends React.Component {
                         <span style={{ marginLeft: 5, opacity: 0.8 }}>{window.L('请选择左侧组织')}</span>
                         <Skeleton />
                       </div>
-                      <Tabs animated={false} defaultActiveKey='all' style={{ display: orgSelectedData.ID ? 'block' : 'none' }}>
+                      <Tabs
+                        animated={false} defaultActiveKey='all'
+                        style={{ display: orgSelectedData.ID ? 'block' : 'none' }}
+                      >
                         <Tabs.TabPane tab={window.L('全局授权')} key='all'>
                           <div className={styles.tabContentRow}>
                             <span className={styles.tabContentLabel}>{window.L('全局可读范围', '全局可读范围：')}</span>
@@ -559,15 +598,21 @@ class RoleForm extends React.Component {
                             >
                               <Radio.Button key={'PERSONAL'} value={'PERSONAL'}>{window.L('个人范围')}</Radio.Button>
                               <Radio.Button key={'CURRENT'} value={'CURRENT'}>{window.L('当前登入组织')}</Radio.Button>
-                              <Radio.Button key={'CURRENT_FOLLOWING'} value={'CURRENT_FOLLOWING'}>{window.L('当前及以下组织')}</Radio.Button>
+                              <Radio.Button
+                                key={'CURRENT_FOLLOWING'}
+                                value={'CURRENT_FOLLOWING'}
+                              >{window.L('当前及以下组织')}</Radio.Button>
                             </Radio.Group>
-                            <Icon type='close-circle' className={styles.clearIcon} onClick={e => {
-                              const { orgDataPrivileges } = this.state
-                              const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
-                              delete obj.ReadableRange
-                              _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
-                              this.setState({ orgDataPrivileges })
-                            }} />
+                            <Icon
+                              type='close-circle' className={styles.clearIcon}
+                              onClick={e => {
+                                const { orgDataPrivileges } = this.state
+                                const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
+                                delete obj.ReadableRange
+                                _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
+                                this.setState({ orgDataPrivileges })
+                              }}
+                            />
                           </div>
                           <div className={styles.tabContentRow}>
                             <span className={styles.tabContentLabel}>{window.L('全局可写范围', '全局可写范围：')}</span>
@@ -583,15 +628,21 @@ class RoleForm extends React.Component {
                             >
                               <Radio.Button key={'PERSONAL'} value={'PERSONAL'}>{window.L('个人范围')}</Radio.Button>
                               <Radio.Button key={'CURRENT'} value={'CURRENT'}>{window.L('当前登入组织')}</Radio.Button>
-                              <Radio.Button key={'CURRENT_FOLLOWING'} value={'CURRENT_FOLLOWING'}>{window.L('当前及以下组织')}</Radio.Button>
+                              <Radio.Button
+                                key={'CURRENT_FOLLOWING'}
+                                value={'CURRENT_FOLLOWING'}
+                              >{window.L('当前及以下组织')}</Radio.Button>
                             </Radio.Group>
-                            <Icon type='close-circle' className={styles.clearIcon} onClick={e => {
-                              const { orgDataPrivileges } = this.state
-                              const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
-                              delete obj.WritableRange
-                              _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
-                              this.setState({ orgDataPrivileges })
-                            }} />
+                            <Icon
+                              type='close-circle' className={styles.clearIcon}
+                              onClick={e => {
+                                const { orgDataPrivileges } = this.state
+                                const obj = _.get(orgDataPrivileges, `${orgSelectedData.ID}`, {})
+                                delete obj.WritableRange
+                                _.set(orgDataPrivileges, `${orgSelectedData.ID}`, obj)
+                                this.setState({ orgDataPrivileges })
+                              }}
+                            />
                           </div>
                         </Tabs.TabPane>
                         <Tabs.TabPane tab={window.L('自定义授权')} key='custom'>
@@ -649,19 +700,21 @@ class RoleForm extends React.Component {
                               },
                               {
                                 title: (
-                                  <Dropdown overlay={
-                                    <Menu onClick={({ key }) => this.handleSelectedMeta('ObjReadableRange', key)}>
-                                      <Menu.Item key={'FOLLOW_GLOBAL'}>{window.L('跟随全局')}</Menu.Item>
-                                      <Menu.Item key={'PERSONAL'}>{window.L('个人范围')}</Menu.Item>
-                                      <Menu.Item key={'CURRENT'}>{window.L('当前登入组织')}</Menu.Item>
-                                      <Menu.Item key={'CURRENT_FOLLOWING'}>{window.L('当前及以下组织')}</Menu.Item>
-                                      <Menu.Divider />
-                                      <Menu.Item key='0' disabled className={styles.redTips}>
-                                        <Icon type='info-circle' />
-                                        {window.L('批量设置选中行')}
-                                      </Menu.Item>
-                                    </Menu>
-                                  }>
+                                  <Dropdown
+                                    overlay={
+                                      <Menu onClick={({ key }) => this.handleSelectedMeta('ObjReadableRange', key)}>
+                                        <Menu.Item key={'FOLLOW_GLOBAL'}>{window.L('跟随全局')}</Menu.Item>
+                                        <Menu.Item key={'PERSONAL'}>{window.L('个人范围')}</Menu.Item>
+                                        <Menu.Item key={'CURRENT'}>{window.L('当前登入组织')}</Menu.Item>
+                                        <Menu.Item key={'CURRENT_FOLLOWING'}>{window.L('当前及以下组织')}</Menu.Item>
+                                        <Menu.Divider />
+                                        <Menu.Item key='0' disabled className={styles.redTips}>
+                                          <Icon type='info-circle' />
+                                          {window.L('批量设置选中行')}
+                                        </Menu.Item>
+                                      </Menu>
+                                    }
+                                  >
                                     <a className='ant-dropdown-link' href='#'>
                                       {window.L('可读范围')} <Icon type='down' />
                                     </a>
@@ -684,26 +737,31 @@ class RoleForm extends React.Component {
                                       <Radio key={'FOLLOW_GLOBAL'} value={'FOLLOW_GLOBAL'}>{window.L('跟随全局')}</Radio>
                                       <Radio key={'PERSONAL'} value={'PERSONAL'}>{window.L('个人范围')}</Radio>
                                       <Radio key={'CURRENT'} value={'CURRENT'}>{window.L('当前登入组织')}</Radio>
-                                      <Radio key={'CURRENT_FOLLOWING'} value={'CURRENT_FOLLOWING'}>{window.L('当前及以下组织')}</Radio>
+                                      <Radio
+                                        key={'CURRENT_FOLLOWING'}
+                                        value={'CURRENT_FOLLOWING'}
+                                      >{window.L('当前及以下组织')}</Radio>
                                     </Radio.Group>
                                   )
                                 }
                               },
                               {
                                 title: (
-                                  <Dropdown overlay={
-                                    <Menu onClick={({ key }) => this.handleSelectedMeta('ObjWritableRange', key)}>
-                                      <Menu.Item key={'FOLLOW_GLOBAL'}>{window.L('跟随全局')}</Menu.Item>
-                                      <Menu.Item key={'PERSONAL'}>{window.L('个人范围')}</Menu.Item>
-                                      <Menu.Item key={'CURRENT'}>{window.L('当前登入组织')}</Menu.Item>
-                                      <Menu.Item key={'CURRENT_FOLLOWING'}>{window.L('当前及以下组织')}</Menu.Item>
-                                      <Menu.Divider />
-                                      <Menu.Item key='0' disabled className={styles.redTips}>
-                                        <Icon type='info-circle' />
-                                        {window.L('批量设置选中行')}
-                                      </Menu.Item>
-                                    </Menu>
-                                  }>
+                                  <Dropdown
+                                    overlay={
+                                      <Menu onClick={({ key }) => this.handleSelectedMeta('ObjWritableRange', key)}>
+                                        <Menu.Item key={'FOLLOW_GLOBAL'}>{window.L('跟随全局')}</Menu.Item>
+                                        <Menu.Item key={'PERSONAL'}>{window.L('个人范围')}</Menu.Item>
+                                        <Menu.Item key={'CURRENT'}>{window.L('当前登入组织')}</Menu.Item>
+                                        <Menu.Item key={'CURRENT_FOLLOWING'}>{window.L('当前及以下组织')}</Menu.Item>
+                                        <Menu.Divider />
+                                        <Menu.Item key='0' disabled className={styles.redTips}>
+                                          <Icon type='info-circle' />
+                                          {window.L('批量设置选中行')}
+                                        </Menu.Item>
+                                      </Menu>
+                                    }
+                                  >
                                     <a className='ant-dropdown-link' href='#'>
                                       {window.L('可写范围')} <Icon type='down' />
                                     </a>
@@ -726,7 +784,10 @@ class RoleForm extends React.Component {
                                       <Radio key={'FOLLOW_GLOBAL'} value={'FOLLOW_GLOBAL'}>{window.L('跟随全局')}</Radio>
                                       <Radio key={'PERSONAL'} value={'PERSONAL'}>{window.L('个人范围')}</Radio>
                                       <Radio key={'CURRENT'} value={'CURRENT'}>{window.L('当前登入组织')}</Radio>
-                                      <Radio key={'CURRENT_FOLLOWING'} value={'CURRENT_FOLLOWING'}>{window.L('当前及以下组织')}</Radio>
+                                      <Radio
+                                        key={'CURRENT_FOLLOWING'}
+                                        value={'CURRENT_FOLLOWING'}
+                                      >{window.L('当前及以下组织')}</Radio>
                                     </Radio.Group>
                                   )
                                 }
@@ -743,7 +804,10 @@ class RoleForm extends React.Component {
           </div>
           <div className={styles.actions}>
             <div className={styles.buttons}>
-              <Button type='primary' htmlType='submit' icon='check' loading={this.state.saveLoading}>{window.L('保存')}</Button>
+              <Button
+                type='primary' htmlType='submit' icon='check'
+                loading={this.state.saveLoading}
+              >{window.L('保存')}</Button>
               <Button icon='undo' onClick={this.handleClose}>{window.L('取消')}</Button>
             </div>
           </div>

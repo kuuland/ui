@@ -4,7 +4,7 @@ import router from 'umi/router'
 import _ from 'lodash'
 import { Form, Icon, Input, Button, Checkbox, message } from 'antd'
 import styles from './login.less'
-import { get, post } from '@/utils/request'
+import { get, post } from 'kuu-tools'
 import OrgModal from '@/components/org-modal'
 import config from '@/config'
 
@@ -22,6 +22,7 @@ class Login extends React.Component {
     this.handleOk = this.handleOk.bind(this)
     this.ensureLogout()
   }
+
   ensureLogout () {
     if (window.localStorage.getItem(config.storageTokenKey)) {
       window.g_app._store.dispatch({
@@ -29,6 +30,7 @@ class Login extends React.Component {
       })
     }
   }
+
   handleSubmit (e) {
     e.preventDefault()
     if (this.state.loginLoading) {
@@ -139,7 +141,10 @@ class Login extends React.Component {
                 <Checkbox>{window.L('记住我')}</Checkbox>
               )}
               <a className={styles.forgot} href=''>{window.L('忘记密码')}</a>
-              <Button type='primary' htmlType='submit' loading={this.state.loginLoading} className={styles.submit}>{window.L('登录')}</Button>
+              <Button
+                type='primary' htmlType='submit' loading={this.state.loginLoading}
+                className={styles.submit}
+              >{window.L('登录')}</Button>
             </Form.Item>
           </Form>
         </div>

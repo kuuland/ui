@@ -8,6 +8,7 @@ import styles from './index.less'
 import LayoutTabs from '@/components/layout-tabs'
 import Navbar from '@/components/navbar'
 import config from '@/config'
+
 const { Header, Sider, Content } = Layout
 
 class BasicLayout extends React.Component {
@@ -231,7 +232,6 @@ class BasicLayout extends React.Component {
                 mode='inline'
                 selectedKeys={selectedKeys}
                 inlineIndent={6}
-                inlineCollapsed={this.state.collapsed}
                 openKeys={openKeys}
                 onOpenChange={openKeys => {
                   this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })

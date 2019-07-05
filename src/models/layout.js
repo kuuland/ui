@@ -1,4 +1,4 @@
-import { get } from '@/utils/request'
+import { get } from 'kuu-tools'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
 import router from 'umi/router'
