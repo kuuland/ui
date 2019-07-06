@@ -1,55 +1,34 @@
 import React from 'react'
-import { Switch } from 'antd'
-import Fano from 'fano-react'
+import { FanoTable } from 'fano-antd'
 import moment from 'moment'
-import _ from 'lodash'
 import styles from './index.less'
 
 class Role extends React.Component {
   constructor (props) {
     super(props)
 
-    this.TableComponent = Fano.fromJson({
-      name: 'role_table',
-      type: 'table',
-      props: {
-        urls: {
-          list: '/api/role',
-          remove: '/api/role'
+    this.state = {
+      columns: [
+        {
+          title: '角色名称',
+          dataIndex: 'Name'
         },
-        columns: [
-          {
-            title: '角色名称',
-            dataIndex: 'Name'
-          },
-          {
-            title: '角色编码',
-            dataIndex: 'Code'
-          },
-          {
-            title: '更新时间',
-            dataIndex: 'UpdatedAt',
-            render: t => moment(t).fromNow()
-          },
-          {
-            title: '是否内置',
-            dataIndex: 'IsBuiltIn',
-            render: t => <Switch checked={t === true} />
-          }
-        ],
-        onAdd: e => {
-          this.goDetail()
+        {
+          title: '角色编码',
+          dataIndex: 'Code'
         },
-        onEdit: r => {
-          const item = _.clone(r)
-          item.CreatedAt = moment(item.CreatedAt).fromNow()
-          item.UpdatedAt = moment(item.UpdatedAt).fromNow()
-          this.goDetail(item)
+        {
+          title: '是否内置',
+          dataIndex: 'IsBuiltIn',
+          render: 'switch'
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'CreatedAt',
+          render: t => moment(t).fromNow()
         }
-      }
-    }).render()
-
-    this.state = {}
+      ]
+    }
   }
 
   goDetail (record) {
@@ -77,10 +56,28 @@ class Role extends React.Component {
   }
 
   render () {
-    const { TableComponent } = this
+    const { columns } = this.state
     return (
       <div className={styles.role}>
-        <TableComponent />
+        <FanoTable
+          columns={columns}
+          url={'/api/role'}
+          fillTAP={{
+            'add': {
+              onClick: () => {
+                this.goDetail()
+              }
+            }
+          }}
+          fillRAP={{
+            'edit': {
+              show: true,
+              onClick: record => {
+                this.goDetail(record)
+              }
+            }
+          }}
+        />
       </div>
     )
   }

@@ -178,6 +178,7 @@ export default class User extends React.Component {
           visible={!!assignRecord}
           onOk={this.handleAssignOk}
           onCancel={this.handleAssignCancel}
+          className={styles.assignModal}
         >
           <Spin
             indicator={<Icon type='loading' style={{ fontSize: 24 }} spin />}
