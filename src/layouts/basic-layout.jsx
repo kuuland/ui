@@ -31,8 +31,10 @@ class BasicLayout extends React.Component {
     })
   }
 
-  componentWillMount () {
-    if (_.get(this.props, 'location.pathname') !== _.get(this.props, 'activePane.URI')) {
+  componentDidMount () {
+    const isDebug = _.get(process, 'env.NODE_ENV', _.get(window, 'process.env.NODE_ENV', 'development')) === 'development'
+    if (_.get(this.props, 'location.pathname') !== _.get(this.props, 'activePane.URI') && !isDebug) {
+      console.warn('权限拦截：请新增菜单并分配权限，通过点击菜单跳转至页面')
       router.replace(_.get(this.props, 'activePane.URI'))
     }
   }

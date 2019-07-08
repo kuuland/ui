@@ -31,7 +31,7 @@ class Role extends React.Component {
     }
   }
 
-  goDetail (record) {
+  handleDetail (record) {
     let value
     if (record) {
       value = {
@@ -65,7 +65,7 @@ class Role extends React.Component {
           fillTAP={{
             'add': {
               onClick: () => {
-                this.goDetail()
+                this.handleDetail()
               }
             }
           }}
@@ -73,7 +73,7 @@ class Role extends React.Component {
             'edit': {
               show: true,
               onClick: record => {
-                this.goDetail(record)
+                this.handleDetail(record)
               }
             }
           }}
