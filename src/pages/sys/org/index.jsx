@@ -1,6 +1,9 @@
 import React from 'react'
 import { FanoTable } from 'fano-antd'
+import arrayToTree from 'array-to-tree'
 import styles from './index.less'
+import moment from 'moment'
+import _ from 'lodash'
 
 export default class Org extends React.Component {
   constructor (props) {
@@ -9,24 +12,21 @@ export default class Org extends React.Component {
     this.state = {
       columns: [
         {
-          dataIndex: 'rowNo',
-          display: false
-        },
-        {
           title: '组织名称',
           dataIndex: 'Name',
-          sorter: false
+          sorter: false,
+          width: 500
         },
         {
           title: '组织编码',
           dataIndex: 'Code',
-          sorter: false
+          width: 150
         },
         {
-          title: '排序',
-          dataIndex: 'Sort',
-          filter: false,
-          align: 'center'
+          title: '创建时间',
+          dataIndex: 'CreatedAt',
+          width: 100,
+          render: t => moment(t).fromNow()
         }
       ],
       form: [
@@ -70,6 +70,15 @@ export default class Org extends React.Component {
           columns={columns}
           form={form}
           url={'/api/org'}
+          afterList={data => {
+            data.list = _.sortBy(data.list, 'Sort')
+            data.list = arrayToTree(data.list, {
+              customID: 'ID',
+              parentProperty: 'Pid',
+              childrenProperty: 'children'
+            })
+            return data
+          }}
         />
       </div>
     )
