@@ -4,6 +4,7 @@ import router from 'umi/router'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
 import { Layout, Menu, Icon, Skeleton } from 'antd'
+import { parseIcon } from 'kuu-tools'
 import styles from './index.less'
 import LayoutTabs from '@/components/layout-tabs'
 import Navbar from '@/components/navbar'
@@ -62,7 +63,7 @@ class BasicLayout extends React.Component {
                 key={value.ID}
                 title={
                   <span className={styles.menuTitle}>
-                    <Icon type={value.Icon} style={iconStyle} />
+                    <Icon {...parseIcon(value.Icon)} style={iconStyle} />
                     <span>{window.L(value.Name)}</span>
                   </span>
                 }
@@ -78,7 +79,7 @@ class BasicLayout extends React.Component {
               onClick={() => this.handleMenuItemClick(value)}
               className={styles.menuTitle}
             >
-              <Icon type={value.Icon} style={iconStyle} />
+              <Icon {...parseIcon(value.Icon)} style={iconStyle} />
               <span>{window.L(value.Name)}</span>
             </Menu.Item>
           )

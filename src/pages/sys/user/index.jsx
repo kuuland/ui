@@ -13,25 +13,25 @@ export default class User extends React.Component {
     this.state = {
       columns: [
         {
-          title: '账号',
+          title: window.L('账号'),
           dataIndex: 'Username'
         },
         {
-          title: '姓名',
+          title: window.L('姓名'),
           dataIndex: 'Name'
         },
         {
-          title: '是否禁用',
+          title: window.L('是否禁用'),
           dataIndex: 'Disable',
           render: 'switch'
         },
         {
-          title: '是否内置',
+          title: window.L('是否内置'),
           dataIndex: 'IsBuiltIn',
           render: 'switch'
         },
         {
-          title: '创建时间',
+          title: window.L('创建时间'),
           dataIndex: 'CreatedAt',
           render: t => moment(t).fromNow()
         }
@@ -40,7 +40,7 @@ export default class User extends React.Component {
         {
           name: 'Username',
           type: 'input',
-          label: '账号',
+          label: window.L('账号'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -48,7 +48,7 @@ export default class User extends React.Component {
         {
           name: 'Name',
           type: 'input',
-          label: '姓名',
+          label: window.L('姓名'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -56,7 +56,7 @@ export default class User extends React.Component {
         {
           name: 'Password',
           type: 'input',
-          label: '密码',
+          label: window.L('密码'),
           props: {
             type: 'password'
           }
@@ -64,13 +64,13 @@ export default class User extends React.Component {
         {
           name: 'Disable',
           type: 'switch',
-          label: '是否禁用'
+          label: window.L('是否禁用')
         },
         {
           condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
           name: 'IsBuiltIn',
           type: 'switch',
-          label: '系统内置',
+          label: window.L('系统内置'),
           props: {
             disabled: true
           }
