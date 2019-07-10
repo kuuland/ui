@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
-import { Modal, Button, Select } from 'antd'
+import arrayToTree from 'array-to-tree'
+import { Modal, Button, TreeSelect } from 'antd'
 import { get, post } from 'kuu-tools'
 
 class OrgModal extends React.Component {
@@ -16,7 +17,8 @@ class OrgModal extends React.Component {
 
   fetchOrgs () {
     this.setState({ orgs: undefined, orgID: undefined }, async () => {
-      const orgs = await get('/api/org/list')
+      let orgs = await get('/api/org/list')
+      const total = _.size(orgs)
       if (_.isEmpty(orgs) && !_.get(this.props.loginData, 'IsBuiltIn', false)) {
         if (_.isFunction(this.props.onError)) {
           this.props.onError()
@@ -25,13 +27,19 @@ class OrgModal extends React.Component {
         }
         return
       }
-      const defaultOrgID = _.get(_.head(orgs), 'ID')
+      const defaultOrgID = _.get(this.props.loginOrg, 'ID', _.get(_.head(orgs), 'ID'))
       let visible = _.size(orgs) > 1
       if (this.props.source !== 'login') {
         visible = true
       }
+      orgs = _.sortBy(orgs, 'Sort').map(item => ({ title: item.Name, pid: item.Pid, value: item.ID, key: item.ID }))
+      orgs = arrayToTree(orgs, {
+        customID: 'value',
+        parentProperty: 'pid',
+        childrenProperty: 'children'
+      })
       this.setState({ orgs, orgID: defaultOrgID, visible: visible }, () => {
-        if (_.size(orgs) <= 1 && this.props.source === 'login') {
+        if (total <= 1 && this.props.source === 'login') {
           this.handleOk()
         }
       })
@@ -94,9 +102,16 @@ class OrgModal extends React.Component {
           </Button>
         ]}
       >
-        <Select value={orgID} style={{ width: '100%' }} onChange={orgID => this.setState({ orgID })}>
-          {orgs.map(item => <Select.Option key={item.ID} value={item.ID}>{item.Name}</Select.Option>)}
-        </Select>
+        <TreeSelect
+          value={orgID}
+          style={{ width: '100%' }}
+          onChange={orgID => this.setState({ orgID })}
+          placeholder={window.L('请选择登入组织')}
+          treeDefaultExpandAll
+          showSearch
+          treeNodeFilterProp={'title'}
+          treeData={orgs}
+        />
       </Modal>
     )
   }

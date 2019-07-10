@@ -66,7 +66,7 @@ class Navbar extends React.Component {
       avatarProps.icon = 'user'
     }
     const rawItems = []
-    if (_.get(loginOrg.Name)) {
+    if (_.get(loginOrg, 'Name')) {
       rawItems.push(
         <div
           key={'org'}
@@ -130,6 +130,7 @@ class Navbar extends React.Component {
         <OrgModal
           visible={this.state.orgModalVisible}
           loginData={loginData}
+          loginOrg={loginOrg}
           onOk={loginOrg => {
             window.g_app._store.dispatch({
               type: 'user/LOGIN_ORG',
