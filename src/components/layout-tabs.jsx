@@ -11,7 +11,7 @@ export default props => {
       onEdit={props.onEdit}
       type='editable-card'
       hideAdd
-      className={styles.tabs}
+      className={styles.layoutTabs}
     >
       {props.panes.map((pane, index) => (
         <Tabs.TabPane

@@ -1,4 +1,4 @@
-.tabs {
+.layoutTabs {
   height: 100%;
 
   .title {
@@ -10,11 +10,24 @@
     .ant-tabs-bar {
       margin: 0;
       padding-top: 5px;
+      .ant-tabs-tab {
+        border-radius: 0;
+      }
+      .ant-tabs-tab:first-child {
+        margin-left: 2px;
+      }
+      .ant-tabs-tab-active {
+        background: #f0f2f5 !important;
+        border-color: #f0f2f5 !important;
+        border-bottom: 1px solid transparent !important;
+      }
     }
 
     .ant-tabs-content {
       height: calc(100% - 45px);
       overflow: auto;
+      padding: 3px;
+      background: #f0f2f5;
 
       .ant-tabs-tabpane.ant-tabs-tabpane-active {
         height: 100%;
@@ -25,20 +38,12 @@
       }
     }
 
-    .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
-      border-radius: 0;
-    }
-
     @menu-height: 35px;
 
     .ant-menu-sub.ant-menu-inline > .ant-menu-item,
     .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
       height: @menu-height;
       line-height: @menu-height;
-    }
-
-    .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab:first-child {
-      margin-left: 2px;
     }
 
     .ant-menu-inline .ant-menu-item,
