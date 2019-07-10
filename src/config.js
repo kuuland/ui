@@ -1,6 +1,6 @@
 export default {
-  shortName: 'Kuu',
-  fullName: 'Kuu',
+  shortName: <img src={require('@/assets/logo_white.png')} width={'100%'} />,
+  fullName: <img src={require('@/assets/logo_black.png')} width={'100%'} />,
   htmlTitle: 'Kuu',
   simplePages: ['/login'],
   whiteRoutes: [],

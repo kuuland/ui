@@ -113,7 +113,7 @@ class Navbar extends React.Component {
         >
           <div className={styles.userinfo}>
             <Avatar {...avatarProps} className={styles.avatar} />
-            <span className={styles.username}>{loginData.Name}</span>
+            <span className={styles.username}>{loginData.Name} <Icon type='down' style={{ fontSize: 12 }} /></span>
           </div>
         </Dropdown>
       </div>
