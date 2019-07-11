@@ -121,7 +121,8 @@ class Menu extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/api/menu?sort=Sort'}
+          url={'/api/menu?range=ALL&sort=Sort'}
+          pagination={false}
           expandAllRows
           arrayToTree
         />
