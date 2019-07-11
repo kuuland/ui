@@ -72,7 +72,8 @@ export default class Org extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/api/org?sort=Sort'}
+          url={'/api/org?range=ALL&sort=Sort'}
+          pagination={false}
           expandAllRows
           arrayToTree
         />
