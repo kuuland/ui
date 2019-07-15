@@ -1,7 +1,20 @@
 .user {
-  .assignModal {
-    :global(.ant-transfer-list) {
-      width: 253px;
+}
+
+.assignModal {
+  :global {
+    .ant-transfer {
+      display: flex;
+    }
+    
+    .ant-transfer-operation {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .ant-transfer-list {
+      flex: 1;
     }
   }
 }

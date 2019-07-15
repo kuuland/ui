@@ -279,7 +279,7 @@ class RoleForm extends React.Component {
       // 处理OperationPrivileges
       const hisMenuCodes = _.groupBy(_.get(record, 'OperationPrivileges'), 'MenuCode')
       let isOperationPrivilegesChange = false
-      if (totalMenusCheckedKeys.length === record.OperationPrivileges.length) {
+      if (totalMenusCheckedKeys.length === _.size(record.OperationPrivileges)) {
         for (const key of totalMenusCheckedKeys) {
           if (!hisMenuCodes[key]) {
             isOperationPrivilegesChange = true

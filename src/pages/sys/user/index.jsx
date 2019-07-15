@@ -168,6 +168,8 @@ export default class User extends React.Component {
           beforeSave={values => {
             if (values.Password) {
               values.Password = md5(values.Password)
+            } else if (_.get(values, 'doc.Password')) {
+              values.doc.Password = md5(values.doc.Password)
             }
           }}
         />
