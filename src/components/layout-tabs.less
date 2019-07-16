@@ -1,3 +1,4 @@
+@header-height: 50px;
 .layoutTabs {
   height: 100%;
 
@@ -7,49 +8,68 @@
   }
 
   :global {
-    .ant-tabs-bar {
-      margin: 0;
-      padding-top: 5px;
-      .ant-tabs-tab {
-        border-radius: 0;
-      }
-      .ant-tabs-tab:first-child {
-        margin-left: 2px;
-      }
-      .ant-tabs-tab-active {
-        background: #f0f2f5 !important;
-        border-color: #f0f2f5 !important;
-        border-bottom: 1px solid transparent !important;
-      }
+    .ant-tabs-nav-container {
+      height: fit-content !important;
     }
 
-    .ant-tabs-content {
-      height: calc(100% - 45px);
-      overflow: auto;
-      padding: 3px;
-      background: #f0f2f5;
+    .ant-tabs-extra-content {
+      height: @header-height;
+      line-height: @header-height;
+    }
 
-      .ant-tabs-tabpane.ant-tabs-tabpane-active {
-        height: 100%;
+    .ant-tabs-card > .ant-tabs-bar {
+      height: @header-height;
+      line-height: @header-height;
+      border-bottom: 1px solid #4962a2;
+      background: #4962a2;
+      box-shadow: 1px 0 6px rgba(0, 21, 41, 0.25);
+      color: rgba(255, 255, 255, 0.85);
+    }
 
-        > div {
-          height: 100%;
-          overflow: auto;
+    .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+      //border-color: transparent;
+      background: transparent;
+      border: 0;
+      height: @header-height;
+      line-height: @header-height;
+      border-radius: 0;
+
+      &:hover {
+        color: #fff;
+        background: rgba(240, 242, 245, 0.15);
+      }
+
+      .ant-tabs-close-x {
+        color: rgba(255, 255, 255, 0.45);
+
+        &:hover {
+          color: rgba(255, 255, 255, 0.85);
         }
       }
     }
 
-    @menu-height: 35px;
+    .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
+      background: #f0f2f5;
+      height: @header-height;
+      line-height: @header-height;
 
-    .ant-menu-sub.ant-menu-inline > .ant-menu-item,
-    .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
-      height: @menu-height;
-      line-height: @menu-height;
+      &:hover {
+        color: #1890ff;
+        background: #f0f2f5;
+      }
+
+      .ant-tabs-close-x {
+        color: rgba(0, 0, 0, 0.45);
+
+        &:hover {
+          color: rgba(0, 0, 0, 0.85);
+        }
+      }
     }
 
-    .ant-menu-inline .ant-menu-item,
-    .ant-menu-inline .ant-menu-submenu-title {
-      width: 100%;
+    .ant-tabs-content {
+      overflow: auto;
+      padding: 0 16px;
     }
   }
 }

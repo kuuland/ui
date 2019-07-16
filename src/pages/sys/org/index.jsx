@@ -44,14 +44,14 @@ export default class Org extends React.Component {
           }
         },
         {
-          name: 'Code',
-          type: 'input',
-          label: '组织编码'
-        },
-        {
           name: 'Name',
           type: 'input',
           label: '组织名称'
+        },
+        {
+          name: 'Code',
+          type: 'input',
+          label: '组织编码'
         },
         {
           name: 'Sort',

@@ -50,7 +50,7 @@ class RoleForm extends React.Component {
   }
 
   async fetchDetail (idVal) {
-    const record = await id('role', idVal)
+    const record = await id('role', idVal, { preload: 'OperationPrivileges,DataPrivileges' })
     this.props.form.setFieldsValue(_.pick(record, ['Code', 'Name']))
     this.setState({ record })
   }
@@ -80,7 +80,7 @@ class RoleForm extends React.Component {
       })
       const splitMenuExpandedKeys = {}
       const splitMenuCheckedKeys = {}
-      const permissions = _.get(record, 'OperationPrivileges', []).map(item => item.MenuCode)
+      const permissions = (_.get(record, 'OperationPrivileges') || []).map(item => item.MenuCode)
       const fall = (values, expandedKeys, checkedKeys) => {
         for (const item of values) {
           if (permissions.includes(item.Code)) {

@@ -1,6 +1,6 @@
+@header-height: 50px;
 .layout {
   height: 100vh;
-  @header-height: 50px;
 
   .loadingMask {
     height: 100vh;
@@ -21,15 +21,10 @@
     }
   }
 
-  .content {
-    min-height: 280px;
-  }
-
   .sider {
     overflow-x: hidden;
     overflow-y: auto;
     left: 0;
-    margin-right: 2px;
     box-shadow: 1px 0 8px rgba(0, 21, 41, 0.25);
     background: #f0f2f5;
     display: flex;
@@ -38,7 +33,7 @@
       width: 100%;
     }
 
-    height: calc(100vh - @header-height);
+    height: 100vh;
   }
 
   .logo {
@@ -88,15 +83,10 @@
   .menuTitle > i {
     padding-left: 10px;
   }
-
-  :global {
-    .ant-layout {
-      background: #fff;
-    }
-  }
 }
 
 :global {
+
   .theme-light {
     background: #f0f2f5;
 
