@@ -45,7 +45,9 @@ export default props => {
             key={pane.ID}
             closable={pane.Closeable !== false}
           >
-            {pane.Content}
+            <div className={styles.content}>
+              {pane.Content}
+            </div>
           </Tabs.TabPane>
         ))}
       </Tabs>
