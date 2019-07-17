@@ -20,13 +20,13 @@ class BasicLayout extends React.Component {
       collapsed: false
     }
     this.panesContent = {}
-    this.toggle = this.toggle.bind(this)
+    this.toggleSider = this.toggleSider.bind(this)
     this.handleTabsChange = this.handleTabsChange.bind(this)
     this.handleTabsRemove = this.handleTabsRemove.bind(this)
     this.handleTabsContext = this.handleTabsContext.bind(this)
   }
 
-  toggle () {
+  toggleSider () {
     this.setState({
       collapsed: !this.state.collapsed
     })
@@ -221,9 +221,9 @@ class BasicLayout extends React.Component {
               <div className={`${styles.logo} theme-logo`}>
                 <div>
                   <Icon
-                    className={`${styles.trigger} theme-trigger`}
+                    className={'kuu-sider-trigger'}
                     type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                    onClick={this.toggle}
+                    onClick={this.toggleSider}
                   />
                   <span className={`${styles.appName}`}>{config.shortName}</span>
                 </div>
@@ -252,6 +252,8 @@ class BasicLayout extends React.Component {
               onContext={this.handleTabsContext}
               onEdit={this.handleTabsRemove}
               breadcrumbs={_.get(activePane, 'breadcrumbs')}
+              toggleSider={this.toggleSider}
+              siderCollapsed={this.state.collapsed}
             />
           </Layout>
         </Skeleton>

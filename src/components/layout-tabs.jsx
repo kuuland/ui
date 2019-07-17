@@ -5,6 +5,13 @@ import styles from './layout-tabs.less'
 export default props => {
   return (
     <div className={styles.layoutTabs}>
+      {props.siderCollapsed && (
+        <Icon
+          className={`kuu-sider-trigger`}
+          type={'menu-unfold'}
+          onClick={props.toggleSider}
+        />
+      )}
       <Tabs
         size='default'
         activeKey={props.activeKey}
@@ -14,6 +21,7 @@ export default props => {
         hideAdd
         tabBarGutter={0}
         tabBarExtraContent={props.tabBarExtraContent}
+        tabBarStyle={{ paddingLeft: props.siderCollapsed ? 60 : 0 }}
       >
         {props.panes.map((pane, index) => (
           <Tabs.TabPane

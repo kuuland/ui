@@ -63,15 +63,6 @@
     flex: 1 1;
   }
 
-  .trigger {
-    font-size: 20px;
-    cursor: pointer;
-    transition: color .3s;
-    z-index: 1;
-    position: absolute;
-    left: 20px;
-  }
-
   .trigger:hover {
     color: #1890ff;
   }
@@ -86,6 +77,7 @@
 }
 
 :global {
+
   .ant-layout {
     background: #f9f9f9;
   }
@@ -100,6 +92,21 @@
     .theme-logo {
       color: #1890ff;
       border-bottom: 1px solid #e8e8e8;
+    }
+  }
+
+  .kuu-sider-trigger {
+    font-size: 20px;
+    cursor: pointer;
+    transition: color .3s;
+    z-index: 1;
+    position: absolute;
+    left: 20px;
+    top: 15px;
+    color: #fff;
+
+    &:hover {
+      color: #fff;
     }
   }
 
