@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Dropdown, Tabs, Icon } from 'antd'
+import { Menu, Dropdown, Tabs, Icon, Breadcrumb } from 'antd'
 import styles from './layout-tabs.less'
 
 export default props => {
@@ -45,6 +45,9 @@ export default props => {
             key={pane.ID}
             closable={pane.Closeable !== false}
           >
+            <Breadcrumb className={styles.breadcrumbs}>
+              {(props.breadcrumbs || []).map(item => <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>)}
+            </Breadcrumb>
             <div className={styles.content}>
               {pane.Content}
             </div>

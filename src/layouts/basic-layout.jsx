@@ -40,7 +40,7 @@ class BasicLayout extends React.Component {
     }
   }
 
-  renderMenuChildren (values) {
+  renderMenuChildren (values, breadcrumbs = []) {
     values = _.chain(values)
       .filter(item => !!item.Disable !== true || item.IsVirtual === true)
       .sortBy('Sort').value()
@@ -55,8 +55,10 @@ class BasicLayout extends React.Component {
         if (this.state.collapsed) {
           iconStyle.paddingLeft = 0
         }
+        const title = window.L(value.Name)
+        value.breadcrumbs = breadcrumbs.concat([title])
         if (value.Children) {
-          const sub = this.renderMenuChildren(value.Children)
+          const sub = this.renderMenuChildren(value.Children, value.breadcrumbs)
           if (Array.isArray(sub) && sub.length > 0) {
             ret.push(
               <Menu.SubMenu
@@ -64,7 +66,7 @@ class BasicLayout extends React.Component {
                 title={
                   <span className={styles.menuTitle}>
                     <Icon {...parseIcon(value.Icon)} style={iconStyle} />
-                    <span>{window.L(value.Name)}</span>
+                    <span>{title}</span>
                   </span>
                 }
               >
@@ -80,7 +82,7 @@ class BasicLayout extends React.Component {
               className={styles.menuTitle}
             >
               <Icon {...parseIcon(value.Icon)} style={iconStyle} />
-              <span>{window.L(value.Name)}</span>
+              <span>{title}</span>
             </Menu.Item>
           )
         }
@@ -249,6 +251,7 @@ class BasicLayout extends React.Component {
               onChange={this.handleTabsChange}
               onContext={this.handleTabsContext}
               onEdit={this.handleTabsRemove}
+              breadcrumbs={_.get(activePane, 'breadcrumbs')}
             />
           </Layout>
         </Skeleton>
