@@ -30,8 +30,8 @@ class Menu extends React.Component {
           dataIndex: 'Disable',
           width: 60,
           align: 'center',
-          render: t => t ? <Icon type='eye-invisible' style={{ color: '#52c41a' }} />
-            : <Icon type='eye' style={{ color: '#52c41a' }} />
+          render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 18 }} />
+            : <Icon type='eye' style={{ color: '#52c41a', fontSize: 18 }} />
         },
         {
           title: '菜单详情',
@@ -98,7 +98,7 @@ class Menu extends React.Component {
         {
           name: 'Disable',
           type: 'switch',
-          label: '可见性'
+          label: '禁用'
         },
         {
           name: 'IsDefaultOpen',
