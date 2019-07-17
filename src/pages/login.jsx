@@ -96,8 +96,12 @@ class Login extends React.Component {
 
   render () {
     const { getFieldDecorator } = this.props.form
+    const style = {}
+    if (config.loginBg) {
+      style.backgroundImage = `url(${config.loginBg})`
+    }
     return (
-      <div className={styles.login}>
+      <div className={styles.login} style={style}>
         <OrgModal
           source='login'
           visible={this.state.orgModalVisible}
@@ -149,7 +153,7 @@ class Login extends React.Component {
           </Form>
         </div>
         <div className={styles.footer}>
-          Copyright <Icon type='copyright' /> {config.copyRight}
+          {config.copyright}
         </div>
       </div>
     )
