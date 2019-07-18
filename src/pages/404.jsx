@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './index.less'
-import Exception from '@/components/exception'
+import Exception from '@/components/sys/exception'
 
 export default function () {
   return (

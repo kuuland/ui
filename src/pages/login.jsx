@@ -5,7 +5,7 @@ import _ from 'lodash'
 import { Form, Icon, Input, Button, Checkbox, message } from 'antd'
 import styles from './login.less'
 import { get, post } from 'kuu-tools'
-import OrgModal from '@/components/org-modal'
+import OrgModal from '@/components/sys/org-modal'
 import config from '@/config'
 
 class Login extends React.Component {

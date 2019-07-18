@@ -5,7 +5,7 @@ import { Transfer, Modal, Icon, Tooltip, Spin } from 'antd'
 import md5 from 'blueimp-md5'
 import { get, list, update } from 'kuu-tools'
 import { FanoTable } from 'fano-antd'
-import styles from '@/pages/sys/user/index.less'
+import styles from './index.less'
 
 export default class User extends React.Component {
   constructor (props) {

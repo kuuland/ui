@@ -6,8 +6,8 @@ import withRouter from 'umi/withRouter'
 import { Layout, Menu, Icon, Skeleton } from 'antd'
 import { parseIcon } from 'kuu-tools'
 import styles from './index.less'
-import LayoutTabs from '@/components/layout-tabs'
-import Navbar from '@/components/navbar'
+import LayoutTabs from '@/components/sys/layout-tabs'
+import Navbar from '@/components/sys/navbar'
 import config from '@/config'
 
 const { Sider } = Layout
@@ -209,6 +209,11 @@ class BasicLayout extends React.Component {
           paragraph={{ rows: 10 }}
           className={styles.loadingMask}
         >
+          <Icon
+            className={'kuu-sider-trigger'}
+            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={this.toggleSider}
+          />
           <Sider
             theme={theme}
             collapsedWidth={0}
@@ -219,14 +224,7 @@ class BasicLayout extends React.Component {
           >
             <div className={`${styles.header} theme-header`}>
               <div className={`${styles.logo} theme-logo`}>
-                <div>
-                  <Icon
-                    className={'kuu-sider-trigger'}
-                    type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                    onClick={this.toggleSider}
-                  />
-                  <span className={`${styles.appName}`}>{config.shortName}</span>
-                </div>
+                <div className={`${styles.appName}`}>{config.shortName}</div>
               </div>
             </div>
             <Menu
