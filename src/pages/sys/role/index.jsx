@@ -1,5 +1,7 @@
 import React from 'react'
+import { Icon } from 'antd'
 import { FanoTable } from 'fano-antd'
+import { parseIcon } from 'kuu-tools'
 import moment from 'moment'
 import styles from './index.less'
 
@@ -26,6 +28,32 @@ class Role extends React.Component {
           title: '创建时间',
           dataIndex: 'CreatedAt',
           render: t => moment(t).fromNow()
+        }
+      ],
+      form: [
+        {
+          name: 'Name',
+          type: 'input',
+          label: '角色名称'
+        },
+        {
+          name: 'Code',
+          type: 'input',
+          label: '角色编码'
+        },
+        {
+          name: 'OperationPrivileges2',
+          type: 'treeselect',
+          label: '操作权限',
+          props: {
+            url: '/api/menu?range=ALL&sort=Sort',
+            titleKey: 'Name',
+            valueKey: 'ID',
+            arrayToTree: true,
+            multiple: true,
+            treeCheckable: true,
+            titleRender: (title, item) => <span><Icon {...parseIcon(item.Icon)} /> {title}</span>
+          }
         }
       ]
     }
@@ -56,27 +84,28 @@ class Role extends React.Component {
   }
 
   render () {
-    const { columns } = this.state
+    const { columns, form } = this.state
     return (
       <div className={styles.role}>
         <FanoTable
           columns={columns}
-          url={'/api/role'}
-          fillTAP={{
-            'add': {
-              onClick: () => {
-                this.handleDetail()
-              }
-            }
-          }}
-          fillRAP={{
-            'edit': {
-              show: true,
-              onClick: record => {
-                this.handleDetail(record)
-              }
-            }
-          }}
+          form={form}
+          url={'/api/role?preload=OperationPrivileges,DataPrivileges'}
+          // fillTAP={{
+          //   'add': {
+          //     onClick: () => {
+          //       this.handleDetail()
+          //     }
+          //   }
+          // }}
+          // fillRAP={{
+          //   'edit': {
+          //     show: true,
+          //     onClick: record => {
+          //       this.handleDetail(record)
+          //     }
+          //   }
+          // }}
         />
       </div>
     )

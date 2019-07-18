@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { Menu, Dropdown, Tabs, Icon, Breadcrumb } from 'antd'
 import styles from './layout-tabs.less'
 
@@ -46,9 +47,11 @@ export default props => {
             key={pane.ID}
             closable={pane.Closeable !== false}
           >
-            <Breadcrumb className={styles.breadcrumbs}>
-              {(props.breadcrumbs || []).map(item => <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>)}
-            </Breadcrumb>
+            {_.size(props.breadcrumbs) > 1 && (
+              <Breadcrumb className={styles.breadcrumbs}>
+                {props.breadcrumbs.map(item => <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>)}
+              </Breadcrumb>
+            )}
             <div className={styles.container}>
               <div className={styles.content}>
                 {pane.Content}

@@ -116,7 +116,7 @@ class RoleForm extends React.Component {
       const data = await list('org', { range: 'ALL', sort: 'Sort' })
       const raw = _.get(data, 'list', [])
       this.orgsMap = _.chain(raw).groupBy('ID').mapValues(item => _.head(item)).value()
-      let orgs = arrayToTree(raw, {
+      const orgs = arrayToTree(raw, {
         customID: 'ID',
         parentProperty: 'Pid',
         childrenProperty: 'Children'
@@ -172,7 +172,7 @@ class RoleForm extends React.Component {
     values = _.chain(values)
       .filter(item => !!item.Disable !== true || item.IsVirtual === true)
       .sortBy('Sort').value()
-    let ret = []
+    const ret = []
     for (const value of values) {
       if (value.Children) {
         const sub = this.renderMenuTreeChildren(value.Children)
@@ -203,7 +203,7 @@ class RoleForm extends React.Component {
   renderOrgTreeChildren (values) {
     const { orgDataPrivileges } = this.state
     values = _.sortBy(values, 'Sort')
-    let ret = []
+    const ret = []
     for (const value of values) {
       const current = orgDataPrivileges[value.ID]
       let stateIcon

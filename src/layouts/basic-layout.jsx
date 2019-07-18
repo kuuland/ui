@@ -196,13 +196,12 @@ class BasicLayout extends React.Component {
     }
     const currentTree = _.cloneDeep(menusTree)
     const menuChildren = this.renderMenuChildren(_.get(currentTree, `[${activeMenuIndex}].Children`, []))
-    const theme = 'light' // light、dark
     const selectedKeys = []
     if (_.get(activePane, 'ID')) {
       selectedKeys.push(`${_.get(activePane, 'ID')}`)
     }
     return (
-      <Layout className={`${styles.layout} theme-${theme}`}>
+      <Layout className={`${styles.layout}`}>
         <Skeleton
           active
           loading={!logged}
@@ -215,21 +214,19 @@ class BasicLayout extends React.Component {
             onClick={this.toggleSider}
           />
           <Sider
-            theme={theme}
             collapsedWidth={0}
             trigger={null}
             collapsible
             collapsed={this.state.collapsed}
             className={styles.sider}
           >
-            <div className={`${styles.header} theme-header`}>
-              <div className={`${styles.logo} theme-logo`}>
+            <div className={`${styles.header}`}>
+              <div className={`${styles.logo}`}>
                 <div className={`${styles.appName}`}>{config.shortName}</div>
               </div>
             </div>
             <Menu
               className={`${styles.menu}`}
-              theme={theme}
               mode='inline'
               selectedKeys={selectedKeys}
               inlineIndent={6}
@@ -250,7 +247,6 @@ class BasicLayout extends React.Component {
               onContext={this.handleTabsContext}
               onEdit={this.handleTabsRemove}
               breadcrumbs={_.get(activePane, 'breadcrumbs')}
-              toggleSider={this.toggleSider}
               siderCollapsed={this.state.collapsed}
             />
           </Layout>

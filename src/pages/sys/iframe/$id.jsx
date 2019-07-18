@@ -1,4 +1,6 @@
 import React from 'react'
+import _ from 'lodash'
+import { connect } from 'dva'
 import { Skeleton } from 'antd'
 import styles from './$id.less'
 
@@ -12,7 +14,7 @@ class IframePage extends React.Component {
   }
 
   render () {
-    const { location } = this.props
+    const { location, activePane } = this.props
     const menuData = location.state
     return (
       <div className={styles.content}>
@@ -34,7 +36,8 @@ class IframePage extends React.Component {
           width='100%'
           height={this.state.height}
           style={{
-            display: this.state.loading ? 'none' : 'block'
+            display: this.state.loading ? 'none' : 'block',
+            minHeight: _.size(_.get(activePane, 'breadcrumbs')) > 1 ? '84vh' : '90vh'
           }}
         />
       </div>
@@ -42,4 +45,6 @@ class IframePage extends React.Component {
   }
 }
 
-export default IframePage
+export default connect(state => ({
+  activePane: state.layout.activePane
+}))(IframePage)

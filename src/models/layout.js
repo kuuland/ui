@@ -27,7 +27,7 @@ export default {
         childrenProperty: 'Children'
       })
       let { activeMenuIndex, openKeys } = state
-      let localActiveMenu = parseInt(window.localStorage.getItem(activeMenuKey))
+      const localActiveMenu = parseInt(window.localStorage.getItem(activeMenuKey))
       if (_.isFinite(localActiveMenu)) {
         activeMenuIndex = localActiveMenu
       }

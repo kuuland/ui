@@ -175,7 +175,7 @@ class RoleDetail extends React.Component {
     values = _.chain(values)
       .filter(item => !!item.Disable !== true || item.IsVirtual === true)
       .sortBy('Sort').value()
-    let ret = []
+    const ret = []
     for (const value of values) {
       if (value.Children) {
         const sub = this.renderMenuTreeChildren(value.Children)
@@ -206,7 +206,7 @@ class RoleDetail extends React.Component {
   renderOrgTreeChildren (values) {
     const { orgDataPrivileges } = this.state
     values = _.sortBy(values, 'Sort')
-    let ret = []
+    const ret = []
     for (const value of values) {
       const current = orgDataPrivileges[value.ID]
       let stateIcon

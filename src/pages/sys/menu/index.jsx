@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, Checkbox } from 'antd'
+import { Icon, Checkbox, Button } from 'antd'
 import { FanoTable } from 'fano-antd'
 import { parseIcon } from 'kuu-tools'
 import styles from './index.less'
@@ -18,7 +18,8 @@ class Menu extends React.Component {
         },
         {
           title: '菜单地址',
-          dataIndex: 'URI'
+          dataIndex: 'URI',
+          render: t => <Button type={'link'} size={'small'}>{t}</Button>
         },
         {
           title: '排序',
@@ -68,7 +69,17 @@ class Menu extends React.Component {
         {
           name: 'Name',
           type: 'input',
-          label: '菜单名称'
+          label: '菜单名称',
+          props: {
+            fieldOptions: {
+              rules: [
+                {
+                  required: true,
+                  message: window.L('请输入菜单名称')
+                }
+              ]
+            }
+          }
         },
         {
           name: 'URI',
