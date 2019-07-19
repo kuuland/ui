@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { Menu, Dropdown, Tabs, Icon, Breadcrumb } from 'antd'
+import { parseIcon } from 'kuu-tools'
 import styles from './layout-tabs.less'
 
 export default props => {
@@ -40,7 +41,7 @@ export default props => {
                 trigger={['contextMenu']}
               >
                 <span className={styles.title}>
-                  <Icon type={pane.Icon} />{pane.Name}
+                  <Icon {...parseIcon(pane.Icon)} />{pane.Name}
                 </span>
               </Dropdown>
             }
