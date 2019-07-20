@@ -81,6 +81,14 @@ class Role extends React.Component {
                   message: window.L('请设置操作权限')
                 }
               ]
+            },
+            layout: {
+              colProps: {
+                span: 24
+              }
+            },
+            style: {
+              maxWidth: 808
             }
           }
         },
@@ -89,6 +97,11 @@ class Role extends React.Component {
           type: 'render',
           label: '数据权限',
           props: {
+            layout: {
+              colProps: {
+                span: 24
+              }
+            },
             render: props => {
               return (
                 <div>
