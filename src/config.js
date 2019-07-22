@@ -8,5 +8,6 @@ export default {
   whiteRoutes: [],
   loginPathname: '/login',
   storageTokenKey: 'token',
-  copyright: <div>Copyright <Icon type='copyright' /> 2019 蚁群出品</div>
+  copyright: <div>Copyright <Icon type='copyright' /> 2019 蚁群出品</div>,
+  loginBg: ''
 }

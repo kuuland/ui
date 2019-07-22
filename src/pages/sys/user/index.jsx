@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import moment from 'moment'
-import { Transfer, Modal, Icon, Tooltip, Spin } from 'antd'
+import { Transfer, Modal, Icon, Spin } from 'antd'
 import md5 from 'blueimp-md5'
 import { get, list, update } from 'kuu-tools'
 import { FanoTable } from 'fano-antd'
@@ -158,11 +158,7 @@ export default class User extends React.Component {
                   assignRecord: record
                 }, this.fetchUserAssigns)
               },
-              wrapper: children => (
-                <Tooltip title={window.L('角色分配')}>
-                  {children}
-                </Tooltip>
-              )
+              tooltip: window.L('角色分配')
             }
           ]}
           beforeSave={values => {
