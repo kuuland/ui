@@ -41,7 +41,13 @@ export default {
       return { ...state, menus, menusTree, openKeys, activeMenuIndex }
     },
     SET_PANES (state, { payload: panes }) {
-      return { ...state, panes }
+      const newState = { panes }
+      if (_.isEmpty(panes)) {
+        newState.activeMenuIndex = 0
+        newState.activePane = undefined
+        window.localStorage.removeItem('panes:data')
+      }
+      return { ...state, ...newState }
     },
     SET_ACTIVE_MENU_INDEX (state, { payload: activeMenuIndex }) {
       saveActiveMenu(activeMenuIndex)
@@ -78,7 +84,7 @@ export default {
       const menus = Array.isArray(data) ? data : []
       yield put({ type: 'SET_MENUS', payload: menus })
     },
-    * addOrActivatePane ({ payload: value }, { put, select }) {
+    * addPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
       const { panes, menus, activePane: currentActivePane } = state
       let openKeys = state.openKeys
@@ -119,7 +125,7 @@ export default {
         }
         yield put({ type: 'SET_PANES', payload: panes })
         if (panes.length > 0) {
-          yield put({ type: 'addOrActivatePane', payload: activePane })
+          yield put({ type: 'addPane', payload: activePane })
         } else {
           yield put({ type: 'SET_ACTIVE_PANE', payload: { activePane: undefined, openKeys: [], panes } })
         }

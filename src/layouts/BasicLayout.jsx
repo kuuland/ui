@@ -55,7 +55,7 @@ class BasicLayout extends React.Component {
         if (this.state.collapsed) {
           iconStyle.paddingLeft = 0
         }
-        const title = window.L(value.Name)
+        const title = value.Name
         value.breadcrumbs = breadcrumbs.concat([title])
         if (value.Children) {
           const sub = this.renderMenuChildren(value.Children, value.breadcrumbs)
@@ -99,7 +99,7 @@ class BasicLayout extends React.Component {
     if (!value) {
       return
     }
-    this.props.dispatch({ type: 'layout/addOrActivatePane', payload: value })
+    this.props.dispatch({ type: 'layout/addPane', payload: value })
   }
 
   cacheMenuPaneContent (activePane) {
@@ -155,7 +155,7 @@ class BasicLayout extends React.Component {
     if (Array.isArray(newPanes)) {
       this.props.dispatch({ type: 'layout/SET_PANES', payload: newPanes })
     }
-    this.props.dispatch({ type: 'layout/addOrActivatePane', payload: pane })
+    this.props.dispatch({ type: 'layout/addPane', payload: pane })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -170,7 +170,7 @@ class BasicLayout extends React.Component {
       })
       if (nextActivePane && nextActivePane.URI) {
         if (_.get(this.props.activePane, 'URI') !== nextActivePane.URI) {
-          this.props.dispatch({ type: 'layout/addOrActivatePane', payload: nextActivePane })
+          this.props.dispatch({ type: 'layout/addPane', payload: nextActivePane })
         }
       }
     }
@@ -204,7 +204,7 @@ class BasicLayout extends React.Component {
       <Layout className={`${styles.layout}`}>
         <Skeleton
           active
-          loading={!logged}
+          loading={logged !== 1}
           paragraph={{ rows: 10 }}
           className={styles.loadingMask}
         >
@@ -218,6 +218,7 @@ class BasicLayout extends React.Component {
             trigger={null}
             collapsible
             collapsed={this.state.collapsed}
+            width={config.siderWidth || 260}
             className={styles.sider}
           >
             <div className={`${styles.header}`}>
@@ -240,7 +241,9 @@ class BasicLayout extends React.Component {
           </Sider>
           <Layout>
             <LayoutTabs
-              tabBarExtraContent={<Navbar />}
+              tabBarExtraContent={
+                <Navbar />
+              }
               activeKey={`${_.get(activePane, 'ID', '')}`}
               panes={this.props.panes || []}
               onChange={this.handleTabsChange}
@@ -256,8 +259,7 @@ class BasicLayout extends React.Component {
   }
 }
 
-export default withRouter(connect(state => {
-  const ret = state.layout || {}
-  ret.logged = !!(window.localStorage.getItem(config.storageTokenKey) || _.get(state, 'user.loginData'))
-  return ret
-})(BasicLayout))
+export default withRouter(connect(state => ({
+  ...state.layout,
+  logged: (window.localStorage.getItem(config.storageTokenKey) || _.get(state, 'user.loginData')) ? 1 : 2
+}))(BasicLayout))

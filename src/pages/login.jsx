@@ -87,10 +87,10 @@ class Login extends React.Component {
   }
 
   handleOk (loginOrg, loginData) {
-    window.g_app._store.dispatch({
-      type: 'user/LOGIN',
-      payload: { loginData: loginData || this.state.loginData, loginOrg }
-    })
+    // window.g_app._store.dispatch({
+    //   type: 'user/LOGIN',
+    //   payload: { loginData: loginData || this.state.loginData, loginOrg }
+    // })
     this.handleLoginRedirect()
   }
 

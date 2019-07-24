@@ -2,7 +2,8 @@ import React from 'react'
 import _ from 'lodash'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
-import { Avatar, Menu, Dropdown, Icon, Divider, message } from 'antd'
+import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio, message } from 'antd'
+import { get, update } from 'kuu-tools'
 import OrgModal from './org-modal'
 import styles from './navbar.less'
 
@@ -11,14 +12,14 @@ class Navbar extends React.Component {
     super(props)
 
     this.state = {
-      orgModalVisible: false,
       menuKeyPrefix: 'menu-'
     }
-    this.handleClick = this.handleClick.bind(this)
+    this.handleMenuClick = this.handleMenuClick.bind(this)
   }
 
-  handleClick (e) {
+  handleMenuClick (e) {
     const { menuKeyPrefix } = this.state
+    const { loginData } = this.props
     if (e.key.startsWith(menuKeyPrefix)) {
       const activeMenuIndex = parseInt(e.key.substring(menuKeyPrefix.length))
       window.g_app._store.dispatch({
@@ -27,16 +28,49 @@ class Navbar extends React.Component {
       })
     } else {
       switch (e.key) {
-        case 'userinfo':
+        case 'profile':
           break
-        case 'password':
+        case 'i18n':
+          this.fetchLanguages(languages => {
+            Modal.info({
+              title: window.L('kuu_ui_languages', 'Languages'),
+              icon: 'global',
+              content: (
+                <Radio.Group
+                  style={{ textAlign: 'center' }}
+                  onChange={e => {
+                    this.setState({ selectLang: e.target.value })
+                  }}
+                  defaultValue={_.get(loginData, 'Lang')}
+                >
+                  {languages.map(item => (
+                    <Radio.Button key={item.LangCode} value={item.LangCode}>{item.LangName}</Radio.Button>))}
+                </Radio.Group>
+              ),
+              onOk: async () => {
+                if (!loginData.UID || !this.state.selectLang) {
+                  return
+                }
+                const ret = await update('user', { ID: loginData.UID }, { Lang: this.state.selectLang })
+                if (ret) {
+                  window.g_app._store.dispatch({
+                    type: 'user/valid'
+                  })
+                  this.setState({ selectLang: undefined })
+                }
+                window.g_app._store.dispatch({ type: 'layout/SET_PANES', payload: [] })
+              }
+            })
+          })
           break
         case 'logout':
-          this.handleLogout()
+          window.g_app._store.dispatch({
+            type: 'user/logout'
+          })
           break
         case 'apikey':
           window.g_app._store.dispatch({
-            type: 'layout/addOrActivatePane',
+            type: 'layout/addPane',
             payload: {
               ID: 'apikey',
               Icon: 'key',
@@ -49,14 +83,14 @@ class Navbar extends React.Component {
     }
   }
 
-  handleLogout () {
-    window.g_app._store.dispatch({
-      type: 'user/logout'
-    })
+  async fetchLanguages (callback) {
+    const json = await get('/language', { range: 'ALL' })
+    const languages = _.get(json, 'list', [])
+    callback(languages)
   }
 
   render () {
-    const { menuKeyPrefix } = this.state
+    const { menuKeyPrefix, orgModalVisible = false } = this.state
     const { menusTree, loginOrg, loginData } = this.props
     const activeMenuIndex = this.props.activeMenuIndex >= menusTree.length ? 0 : this.props.activeMenuIndex
     const avatarProps = {}
@@ -71,7 +105,7 @@ class Navbar extends React.Component {
         <div
           key={'org'}
           className={styles.item}
-          onClick={e => this.setState({ orgModalVisible: true })}
+          onClick={() => this.setState({ orgModalVisible: true })}
         >
           <Icon type='home' style={{ fontSize: 17 }} /> {loginOrg.Name}
         </div>
@@ -81,19 +115,19 @@ class Navbar extends React.Component {
       <div className={styles.item} key={'username'}>
         <Dropdown
           overlay={
-            <Menu onClick={this.handleClick}>
-              <Menu.Item key={'userinfo'}>
-                <Icon type='user' />{window.L('个人中心')}
+            <Menu onClick={this.handleMenuClick}>
+              <Menu.Item key={'profile'}>
+                <Icon type='user' />{window.L('kuu_navbar_profile', 'Profile')}
               </Menu.Item>
-              <Menu.Item key={'password'}>
-                <Icon type='lock' />{window.L('修改密码')}
+              <Menu.Item key={'i18n'}>
+                <Icon type='global' />{window.L('kuu_navbar_languages', 'Languages')}
               </Menu.Item>
               <Menu.Item key={'apikey'}>
-                <Icon type='key' />{window.L('APIKey', 'API & Keys')}
+                <Icon type='key' />{window.L('kuu_navbar_apikeys', 'API & Keys')}
               </Menu.Item>
               <Menu.Divider />
               <Menu.Item key={'logout'}>
-                <Icon type='logout' />{window.L('退出登录')}
+                <Icon type='logout' />{window.L('kuu_navbar_logout', 'Logout')}
               </Menu.Item>
               {menusTree.length > 1 && <Menu.Divider />}
               {menusTree.length > 1 && menusTree.map((item, index) => {
@@ -128,7 +162,7 @@ class Navbar extends React.Component {
     return (
       <div className={styles.navbar}>
         <OrgModal
-          visible={this.state.orgModalVisible}
+          visible={orgModalVisible}
           loginData={loginData}
           loginOrg={loginOrg}
           onOk={loginOrg => {

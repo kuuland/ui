@@ -87,6 +87,11 @@ class Menu extends React.Component {
           label: '菜单链接'
         },
         {
+          name: 'LocaleKey',
+          type: 'input',
+          label: '国际化键'
+        },
+        {
           name: 'IsLink',
           type: 'switch',
           label: '是否外链'

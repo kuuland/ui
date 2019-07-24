@@ -25,6 +25,8 @@
     box-shadow: 0 2px 8px rgba(115, 115, 115, 0.08);
     width: 100%;
     max-width: 1400px;
+    overflow: auto;
+
   }
 
   :global {
@@ -89,6 +91,14 @@
         &:hover {
           color: rgba(0, 0, 0, 0.85);
         }
+      }
+    }
+
+    .ant-tabs-tab-prev, .ant-tabs-tab-next {
+      color: rgba(255, 255, 255, 0.45);
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.85);
       }
     }
 

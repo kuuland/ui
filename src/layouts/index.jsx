@@ -1,7 +1,7 @@
 import React from 'react'
 import DocumentTitle from 'react-document-title'
-import SimpleLayout from './simple-layout'
-import BasicLayout from './basic-layout'
+import SimpleLayout from './BlankLayout'
+import BasicLayout from './BasicLayout'
 import config from '@/config'
 
 export default props => {
