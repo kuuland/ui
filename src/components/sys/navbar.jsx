@@ -35,6 +35,7 @@ class Navbar extends React.Component {
             Modal.info({
               title: window.L('kuu_ui_languages', 'Languages'),
               icon: 'global',
+              maskClosable: true,
               content: (
                 <Radio.Group
                   style={{ textAlign: 'center' }}
