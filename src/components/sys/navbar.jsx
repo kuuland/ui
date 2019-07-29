@@ -74,14 +74,14 @@ class Navbar extends React.Component {
         case 'logout':
           this.handleLogout()
           break
-        case 'apikey':
+        case 'apikeys':
           window.g_app._store.dispatch({
             type: 'layout/addPane',
             payload: {
-              ID: 'apikey',
+              ID: 'apikeys',
               Icon: 'key',
               Name: this.props.L('kuu_navbar_apikeys', 'API & Keys'),
-              URI: '/sys/apikey'
+              URI: '/sys/apikeys'
             }
           })
           break
@@ -134,7 +134,7 @@ class Navbar extends React.Component {
               <Menu.Item key={'i18n'}>
                 <Icon type='global' />{this.props.L('kuu_navbar_languages', 'Languages')}
               </Menu.Item>
-              <Menu.Item key={'apikey'}>
+              <Menu.Item key={'apikeys'}>
                 <Icon type='key' />{this.props.L('kuu_navbar_apikeys', 'API & Keys')}
               </Menu.Item>
               <Menu.Divider />
@@ -202,4 +202,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(withLocale(Navbar)))
+export default withLocale(connect(mapStateToProps)(withRouter(Navbar)))

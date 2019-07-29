@@ -7,29 +7,29 @@ import moment from 'moment'
 import { update, withLocale } from 'kuu-tools'
 import styles from './index.less'
 
-class APIKey extends React.Component {
+class APIKeys extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
       columns: [
         {
-          title: this.props.L('描述'),
+          title: this.props.L('kuu_apikeys_desc', 'Description'),
           dataIndex: 'Desc',
-          render: t => (t || this.props.L('用户登录'))
+          render: t => (t || this.props.L('kuu_apikeys_desc_render', 'User login'))
         },
         {
-          title: '有效状态',
+          title: this.props.L('kuu_apikeys_state', 'State'),
           dataIndex: 'State',
           render: 'switch'
         },
         {
-          title: '过期时间',
+          title: this.props.L('kuu_apikeys_exp', 'Exp'),
           dataIndex: 'Exp',
-          render: t => moment.unix(t).diff(moment(), 'years') > 100 ? this.props.L('令牌永不过期') : moment.unix(t).format('YYYY-MM-DD HH:mm:ss')
+          render: t => moment.unix(t).diff(moment(), 'years') > 100 ? this.props.L('kuu_apikeys_exp_never_exp', 'Never Expire') : moment.unix(t).format('YYYY-MM-DD HH:mm:ss')
         },
         {
-          title: '创建时间',
+          title: this.props.L('kuu_apikeys_createdat', 'Created At'),
           dataIndex: 'CreatedAt',
           render: t => moment(t).fromNow()
         }
@@ -38,15 +38,15 @@ class APIKey extends React.Component {
         {
           name: 'Desc',
           type: 'textarea',
-          label: this.props.L('描述'),
+          label: this.props.L('kuu_apikeys_desc', 'Description'),
           props: {
             rows: 2,
-            placeholder: this.props.L('APIKey描述占位符', '例如: 此密钥由任务调度服务器使用，用于任务触发部署。'),
+            placeholder: this.props.L('kuu_apikeys_desc_placeholder', 'Optional: e.g. This key is used by the cron service to trigger jobs'),
             fieldOptions: {
               rules: [
                 {
                   required: true,
-                  message: this.props.L('请输入用途描述')
+                  message: this.props.L('kuu_apikeys_desc_required', 'Please enter a description')
                 }
               ]
             }
@@ -55,27 +55,27 @@ class APIKey extends React.Component {
         {
           name: 'Exp',
           type: 'radio',
-          label: this.props.L('过期时间'),
+          label: this.props.L('kuu_apikeys_exp', 'Exp'),
           props: {
             options: [
               {
-                label: this.props.L('永不过期', '令牌将永不过期，请谨慎设置'),
+                label: this.props.L('kuu_apikeys_exp_options_never', 'Never'),
                 value: 'never'
               },
               {
-                label: this.props.L('一天后过期', '从现在开始，有效期1天'),
+                label: this.props.L('kuu_apikeys_exp_options_day', 'A day from now'),
                 value: 'day'
               },
               {
-                label: this.props.L('一周后过期', '从现在开始，有效期1周'),
+                label: this.props.L('kuu_apikeys_exp_options_week', 'A week from now'),
                 value: 'week'
               },
               {
-                label: this.props.L('一个月后过期', '从现在开始，有效期1个月'),
+                label: this.props.L('kuu_apikeys_exp_options_month', 'A month from now'),
                 value: 'month'
               },
               {
-                label: this.props.L('一年后过期', '从现在开始，有效期1年'),
+                label: this.props.L('kuu_apikeys_exp_options_year', 'A year from now'),
                 value: 'year'
               }
             ],
@@ -83,7 +83,7 @@ class APIKey extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: this.props.L('请选择过期时间')
+                  message: this.props.L('kuu_apikeys_exp_required', 'Please select automatic expiration time')
                 }
               ]
             }
@@ -143,13 +143,13 @@ class APIKey extends React.Component {
                 return (
                   <CopyToClipboard
                     text={record.Token}
-                    onCopy={() => message.info(this.props.L('已复制令牌到剪贴板'), 0.5)}
+                    onCopy={() => message.info(this.props.L('kuu_apikeys_token_copy_copied', 'The token has been copied'), 0.5)}
                   >
                     {children}
                   </CopyToClipboard>
                 )
               },
-              tooltip: this.props.L('点击复制令牌')
+              tooltip: this.props.L('kuu_apikeys_token_copy_tooltip', 'Click to copy token')
             },
             {
               icon: 'stop',
@@ -158,7 +158,7 @@ class APIKey extends React.Component {
               },
               show: record => record.State,
               popconfirm: record => ({
-                title: this.props.L('令牌作废二次确认提示', '确定要作废该令牌吗？'),
+                title: this.props.L('kuu_apikeys_token_exp_confirm', 'Are you sure to expire this token?'),
                 onConfirm: async () => {
                   const ret = await update('signsecret', { ID: record.ID }, { Method: 'LOGOUT' })
                   if (ret) {
@@ -166,13 +166,13 @@ class APIKey extends React.Component {
                   }
                 }
               }),
-              tooltip: this.props.L('立即作废')
+              tooltip: this.props.L('kuu_apikeys_token_exp_tooltip', 'Expired now')
             },
             {
               icon: 'rollback',
               show: record => !record.State && moment().isBefore(moment.unix(record.Exp)),
               popconfirm: record => ({
-                title: this.props.L('令牌撤销二次确认提示', '确定重新启用该令牌吗？'),
+                title: this.props.L('kuu_apikeys_token_enable_confirm', 'Are you sure to re-enable the token?'),
                 onConfirm: async () => {
                   const ret = await update('signsecret', { ID: record.ID }, { Method: 'LOGIN' })
                   if (ret) {
@@ -180,7 +180,7 @@ class APIKey extends React.Component {
                   }
                 }
               }),
-              tooltip: this.props.L('令牌撤销')
+              tooltip: this.props.L('kuu_apikeys_token_enable_tooltip', 'Enable now')
             }
           ]}
         />
@@ -189,4 +189,4 @@ class APIKey extends React.Component {
   }
 }
 
-export default withLocale(APIKey)
+export default withLocale(APIKeys)

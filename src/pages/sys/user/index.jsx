@@ -13,25 +13,25 @@ class User extends React.Component {
     this.state = {
       columns: [
         {
-          title: this.props.L('账号'),
+          title: this.props.L('kuu_user_username', 'Username'),
           dataIndex: 'Username'
         },
         {
-          title: this.props.L('姓名'),
+          title: this.props.L('kuu_user_name', 'Real name'),
           dataIndex: 'Name'
         },
         {
-          title: this.props.L('是否禁用'),
+          title: this.props.L('kuu_user_disable', 'Disable'),
           dataIndex: 'Disable',
           render: 'switch'
         },
         {
-          title: this.props.L('是否内置'),
+          title: this.props.L('kuu_user_builtin', 'Built-in'),
           dataIndex: 'IsBuiltIn',
           render: 'switch'
         },
         {
-          title: this.props.L('创建时间'),
+          title: this.props.L('kuu_user_createdat', 'Created At'),
           dataIndex: 'CreatedAt',
           render: t => moment(t).fromNow()
         }
@@ -40,7 +40,7 @@ class User extends React.Component {
         {
           name: 'Username',
           type: 'input',
-          label: this.props.L('账号'),
+          label: this.props.L('kuu_user_username', 'Username'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -48,7 +48,7 @@ class User extends React.Component {
         {
           name: 'Name',
           type: 'input',
-          label: this.props.L('姓名'),
+          label: this.props.L('kuu_user_name', 'Real name'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -56,7 +56,7 @@ class User extends React.Component {
         {
           name: 'Password',
           type: 'input',
-          label: this.props.L('密码'),
+          label: this.props.L('kuu_user_password', 'Password'),
           props: {
             type: 'password'
           }
@@ -64,13 +64,13 @@ class User extends React.Component {
         {
           name: 'Disable',
           type: 'switch',
-          label: this.props.L('是否禁用')
+          label: this.props.L('kuu_user_disable', 'Disable')
         },
         {
           condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
           name: 'IsBuiltIn',
           type: 'switch',
-          label: this.props.L('系统内置'),
+          label: this.props.L('kuu_user_builtin', 'Built-in'),
           props: {
             disabled: true
           }
@@ -158,7 +158,7 @@ class User extends React.Component {
                   assignRecord: record
                 }, this.fetchUserAssigns)
               },
-              tooltip: this.props.L('角色分配')
+              tooltip: this.props.L('kuu_user_role_assigns', 'Role Assignments')
             }
           ]}
           beforeSave={values => {
@@ -172,7 +172,7 @@ class User extends React.Component {
         <Modal
           width={600}
           maskClosable={false}
-          title={this.props.L('角色分配')}
+          title={this.props.L('kuu_user_role_assigns', 'Role Assignments')}
           visible={!!assignRecord}
           onOk={this.handleAssignOk}
           onCancel={this.handleAssignCancel}
@@ -185,7 +185,7 @@ class User extends React.Component {
             <Transfer
               rowKey={record => record.ID}
               dataSource={roles}
-              titles={[this.props.L('系统角色'), this.props.L('已分配角色')]}
+              titles={[this.props.L('kuu_user_titles_notassigned', 'Not Assigned'), this.props.L('kuu_user_titles_assigned', 'Assigned')]}
               showSearch
               filterOption={(inputValue, option) => option.Name.includes(inputValue)}
               targetKeys={userAssignsRolesKey}

@@ -266,4 +266,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(withLocale(BasicLayout)))
+export default withLocale(connect(mapStateToProps)(withRouter(BasicLayout)))

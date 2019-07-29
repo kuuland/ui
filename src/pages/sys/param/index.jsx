@@ -1,6 +1,7 @@
 import React from 'react'
 import { FanoTable } from 'fano-antd'
 import moment from 'moment'
+import { withLocale } from 'kuu-tools'
 import styles from './index.less'
 
 class Param extends React.Component {
@@ -10,24 +11,24 @@ class Param extends React.Component {
     this.state = {
       columns: [
         {
-          title: '参数编码',
+          title: this.props.L('kuu_param_code', 'Code'),
           dataIndex: 'Code'
         },
         {
-          title: '参数名称',
+          title: this.props.L('kuu_param_name', 'Name'),
           dataIndex: 'Name'
         },
         {
-          title: '参数值',
+          title: this.props.L('kuu_param_value', 'Value'),
           dataIndex: 'Value'
         },
         {
-          title: '是否内置',
+          title: this.props.L('kuu_param_builtin', 'Built-in'),
           dataIndex: 'IsBuiltIn',
           render: 'switch'
         },
         {
-          title: '创建时间',
+          title: this.props.L('kuu_param_createdat', 'Created At'),
           dataIndex: 'CreatedAt',
           render: t => moment(t).fromNow()
         }
@@ -37,7 +38,7 @@ class Param extends React.Component {
         {
           name: 'Code',
           type: 'input',
-          label: '参数编码',
+          label: this.props.L('kuu_param_code', 'Code'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -45,7 +46,7 @@ class Param extends React.Component {
         {
           name: 'Name',
           type: 'input',
-          label: '参数名称',
+          label: this.props.L('kuu_param_name', 'Name'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -53,7 +54,7 @@ class Param extends React.Component {
         {
           name: 'Value',
           type: 'textarea',
-          label: '参数值',
+          label: this.props.L('kuu_param_value', 'Value'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -62,7 +63,7 @@ class Param extends React.Component {
           condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
           name: 'IsBuiltIn',
           type: 'switch',
-          label: '系统内置',
+          label: this.props.L('kuu_param_builtin', 'Built-in'),
           props: {
             disabled: true
           }
@@ -85,4 +86,4 @@ class Param extends React.Component {
   }
 }
 
-export default Param
+export default withLocale(Param)

@@ -13,20 +13,20 @@ class Role extends React.Component {
     this.state = {
       columns: [
         {
-          title: '角色名称',
+          title: this.props.L('kuu_role_name', 'Name'),
           dataIndex: 'Name'
         },
         {
-          title: '角色编码',
+          title: this.props.L('kuu_role_code', 'Code'),
           dataIndex: 'Code'
         },
         {
-          title: '是否内置',
+          title: this.props.L('kuu_role_builtin', 'Built-in'),
           dataIndex: 'IsBuiltIn',
           render: 'switch'
         },
         {
-          title: '创建时间',
+          title: this.props.L('kuu_role_createdat', 'Created At'),
           dataIndex: 'CreatedAt',
           render: t => moment(t).fromNow()
         }
@@ -35,13 +35,13 @@ class Role extends React.Component {
         {
           name: 'Name',
           type: 'input',
-          label: '角色名称',
+          label: this.props.L('kuu_role_name', 'Name'),
           props: {
             fieldOptions: {
               rules: [
                 {
                   required: true,
-                  message: this.props.L('请输入角色名称')
+                  message: this.props.L('kuu_role_name_required', 'Please enter a role name')
                 }
               ]
             }
@@ -50,13 +50,13 @@ class Role extends React.Component {
         {
           name: 'Code',
           type: 'input',
-          label: '角色编码',
+          label: this.props.L('kuu_role_code', 'Code'),
           props: {
             fieldOptions: {
               rules: [
                 {
                   required: true,
-                  message: this.props.L('请输入角色编码')
+                  message: this.props.L('kuu_role_code_required', 'Please enter a role code')
                 }
               ]
             }
@@ -65,7 +65,7 @@ class Role extends React.Component {
         {
           name: 'ViewOperationPrivileges',
           type: 'treeselect',
-          label: '操作权限',
+          label: this.props.L('kuu_role_op', 'Menu Privileges'),
           props: {
             url: '/api/menu?range=ALL&sort=Sort',
             titleKey: 'Name',
@@ -73,15 +73,11 @@ class Role extends React.Component {
             arrayToTree: true,
             multiple: true,
             treeCheckable: true,
-            titleRender: (title, item) => <span><Icon {...parseIcon(item.Icon)} /> {title}</span>,
-            fieldOptions: {
-              rules: [
-                {
-                  required: true,
-                  message: this.props.L('请设置操作权限')
-                }
-              ]
-            },
+            titleRender: (title, item) => (
+              <span>
+                <Icon {...parseIcon(item.Icon)} /> {this.props.L(item.LocaleKey || item.Name, item.Name)}
+              </span>
+            ),
             layout: {
               colProps: {
                 span: 24
@@ -95,7 +91,7 @@ class Role extends React.Component {
         {
           name: 'DataPrivileges',
           type: 'render',
-          label: '数据权限',
+          label: this.props.L('kuu_role_dp', 'Data Privileges'),
           props: {
             layout: {
               colProps: {
@@ -122,7 +118,7 @@ class Role extends React.Component {
                                 titleKey: 'Name',
                                 valueKey: 'ID',
                                 arrayToTree: true,
-                                placeholder: this.props.L('请选择组织')
+                                placeholder: this.props.L('kuu_role_select_org_placeholder', 'Please select an organization')
                               }
                             }}
                             value={item.TargetOrgID}
@@ -134,7 +130,7 @@ class Role extends React.Component {
                           />
                           <Select
                             defaultValue='PERSONAL'
-                            placeholder={this.props.L('请选择可读范围')}
+                            placeholder={this.props.L('kuu_role_readable_range_placeholder', 'Please select a readable range')}
                             value={item.ReadableRange}
                             onChange={v => {
                               const value = _.cloneDeep(props.value)
@@ -142,13 +138,19 @@ class Role extends React.Component {
                               props.onChange(value)
                             }}
                           >
-                            <Select.Option value='PERSONAL'>{this.props.L('个人范围可读')}</Select.Option>
-                            <Select.Option value='CURRENT'>{this.props.L('当前组织可读')}</Select.Option>
-                            <Select.Option value='CURRENT_FOLLOWING'>{this.props.L('当前及以下可读')}</Select.Option>
+                            <Select.Option
+                              value='PERSONAL'
+                            >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
+                            <Select.Option
+                              value='CURRENT'
+                            >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
+                            <Select.Option
+                              value='CURRENT_FOLLOWING'
+                            >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
                           </Select>
                           <Select
                             defaultValue='PERSONAL'
-                            placeholder={this.props.L('请选择可写范围')}
+                            placeholder={this.props.L('kuu_role_writable_range_placeholder', 'Please select a writable range')}
                             value={item.WritableRange}
                             onChange={v => {
                               const value = _.cloneDeep(props.value)
@@ -156,9 +158,15 @@ class Role extends React.Component {
                               props.onChange(value)
                             }}
                           >
-                            <Select.Option value='PERSONAL'>{this.props.L('个人范围可写')}</Select.Option>
-                            <Select.Option value='CURRENT'>{this.props.L('当前组织可写')}</Select.Option>
-                            <Select.Option value='CURRENT_FOLLOWING'>{this.props.L('当前及以下可写')}</Select.Option>
+                            <Select.Option
+                              value='PERSONAL'
+                            >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
+                            <Select.Option
+                              value='CURRENT'
+                            >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
+                            <Select.Option
+                              value='CURRENT_FOLLOWING'
+                            >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
                           </Select>
                           <Button
                             size={'small'}
@@ -193,19 +201,11 @@ class Role extends React.Component {
                         props.onChange(value)
                       }}
                     >
-                      {this.props.L('添加权限')}
+                      {this.props.L('kuu_role_addrule', 'Add rule')}
                     </Button>
                   </div>
                 </div>
               )
-            },
-            fieldOptions: {
-              rules: [
-                {
-                  required: true,
-                  message: this.props.L('请设置数据权限权限')
-                }
-              ]
             }
           }
         }
@@ -226,6 +226,7 @@ class Role extends React.Component {
           onFormRecord={record => {
             record.ViewOperationPrivileges = _.chain(record)
               .get('OperationPrivileges', [])
+              .filter(item => !_.isEmpty(item.MenuCode))
               .map(item => item.MenuCode)
               .value()
           }}
@@ -256,6 +257,7 @@ class Role extends React.Component {
               }
               if (_.has(values, 'doc')) {
                 // 修改
+                _.set(values, 'doc.OperationPrivileges', ops)
                 _.set(values, 'doc.OperationPrivileges', ops)
                 delete values.doc.ViewOperationPrivileges
               } else {

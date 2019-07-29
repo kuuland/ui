@@ -11,23 +11,23 @@ class Menu extends React.Component {
     this.state = {
       columns: [
         {
-          title: '菜单名称',
+          title: this.props.L('kuu_menu_name', 'Name'),
           dataIndex: 'Name',
           width: 280,
           render: (t, r) => r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
         },
         {
-          title: '菜单地址',
+          title: this.props.L('kuu_menu_uri', 'URI'),
           dataIndex: 'URI',
           render: t => <Button type={'link'} size={'small'}>{t}</Button>
         },
         {
-          title: '排序',
+          title: this.props.L('kuu_menu_sort', 'Sort'),
           dataIndex: 'Sort',
           show: false
         },
         {
-          title: '可见',
+          title: this.props.L('kuu_menu_disable', 'Disable'),
           dataIndex: 'Disable',
           width: 60,
           align: 'center',
@@ -35,22 +35,26 @@ class Menu extends React.Component {
             : <Icon type='eye' style={{ color: '#52c41a', fontSize: 18 }} />
         },
         {
-          title: '菜单详情',
+          title: this.props.L('kuu_menu_detail', 'Detail'),
           dataIndex: 'Detail',
           width: 300,
           align: 'center',
           render: (t, r) => {
             return (
               <div>
-                <Checkbox checked={!!r.IsLink}>{this.props.L('是否外链')}</Checkbox>
-                <Checkbox checked={!!r.IsDefaultOpen}>{this.props.L('默认打开')}</Checkbox>
-                <Checkbox checked={r.Closeable === undefined || !!r.Closeable}>{this.props.L('可关闭')}</Checkbox>
+                <Checkbox checked={!!r.IsLink}>{this.props.L('kuu_menu_external', 'External link')}</Checkbox>
+                <Checkbox
+                  checked={!!r.IsDefaultOpen}
+                >{this.props.L('kuu_menu_defaultopen', 'Open by default')}</Checkbox>
+                <Checkbox
+                  checked={r.Closeable === undefined || !!r.Closeable}
+                >{this.props.L('kuu_menu_closeable', 'Closeable')}</Checkbox>
               </div>
             )
           }
         },
         {
-          title: '权限标识',
+          title: this.props.L('kuu_menu_code', 'Permission Code'),
           dataIndex: 'Code'
         }
       ],
@@ -58,7 +62,7 @@ class Menu extends React.Component {
         {
           name: 'Pid',
           type: 'treeselect',
-          label: '上级菜单',
+          label: this.props.L('kuu_menu_parent', 'Parent Menu'),
           props: {
             url: '/api/user/menus',
             titleKey: 'Name',
@@ -72,13 +76,13 @@ class Menu extends React.Component {
         {
           name: 'Name',
           type: 'input',
-          label: '菜单名称',
+          label: this.props.L('kuu_menu_name', 'Name'),
           props: {
             fieldOptions: {
               rules: [
                 {
                   required: true,
-                  message: this.props.L('请输入菜单名称')
+                  message: this.props.L('kuu_menu_name_required', 'Please enter a menu name')
                 }
               ]
             }
@@ -87,47 +91,47 @@ class Menu extends React.Component {
         {
           name: 'URI',
           type: 'input',
-          label: '菜单链接'
+          label: this.props.L('kuu_menu_uri', 'URI')
         },
         {
           name: 'LocaleKey',
           type: 'input',
-          label: '国际化键'
+          label: this.props.L('kuu_menu_localekey', 'Locale Key')
         },
         {
           name: 'IsLink',
           type: 'switch',
-          label: '是否外链'
+          label: this.props.L('kuu_menu_external', 'External link')
         },
         {
           name: 'Sort',
           type: 'number',
-          label: '排序'
+          label: this.props.L('kuu_menu_sort', 'Sort')
         },
         {
           name: 'Code',
           type: 'input',
-          label: '权限标识'
+          label: this.props.L('kuu_menu_code', 'Permission Code')
         },
         {
           name: 'Icon',
           type: 'icon',
-          label: '菜单图标'
+          label: this.props.L('kuu_menu_icon', 'Icon')
         },
         {
           name: 'Disable',
           type: 'switch',
-          label: '禁用'
+          label: this.props.L('kuu_menu_disable', 'Disable')
         },
         {
           name: 'IsDefaultOpen',
           type: 'switch',
-          label: '默认打开'
+          label: this.props.L('kuu_menu_defaultopen', 'Open by default')
         },
         {
           name: 'Closeable',
           type: 'switch',
-          label: '可关闭'
+          label: this.props.L('kuu_menu_closeable', 'Closeable')
         }
       ]
     }
