@@ -4,8 +4,8 @@
     "start": "umi dev",
     "build": "umi build",
     "test": "umi test",
-    "lint": "standard --verbose",
-    "lint:fix": "standard --fix"
+    "lint": "standard --verbose src/**/*.[js,jsx]",
+    "lint:fix": "standard --fix src/**/*.[js,jsx]"
   },
   "dependencies": {
     "@ant-design/icons": "^2.1.1",
