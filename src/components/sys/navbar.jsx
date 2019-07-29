@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
-import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio, message } from 'antd'
+import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio } from 'antd'
 import { get, update, withLocale } from 'kuu-tools'
 import OrgModal from './org-modal'
 import styles from './navbar.less'
@@ -15,6 +15,7 @@ class Navbar extends React.Component {
       menuKeyPrefix: 'menu-'
     }
     this.handleMenuClick = this.handleMenuClick.bind(this)
+    this.handleLogout = this.handleLogout.bind(this)
   }
 
   handleMenuClick (e) {
@@ -71,9 +72,7 @@ class Navbar extends React.Component {
           })
           break
         case 'logout':
-          window.g_app._store.dispatch({
-            type: 'user/logout'
-          })
+          this.handleLogout()
           break
         case 'apikey':
           window.g_app._store.dispatch({
@@ -81,7 +80,7 @@ class Navbar extends React.Component {
             payload: {
               ID: 'apikey',
               Icon: 'key',
-              Name: this.props.L('APIKey', 'API & Keys'),
+              Name: this.props.L('kuu_navbar_apikeys', 'API & Keys'),
               URI: '/sys/apikey'
             }
           })
@@ -94,6 +93,12 @@ class Navbar extends React.Component {
     const json = await get('/language', { range: 'ALL' })
     const languages = _.get(json, 'list', [])
     callback(languages)
+  }
+
+  handleLogout () {
+    window.g_app._store.dispatch({
+      type: 'user/logout'
+    })
   }
 
   render () {
@@ -180,10 +185,7 @@ class Navbar extends React.Component {
             this.setState({ orgModalVisible: false })
           }}
           onCancel={() => this.setState({ orgModalVisible: false })}
-          onError={() => {
-            message.error(this.props.L('当前用户未分配有效组织'))
-            this.handleLogout()
-          }}
+          onError={this.handleLogout}
         />
         {items}
       </div>

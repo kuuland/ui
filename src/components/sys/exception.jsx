@@ -15,17 +15,17 @@ class Exception extends React.PureComponent {
       403: {
         img: 'https://gw.alipayobjects.com/zos/rmsportal/wZcnGqRDyhPOEYFcZDnb.svg',
         title: '403',
-        desc: this.props.L('kuu_pages_exception_403', 'Sorry, you don\'t have access to this page.')
+        desc: this.props.L('kuu_exception_403', 'Sorry, you don\'t have access to this page.')
       },
       404: {
         img: 'https://gw.alipayobjects.com/zos/rmsportal/KpnpchXsobRgLElEozzI.svg',
         title: '404',
-        desc: this.props.L('kuu_pages_exception_404', 'Sorry, the page you visited does not exist.')
+        desc: this.props.L('kuu_exception_404', 'Sorry, the page you visited does not exist.')
       },
       500: {
         img: 'https://gw.alipayobjects.com/zos/rmsportal/RVRUAYdCGeYNBWoKiIwB.svg',
         title: '500',
-        desc: this.props.L('kuu_pages_exception_500', 'Sorry, the server is reporting an error.')
+        desc: this.props.L('kuu_exception_500', 'Sorry, the server is reporting an error.')
       }
     }
     const {
@@ -61,7 +61,7 @@ class Exception extends React.PureComponent {
                 to: redirect,
                 href: redirect
               },
-              <Button type='primary'>{backText || this.props.L('kuu_pages_exception_back', 'back to home')}</Button>
+              <Button type='primary'>{backText || this.props.L('kuu_exception_btn_back', 'back to home')}</Button>
             )}
           </div>
         </div>

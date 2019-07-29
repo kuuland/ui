@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
-import { Modal, Button, TreeSelect } from 'antd'
+import { Modal, Button, TreeSelect, message } from 'antd'
 import { get, post, withLocale } from 'kuu-tools'
 
 class OrgModal extends React.Component {
@@ -21,6 +21,7 @@ class OrgModal extends React.Component {
       const total = _.size(orgs)
       if (_.isEmpty(orgs) && !_.get(this.props.loginData, 'IsBuiltIn', false)) {
         if (_.isFunction(this.props.onError)) {
+          message.error(this.props.L('kuu_org_unorganized', 'You have not assigned any organization'))
           this.props.onError()
         } else {
           console.warn('组织选择框未指定 onError 回调')
@@ -81,7 +82,7 @@ class OrgModal extends React.Component {
         width={400}
         maskClosable={false}
         visible={visible}
-        title={this.props.L('选择登入组织')}
+        title={this.props.L('kuu_org_select_login', 'Please select a login organization')}
         onCancel={() => {
           this.setState({ orgs: undefined, orgID: undefined, visible: false })
           if (_.isFunction(this.props.onCancel)) {
@@ -98,7 +99,7 @@ class OrgModal extends React.Component {
             loading={loading}
             onClick={this.handleOk}
           >
-            {this.props.L('确认登入')}
+            {this.props.L('kuu_org_btn_login', 'Login')}
           </Button>
         ]}
       >
@@ -106,7 +107,7 @@ class OrgModal extends React.Component {
           value={orgID}
           style={{ width: '100%' }}
           onChange={orgID => this.setState({ orgID })}
-          placeholder={this.props.L('请选择登入组织')}
+          placeholder={this.props.L('kuu_org_select_login', 'Please select a login organization')}
           treeDefaultExpandAll
           showSearch
           treeNodeFilterProp={'title'}

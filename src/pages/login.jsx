@@ -2,7 +2,7 @@ import React from 'react'
 import md5 from 'blueimp-md5'
 import router from 'umi/router'
 import _ from 'lodash'
-import { Form, Icon, Input, Button, Checkbox, message } from 'antd'
+import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import styles from './login.less'
 import { get, post, withLocale } from 'kuu-tools'
 import OrgModal from '@/components/sys/org-modal'
@@ -104,10 +104,7 @@ class Login extends React.Component {
           loginData={this.state.loginData}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          onError={() => {
-            message.error(this.props.L('kuu_login_unorganized', 'You are unorganized'))
-            this.handleCancel()
-          }}
+          onError={this.handleCancel}
         />
         <div className={styles.content}>
           <div className={styles.title}>{config.fullName}</div>
