@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
 import { Modal, Button, TreeSelect } from 'antd'
-import { get, post } from 'kuu-tools'
+import { get, post, withLocale } from 'kuu-tools'
 
 class OrgModal extends React.Component {
   constructor (props) {
@@ -81,7 +81,7 @@ class OrgModal extends React.Component {
         width={400}
         maskClosable={false}
         visible={visible}
-        title={window.L('选择登入组织')}
+        title={this.props.L('选择登入组织')}
         onCancel={() => {
           this.setState({ orgs: undefined, orgID: undefined, visible: false })
           if (_.isFunction(this.props.onCancel)) {
@@ -98,7 +98,7 @@ class OrgModal extends React.Component {
             loading={loading}
             onClick={this.handleOk}
           >
-            {window.L('确认登入')}
+            {this.props.L('确认登入')}
           </Button>
         ]}
       >
@@ -106,7 +106,7 @@ class OrgModal extends React.Component {
           value={orgID}
           style={{ width: '100%' }}
           onChange={orgID => this.setState({ orgID })}
-          placeholder={window.L('请选择登入组织')}
+          placeholder={this.props.L('请选择登入组织')}
           treeDefaultExpandAll
           showSearch
           treeNodeFilterProp={'title'}
@@ -117,4 +117,4 @@ class OrgModal extends React.Component {
   }
 }
 
-export default OrgModal
+export default withLocale(OrgModal)

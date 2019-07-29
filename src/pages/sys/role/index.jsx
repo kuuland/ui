@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, Input, Select, Button } from 'antd'
 import { FanoTable, FanoTreeSelect } from 'fano-antd'
-import { parseIcon } from 'kuu-tools'
+import { parseIcon, withLocale } from 'kuu-tools'
 import _ from 'lodash'
 import moment from 'moment'
 import styles from './index.less'
@@ -41,7 +41,7 @@ class Role extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: window.L('请输入角色名称')
+                  message: this.props.L('请输入角色名称')
                 }
               ]
             }
@@ -56,7 +56,7 @@ class Role extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: window.L('请输入角色编码')
+                  message: this.props.L('请输入角色编码')
                 }
               ]
             }
@@ -78,7 +78,7 @@ class Role extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: window.L('请设置操作权限')
+                  message: this.props.L('请设置操作权限')
                 }
               ]
             },
@@ -122,7 +122,7 @@ class Role extends React.Component {
                                 titleKey: 'Name',
                                 valueKey: 'ID',
                                 arrayToTree: true,
-                                placeholder: window.L('请选择组织')
+                                placeholder: this.props.L('请选择组织')
                               }
                             }}
                             value={item.TargetOrgID}
@@ -134,7 +134,7 @@ class Role extends React.Component {
                           />
                           <Select
                             defaultValue='PERSONAL'
-                            placeholder={window.L('请选择可读范围')}
+                            placeholder={this.props.L('请选择可读范围')}
                             value={item.ReadableRange}
                             onChange={v => {
                               const value = _.cloneDeep(props.value)
@@ -142,13 +142,13 @@ class Role extends React.Component {
                               props.onChange(value)
                             }}
                           >
-                            <Select.Option value='PERSONAL'>{window.L('个人范围可读')}</Select.Option>
-                            <Select.Option value='CURRENT'>{window.L('当前组织可读')}</Select.Option>
-                            <Select.Option value='CURRENT_FOLLOWING'>{window.L('当前及以下可读')}</Select.Option>
+                            <Select.Option value='PERSONAL'>{this.props.L('个人范围可读')}</Select.Option>
+                            <Select.Option value='CURRENT'>{this.props.L('当前组织可读')}</Select.Option>
+                            <Select.Option value='CURRENT_FOLLOWING'>{this.props.L('当前及以下可读')}</Select.Option>
                           </Select>
                           <Select
                             defaultValue='PERSONAL'
-                            placeholder={window.L('请选择可写范围')}
+                            placeholder={this.props.L('请选择可写范围')}
                             value={item.WritableRange}
                             onChange={v => {
                               const value = _.cloneDeep(props.value)
@@ -156,9 +156,9 @@ class Role extends React.Component {
                               props.onChange(value)
                             }}
                           >
-                            <Select.Option value='PERSONAL'>{window.L('个人范围可写')}</Select.Option>
-                            <Select.Option value='CURRENT'>{window.L('当前组织可写')}</Select.Option>
-                            <Select.Option value='CURRENT_FOLLOWING'>{window.L('当前及以下可写')}</Select.Option>
+                            <Select.Option value='PERSONAL'>{this.props.L('个人范围可写')}</Select.Option>
+                            <Select.Option value='CURRENT'>{this.props.L('当前组织可写')}</Select.Option>
+                            <Select.Option value='CURRENT_FOLLOWING'>{this.props.L('当前及以下可写')}</Select.Option>
                           </Select>
                           <Button
                             size={'small'}
@@ -193,7 +193,7 @@ class Role extends React.Component {
                         props.onChange(value)
                       }}
                     >
-                      {window.L('添加权限')}
+                      {this.props.L('添加权限')}
                     </Button>
                   </div>
                 </div>
@@ -203,7 +203,7 @@ class Role extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: window.L('请设置数据权限权限')
+                  message: this.props.L('请设置数据权限权限')
                 }
               ]
             }
@@ -271,4 +271,4 @@ class Role extends React.Component {
   }
 }
 
-export default Role
+export default withLocale(Role)

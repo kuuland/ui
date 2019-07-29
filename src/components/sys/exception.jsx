@@ -1,6 +1,7 @@
 import React, { createElement } from 'react'
 import classNames from 'classnames'
 import { Button } from 'antd'
+import { withLocale } from 'kuu-tools'
 import styles from './exception.less'
 
 class Exception extends React.PureComponent {
@@ -14,17 +15,17 @@ class Exception extends React.PureComponent {
       403: {
         img: 'https://gw.alipayobjects.com/zos/rmsportal/wZcnGqRDyhPOEYFcZDnb.svg',
         title: '403',
-        desc: window.L('Exception-403', '抱歉，你无权访问该页面')
+        desc: this.props.L('kuu_pages_exception_403', 'Sorry, you don\'t have access to this page.')
       },
       404: {
         img: 'https://gw.alipayobjects.com/zos/rmsportal/KpnpchXsobRgLElEozzI.svg',
         title: '404',
-        desc: window.L('Exception-404', '抱歉，你访问的页面不存在')
+        desc: this.props.L('kuu_pages_exception_404', 'Sorry, the page you visited does not exist.')
       },
       500: {
         img: 'https://gw.alipayobjects.com/zos/rmsportal/RVRUAYdCGeYNBWoKiIwB.svg',
         title: '500',
-        desc: window.L('Exception-500', '抱歉，服务器出错了')
+        desc: this.props.L('kuu_pages_exception_500', 'Sorry, the server is reporting an error.')
       }
     }
     const {
@@ -60,7 +61,7 @@ class Exception extends React.PureComponent {
                 to: redirect,
                 href: redirect
               },
-              <Button type='primary'>{backText}</Button>
+              <Button type='primary'>{backText || this.props.L('kuu_pages_exception_back', 'back to home')}</Button>
             )}
           </div>
         </div>
@@ -70,8 +71,7 @@ class Exception extends React.PureComponent {
 }
 
 Exception.defaultProps = {
-  backText: window.L('Exception-back', 'back to home'),
   redirect: '/'
 }
 
-export default Exception
+export default withLocale(Exception)

@@ -4,7 +4,7 @@ import router from 'umi/router'
 import _ from 'lodash'
 import { Form, Icon, Input, Button, Checkbox, message } from 'antd'
 import styles from './login.less'
-import { get, post } from 'kuu-tools'
+import { get, post, withLocale } from 'kuu-tools'
 import OrgModal from '@/components/sys/org-modal'
 import config from '@/config'
 
@@ -87,10 +87,6 @@ class Login extends React.Component {
   }
 
   handleOk (loginOrg, loginData) {
-    // window.g_app._store.dispatch({
-    //   type: 'user/LOGIN',
-    //   payload: { loginData: loginData || this.state.loginData, loginOrg }
-    // })
     this.handleLoginRedirect()
   }
 
@@ -109,7 +105,7 @@ class Login extends React.Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           onError={() => {
-            message.error(window.L('当前用户未分配有效组织'))
+            message.error(this.props.L('kuu_login_unorganized', 'You are unorganized'))
             this.handleCancel()
           }}
         />
@@ -119,21 +115,27 @@ class Login extends React.Component {
           <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
             <Form.Item>
               {getFieldDecorator('username', {
-                rules: [{ required: true, message: window.L('请输入你的登录账号') }]
+                rules: [{
+                  required: true,
+                  message: this.props.L('kuu_login_username_required', 'Please enter your username')
+                }]
               })(
                 <Input
                   prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  placeholder={window.L('账号')}
+                  placeholder={this.props.L('kuu_login_username_placeholder', 'Username')}
                 />
               )}
             </Form.Item>
             <Form.Item>
               {getFieldDecorator('password', {
-                rules: [{ required: true, message: window.L('请输入你的登录密码') }]
+                rules: [{
+                  required: true,
+                  message: this.props.L('kuu_login_password_required', 'Please enter your password')
+                }]
               })(
                 <Input
                   prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  type='password' placeholder={window.L('密码')}
+                  type='password' placeholder={this.props.L('kuu_login_password_placeholder', 'Password')}
                 />
               )}
             </Form.Item>
@@ -142,13 +144,15 @@ class Login extends React.Component {
                 valuePropName: 'checked',
                 initialValue: true
               })(
-                <Checkbox>{window.L('记住我')}</Checkbox>
+                <Checkbox>{this.props.L('kuu_login_remember', 'Remember')}</Checkbox>
               )}
-              <a className={styles.forgot} href=''>{window.L('忘记密码')}</a>
+              <a
+                className={styles.forgot} href=''
+              >{this.props.L('kuu_login_password_forgot', 'Forgot your password?')}</a>
               <Button
                 type='primary' htmlType='submit' loading={this.state.loginLoading}
                 className={styles.submit}
-              >{window.L('登录')}</Button>
+              >{this.props.L('kuu_login_btn_submit', 'Login')}</Button>
             </Form.Item>
           </Form>
         </div>
@@ -160,4 +164,4 @@ class Login extends React.Component {
   }
 }
 
-export default Form.create({ name: 'login' })(Login)
+export default Form.create({ name: 'login' })(withLocale(Login))

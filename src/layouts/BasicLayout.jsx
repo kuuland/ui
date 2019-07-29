@@ -4,7 +4,7 @@ import router from 'umi/router'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
 import { Layout, Menu, Icon, Skeleton } from 'antd'
-import { parseIcon } from 'kuu-tools'
+import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './index.less'
 import LayoutTabs from '@/components/sys/layout-tabs'
 import Navbar from '@/components/sys/navbar'
@@ -55,8 +55,8 @@ class BasicLayout extends React.Component {
         if (this.state.collapsed) {
           iconStyle.paddingLeft = 0
         }
-        const title = value.Name
-        value.breadcrumbs = breadcrumbs.concat([title])
+        const title = this.props.L(value.LocaleKey || value.Name, value.Name)
+        value.breadcrumbs = breadcrumbs.concat([_.pick(value, ['LocaleKey', 'Name'])])
         if (value.Children) {
           const sub = this.renderMenuChildren(value.Children, value.breadcrumbs)
           if (Array.isArray(sub) && sub.length > 0) {
@@ -88,7 +88,7 @@ class BasicLayout extends React.Component {
         }
       }
       if (name) {
-        ret = <Menu.ItemGroup title={window.L(name)} key={name}>{ret}</Menu.ItemGroup>
+        ret = <Menu.ItemGroup title={this.props.L(name)} key={name}>{ret}</Menu.ItemGroup>
       }
       arr = arr.concat(ret)
     }
@@ -259,7 +259,11 @@ class BasicLayout extends React.Component {
   }
 }
 
-export default withRouter(connect(state => ({
-  ...state.layout,
-  logged: (window.localStorage.getItem(config.storageTokenKey) || _.get(state, 'user.loginData')) ? 1 : 2
-}))(BasicLayout))
+function mapStateToProps (state) {
+  return {
+    ...state.layout,
+    logged: (window.localStorage.getItem(config.storageTokenKey) || _.get(state, 'user.loginData')) ? 1 : 2
+  }
+}
+
+export default withRouter(connect(mapStateToProps)(withLocale(BasicLayout)))

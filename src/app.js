@@ -1,4 +1,4 @@
-import { L, config } from 'kuu-tools'
+import { config } from 'kuu-tools'
 import { message } from 'antd'
 import 'fano-antd/lib/index.less'
 
@@ -8,7 +8,6 @@ config({
     error: msg => message.error(msg)
   }
 })
-window.L = L
 
 export const dva = {
   config: {

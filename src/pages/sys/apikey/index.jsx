@@ -4,7 +4,7 @@ import { message } from 'antd'
 import { FanoTable } from 'fano-antd'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import moment from 'moment'
-import { update } from 'kuu-tools'
+import { update, withLocale } from 'kuu-tools'
 import styles from './index.less'
 
 class APIKey extends React.Component {
@@ -14,9 +14,9 @@ class APIKey extends React.Component {
     this.state = {
       columns: [
         {
-          title: window.L('描述'),
+          title: this.props.L('描述'),
           dataIndex: 'Desc',
-          render: t => (t || window.L('用户登录'))
+          render: t => (t || this.props.L('用户登录'))
         },
         {
           title: '有效状态',
@@ -26,7 +26,7 @@ class APIKey extends React.Component {
         {
           title: '过期时间',
           dataIndex: 'Exp',
-          render: t => moment.unix(t).diff(moment(), 'years') > 100 ? window.L('令牌永不过期') : moment.unix(t).format('YYYY-MM-DD HH:mm:ss')
+          render: t => moment.unix(t).diff(moment(), 'years') > 100 ? this.props.L('令牌永不过期') : moment.unix(t).format('YYYY-MM-DD HH:mm:ss')
         },
         {
           title: '创建时间',
@@ -38,15 +38,15 @@ class APIKey extends React.Component {
         {
           name: 'Desc',
           type: 'textarea',
-          label: window.L('描述'),
+          label: this.props.L('描述'),
           props: {
             rows: 2,
-            placeholder: window.L('APIKey描述占位符', '例如: 此密钥由任务调度服务器使用，用于任务触发部署。'),
+            placeholder: this.props.L('APIKey描述占位符', '例如: 此密钥由任务调度服务器使用，用于任务触发部署。'),
             fieldOptions: {
               rules: [
                 {
                   required: true,
-                  message: window.L('请输入用途描述')
+                  message: this.props.L('请输入用途描述')
                 }
               ]
             }
@@ -55,27 +55,27 @@ class APIKey extends React.Component {
         {
           name: 'Exp',
           type: 'radio',
-          label: window.L('过期时间'),
+          label: this.props.L('过期时间'),
           props: {
             options: [
               {
-                label: window.L('永不过期', '令牌将永不过期，请谨慎设置'),
+                label: this.props.L('永不过期', '令牌将永不过期，请谨慎设置'),
                 value: 'never'
               },
               {
-                label: window.L('一天后过期', '从现在开始，有效期1天'),
+                label: this.props.L('一天后过期', '从现在开始，有效期1天'),
                 value: 'day'
               },
               {
-                label: window.L('一周后过期', '从现在开始，有效期1周'),
+                label: this.props.L('一周后过期', '从现在开始，有效期1周'),
                 value: 'week'
               },
               {
-                label: window.L('一个月后过期', '从现在开始，有效期1个月'),
+                label: this.props.L('一个月后过期', '从现在开始，有效期1个月'),
                 value: 'month'
               },
               {
-                label: window.L('一年后过期', '从现在开始，有效期1年'),
+                label: this.props.L('一年后过期', '从现在开始，有效期1年'),
                 value: 'year'
               }
             ],
@@ -83,7 +83,7 @@ class APIKey extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: window.L('请选择过期时间')
+                  message: this.props.L('请选择过期时间')
                 }
               ]
             }
@@ -143,13 +143,13 @@ class APIKey extends React.Component {
                 return (
                   <CopyToClipboard
                     text={record.Token}
-                    onCopy={() => message.info(window.L('已复制令牌到剪贴板'), 0.5)}
+                    onCopy={() => message.info(this.props.L('已复制令牌到剪贴板'), 0.5)}
                   >
                     {children}
                   </CopyToClipboard>
                 )
               },
-              tooltip: window.L('点击复制令牌')
+              tooltip: this.props.L('点击复制令牌')
             },
             {
               icon: 'stop',
@@ -158,7 +158,7 @@ class APIKey extends React.Component {
               },
               show: record => record.State,
               popconfirm: record => ({
-                title: window.L('令牌作废二次确认提示', '确定要作废该令牌吗？'),
+                title: this.props.L('令牌作废二次确认提示', '确定要作废该令牌吗？'),
                 onConfirm: async () => {
                   const ret = await update('signsecret', { ID: record.ID }, { Method: 'LOGOUT' })
                   if (ret) {
@@ -166,13 +166,13 @@ class APIKey extends React.Component {
                   }
                 }
               }),
-              tooltip: window.L('立即作废')
+              tooltip: this.props.L('立即作废')
             },
             {
               icon: 'rollback',
               show: record => !record.State && moment().isBefore(moment.unix(record.Exp)),
               popconfirm: record => ({
-                title: window.L('令牌撤销二次确认提示', '确定重新启用该令牌吗？'),
+                title: this.props.L('令牌撤销二次确认提示', '确定重新启用该令牌吗？'),
                 onConfirm: async () => {
                   const ret = await update('signsecret', { ID: record.ID }, { Method: 'LOGIN' })
                   if (ret) {
@@ -180,7 +180,7 @@ class APIKey extends React.Component {
                   }
                 }
               }),
-              tooltip: window.L('令牌撤销')
+              tooltip: this.props.L('令牌撤销')
             }
           ]}
         />
@@ -189,4 +189,4 @@ class APIKey extends React.Component {
   }
 }
 
-export default APIKey
+export default withLocale(APIKey)

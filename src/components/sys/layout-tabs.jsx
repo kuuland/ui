@@ -1,10 +1,10 @@
 import React from 'react'
 import _ from 'lodash'
 import { Menu, Dropdown, Tabs, Icon, Breadcrumb } from 'antd'
-import { parseIcon } from 'kuu-tools'
+import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './layout-tabs.less'
 
-export default props => {
+export default withLocale(props => {
   return (
     <div className={styles.layoutTabs}>
       <Tabs
@@ -26,22 +26,22 @@ export default props => {
                   <Menu>
                     <Menu.Item key='refresh' onClick={() => props.onContext(pane, index, 'refresh')}><Icon
                       type='reload'
-                    />{window.L('刷新')}</Menu.Item>
+                    />{props.L('刷新')}</Menu.Item>
                     <Menu.Item key='close-others' onClick={() => props.onContext(pane, index, 'close-others')}><Icon
                       type='close-circle'
-                    />{window.L('关闭其他')}</Menu.Item>
+                    />{props.L('关闭其他')}</Menu.Item>
                     <Menu.Item key='close-left' onClick={() => props.onContext(pane, index, 'close-left')}><Icon
                       type='left-circle'
-                    />{window.L('关闭左侧')}</Menu.Item>
+                    />{props.L('关闭左侧')}</Menu.Item>
                     <Menu.Item key='close-right' onClick={() => props.onContext(pane, index, 'close-right')}><Icon
                       type='right-circle'
-                    />{window.L('关闭右侧')}</Menu.Item>
+                    />{props.L('关闭右侧')}</Menu.Item>
                   </Menu>
                 }
                 trigger={['contextMenu']}
               >
                 <span className={styles.title}>
-                  <Icon {...parseIcon(pane.Icon)} />{pane.Name}
+                  <Icon {...parseIcon(pane.Icon)} />{props.L(pane.LocaleKey || pane.Name, pane.Name)}
                 </span>
               </Dropdown>
             }
@@ -50,7 +50,9 @@ export default props => {
           >
             {_.size(props.breadcrumbs) > 1 && (
               <Breadcrumb className={styles.breadcrumbs}>
-                {props.breadcrumbs.map(item => <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>)}
+                {props.breadcrumbs.map(item => <Breadcrumb.Item
+                  key={item.LocaleKey || item.Name}
+                >{props.L(item.LocaleKey || item.Name, item.Name)}</Breadcrumb.Item>)}
               </Breadcrumb>
             )}
             <div className={styles.container}>
@@ -63,4 +65,4 @@ export default props => {
       </Tabs>
     </div>
   )
-}
+})

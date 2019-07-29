@@ -1,27 +1,29 @@
 import _ from 'lodash'
 import router from 'umi/router'
 import config from '@/config'
-import moment from 'moment'
 import { get, post, config as toolsConfig } from 'kuu-tools'
 import { setLocale } from 'umi-plugin-locale'
+
+const cacheLocaleMessages = window.localStorage.getItem(config.storageLocaleMessagesKey)
+const localeMessages = JSON.parse(cacheLocaleMessages || '{}')
+const cacheLocale = window.localStorage.getItem(config.storageLocaleKey)
+if (cacheLocale) {
+  setLocale(cacheLocale, false)
+}
 
 export default {
   state: {
     loginData: undefined,
     loginOrg: undefined,
-    language: undefined
+    localeMessages: localeMessages
   },
   reducers: {
     LOGIN (state, { payload: { loginData, loginOrg } }) {
       if (_.get(loginData, 'Token')) {
         window.localStorage.setItem(config.storageTokenKey, loginData.Token)
         if (loginData.Lang) {
-          setLocale(loginData.Lang, true)
-          let lowerLocale = loginData.Lang.toLowerCase()
-          if (lowerLocale === 'en-us') {
-            lowerLocale = 'en'
-          }
-          moment.locale(lowerLocale)
+          setLocale(loginData.Lang, false)
+          window.localStorage.setItem(config.storageLocaleKey, loginData.Lang)
         }
       } else {
         window.localStorage.removeItem(config.storageTokenKey)
@@ -33,7 +35,8 @@ export default {
     },
     SET_LANGMSGS (state, { payload: msgs }) {
       window[_.get(toolsConfig, 'localeMessagesKey', 'localeMessages')] = msgs
-      return { ...state, language: msgs }
+      window.localStorage.setItem(config.storageLocaleMessagesKey, JSON.stringify(msgs))
+      return { ...state, localeMessages: msgs }
     }
   },
   effects: {

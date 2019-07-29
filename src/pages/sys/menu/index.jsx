@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, Checkbox, Button } from 'antd'
 import { FanoTable } from 'fano-antd'
-import { parseIcon } from 'kuu-tools'
+import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './index.less'
 
 class Menu extends React.Component {
@@ -42,9 +42,9 @@ class Menu extends React.Component {
           render: (t, r) => {
             return (
               <div>
-                <Checkbox checked={!!r.IsLink}>{window.L('是否外链')}</Checkbox>
-                <Checkbox checked={!!r.IsDefaultOpen}>{window.L('默认打开')}</Checkbox>
-                <Checkbox checked={r.Closeable === undefined || !!r.Closeable}>{window.L('可关闭')}</Checkbox>
+                <Checkbox checked={!!r.IsLink}>{this.props.L('是否外链')}</Checkbox>
+                <Checkbox checked={!!r.IsDefaultOpen}>{this.props.L('默认打开')}</Checkbox>
+                <Checkbox checked={r.Closeable === undefined || !!r.Closeable}>{this.props.L('可关闭')}</Checkbox>
               </div>
             )
           }
@@ -63,7 +63,10 @@ class Menu extends React.Component {
             url: '/api/user/menus',
             titleKey: 'Name',
             valueKey: 'ID',
-            titleRender: (title, item) => item.Icon ? <span><Icon {...parseIcon(item.Icon)} /> {title}</span> : title
+            titleRender: (title, item) => {
+              title = this.props.L(item.LocaleKey, title)
+              return item.Icon ? <span><Icon {...parseIcon(item.Icon)} /> {title}</span> : title
+            }
           }
         },
         {
@@ -75,7 +78,7 @@ class Menu extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: window.L('请输入菜单名称')
+                  message: this.props.L('请输入菜单名称')
                 }
               ]
             }
@@ -147,4 +150,4 @@ class Menu extends React.Component {
   }
 }
 
-export default Menu
+export default withLocale(Menu)

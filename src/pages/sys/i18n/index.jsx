@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { Icon, Input, Modal, List, Button } from 'antd'
 import { FanoTable } from 'fano-antd'
-import { list, post } from 'kuu-tools'
+import { list, post, withLocale } from 'kuu-tools'
 import styles from './index.less'
 
 class I18n extends React.Component {
@@ -31,7 +31,7 @@ class I18n extends React.Component {
               ref={node => {
                 this.searchInput = node
               }}
-              placeholder={window.L('kuu_i18n_keyword_placeholder', 'Search keywords')}
+              placeholder={this.props.L('kuu_i18n_keyword_placeholder', 'Search keywords')}
               value={selectedKeys[0]}
               onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
               onPressEnter={confirm}
@@ -50,7 +50,7 @@ class I18n extends React.Component {
     const { languages = [], languagesModalList = [], languagesModalVisible = false } = this.state
     const columns = [
       {
-        title: window.L('kuu_i18n_key', 'Key'),
+        title: this.props.L('kuu_i18n_key', 'Key'),
         dataIndex: 'Key',
         width: 300,
         ...this.filterProps('Key')
@@ -60,13 +60,13 @@ class I18n extends React.Component {
       {
         name: 'Key',
         type: 'input',
-        label: window.L('kuu_i18n_key', 'Key'),
+        label: this.props.L('kuu_i18n_key', 'Key'),
         props: {
           fieldOptions: {
             rules: [
               {
                 required: true,
-                message: window.L('kuu_i18n_key_required', 'Key is required')
+                message: this.props.L('kuu_i18n_key_required', 'Key is required')
               }
             ]
           }
@@ -90,7 +90,7 @@ class I18n extends React.Component {
             rules: [
               {
                 required: true,
-                message: window.L('kuu_i18n_key_required', 'Value is required')
+                message: this.props.L('kuu_i18n_key_required', 'Value is required')
               }
             ]
           }
@@ -128,13 +128,13 @@ class I18n extends React.Component {
             {
               key: 'languages',
               icon: 'global',
-              text: window.L('kuu_i18n_actions_languages', 'Languages'),
+              text: this.props.L('kuu_i18n_actions_languages', 'Languages'),
               onClick: () => this.setState({ languagesModalVisible: true, languagesModalList: _.cloneDeep(languages) })
             }
           ]}
         />
         <Modal
-          title={window.L('kuu_i18n_actions_languages', 'Languages')}
+          title={this.props.L('kuu_i18n_actions_languages', 'Languages')}
           icon={'global'}
           maskClosable
           width={420}
@@ -174,7 +174,7 @@ class I18n extends React.Component {
                       languagesModalList[index] = item
                       this.setState({ languagesModalList })
                     }}
-                    placeholder={window.L('kuu_i18n_languages_langcode', 'Language code')}
+                    placeholder={this.props.L('kuu_i18n_languages_langcode', 'Language code')}
                   />
                   <Input
                     style={{ width: '50%' }} value={item.LangName}
@@ -183,7 +183,7 @@ class I18n extends React.Component {
                       languagesModalList[index] = item
                       this.setState({ languagesModalList })
                     }}
-                    placeholder={window.L('kuu_i18n_languages_langname', 'Language name')}
+                    placeholder={this.props.L('kuu_i18n_languages_langname', 'Language name')}
                   />
                   <Button
                     style={{ width: '10%' }}
@@ -203,4 +203,4 @@ class I18n extends React.Component {
   }
 }
 
-export default I18n
+export default withLocale(I18n)

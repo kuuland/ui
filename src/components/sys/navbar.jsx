@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
 import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio, message } from 'antd'
-import { get, update } from 'kuu-tools'
+import { get, update, withLocale } from 'kuu-tools'
 import OrgModal from './org-modal'
 import styles from './navbar.less'
 
@@ -33,19 +33,25 @@ class Navbar extends React.Component {
         case 'i18n':
           this.fetchLanguages(languages => {
             Modal.info({
-              title: window.L('kuu_ui_languages', 'Languages'),
+              title: this.props.L('kuu_navbar_languages', 'Languages'),
               icon: 'global',
               maskClosable: true,
+              width: 400,
               content: (
                 <Radio.Group
-                  style={{ textAlign: 'center' }}
                   onChange={e => {
                     this.setState({ selectLang: e.target.value })
                   }}
                   defaultValue={_.get(loginData, 'Lang')}
                 >
                   {languages.map(item => (
-                    <Radio.Button key={item.LangCode} value={item.LangCode}>{item.LangName}</Radio.Button>))}
+                    <Radio
+                      key={item.LangCode}
+                      value={item.LangCode}
+                    >
+                      {item.LangName}
+                    </Radio>)
+                  )}
                 </Radio.Group>
               ),
               onOk: async () => {
@@ -59,7 +65,7 @@ class Navbar extends React.Component {
                   })
                   this.setState({ selectLang: undefined })
                 }
-                window.g_app._store.dispatch({ type: 'layout/SET_PANES', payload: [] })
+                // window.g_app._store.dispatch({ type: 'layout/SET_PANES', payload: [] })
               }
             })
           })
@@ -75,7 +81,7 @@ class Navbar extends React.Component {
             payload: {
               ID: 'apikey',
               Icon: 'key',
-              Name: window.L('APIKey', 'API & Keys'),
+              Name: this.props.L('APIKey', 'API & Keys'),
               URI: '/sys/apikey'
             }
           })
@@ -118,17 +124,17 @@ class Navbar extends React.Component {
           overlay={
             <Menu onClick={this.handleMenuClick}>
               <Menu.Item key={'profile'}>
-                <Icon type='user' />{window.L('kuu_navbar_profile', 'Profile')}
+                <Icon type='user' />{this.props.L('kuu_navbar_profile', 'Profile')}
               </Menu.Item>
               <Menu.Item key={'i18n'}>
-                <Icon type='global' />{window.L('kuu_navbar_languages', 'Languages')}
+                <Icon type='global' />{this.props.L('kuu_navbar_languages', 'Languages')}
               </Menu.Item>
               <Menu.Item key={'apikey'}>
-                <Icon type='key' />{window.L('kuu_navbar_apikeys', 'API & Keys')}
+                <Icon type='key' />{this.props.L('kuu_navbar_apikeys', 'API & Keys')}
               </Menu.Item>
               <Menu.Divider />
               <Menu.Item key={'logout'}>
-                <Icon type='logout' />{window.L('kuu_navbar_logout', 'Logout')}
+                <Icon type='logout' />{this.props.L('kuu_navbar_logout', 'Logout')}
               </Menu.Item>
               {menusTree.length > 1 && <Menu.Divider />}
               {menusTree.length > 1 && menusTree.map((item, index) => {
@@ -138,7 +144,7 @@ class Navbar extends React.Component {
                 }
                 return (
                   <Menu.Item key={`${menuKeyPrefix}${index}`}>
-                    <Icon type='check-circle' theme={theme} />{window.L(item.Name)}
+                    <Icon type='check-circle' theme={theme} />{this.props.L(item.LocaleKey || item.Name, item.Name)}
                   </Menu.Item>
                 )
               })}
@@ -175,7 +181,7 @@ class Navbar extends React.Component {
           }}
           onCancel={() => this.setState({ orgModalVisible: false })}
           onError={() => {
-            message.error(window.L('当前用户未分配有效组织'))
+            message.error(this.props.L('当前用户未分配有效组织'))
             this.handleLogout()
           }}
         />
@@ -185,9 +191,13 @@ class Navbar extends React.Component {
   }
 }
 
-export default withRouter(connect(state => ({
-  loginData: state.user.loginData || {},
-  loginOrg: state.user.loginOrg || {},
-  menusTree: state.layout.menusTree || [],
-  activeMenuIndex: state.layout.activeMenuIndex
-}))(Navbar))
+function mapStateToProps (state) {
+  return {
+    loginData: state.user.loginData || {},
+    loginOrg: state.user.loginOrg || {},
+    menusTree: state.layout.menusTree || [],
+    activeMenuIndex: state.layout.activeMenuIndex
+  }
+}
+
+export default withRouter(connect(mapStateToProps)(withLocale(Navbar)))

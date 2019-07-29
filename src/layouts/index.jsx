@@ -1,15 +1,26 @@
 import React from 'react'
+import _ from 'lodash'
+import { connect } from 'dva'
 import DocumentTitle from 'react-document-title'
-import SimpleLayout from './BlankLayout'
+import { LocaleContext } from 'kuu-tools'
+import BlankLayout from './BlankLayout'
 import BasicLayout from './BasicLayout'
 import config from '@/config'
 
-export default props => {
+const IndexLayout = props => {
   const isSimple = config.simplePages.indexOf(props.location.pathname) >= 0
   const children = isSimple ? (
-    <SimpleLayout>{props.children}</SimpleLayout>
+    <BlankLayout>{props.children}</BlankLayout>
   ) : (
     <BasicLayout>{props.children}</BasicLayout>
   )
-  return <DocumentTitle title={config.htmlTitle}>{children}</DocumentTitle>
+  return (
+    <LocaleContext.Provider value={props.localeMessages}>
+      <DocumentTitle title={config.htmlTitle}>{children}</DocumentTitle>
+    </LocaleContext.Provider>
+  )
 }
+
+export default connect(state => {
+  return { localeMessages: _.get(state, 'user.localeMessages') }
+})(IndexLayout)

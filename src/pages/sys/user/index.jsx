@@ -3,35 +3,35 @@ import _ from 'lodash'
 import moment from 'moment'
 import { Transfer, Modal, Icon, Spin } from 'antd'
 import md5 from 'blueimp-md5'
-import { get, list, update } from 'kuu-tools'
+import { get, list, update, withLocale } from 'kuu-tools'
 import { FanoTable } from 'fano-antd'
 import styles from './index.less'
 
-export default class User extends React.Component {
+class User extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       columns: [
         {
-          title: window.L('账号'),
+          title: this.props.L('账号'),
           dataIndex: 'Username'
         },
         {
-          title: window.L('姓名'),
+          title: this.props.L('姓名'),
           dataIndex: 'Name'
         },
         {
-          title: window.L('是否禁用'),
+          title: this.props.L('是否禁用'),
           dataIndex: 'Disable',
           render: 'switch'
         },
         {
-          title: window.L('是否内置'),
+          title: this.props.L('是否内置'),
           dataIndex: 'IsBuiltIn',
           render: 'switch'
         },
         {
-          title: window.L('创建时间'),
+          title: this.props.L('创建时间'),
           dataIndex: 'CreatedAt',
           render: t => moment(t).fromNow()
         }
@@ -40,7 +40,7 @@ export default class User extends React.Component {
         {
           name: 'Username',
           type: 'input',
-          label: window.L('账号'),
+          label: this.props.L('账号'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -48,7 +48,7 @@ export default class User extends React.Component {
         {
           name: 'Name',
           type: 'input',
-          label: window.L('姓名'),
+          label: this.props.L('姓名'),
           props: {
             disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
           }
@@ -56,7 +56,7 @@ export default class User extends React.Component {
         {
           name: 'Password',
           type: 'input',
-          label: window.L('密码'),
+          label: this.props.L('密码'),
           props: {
             type: 'password'
           }
@@ -64,13 +64,13 @@ export default class User extends React.Component {
         {
           name: 'Disable',
           type: 'switch',
-          label: window.L('是否禁用')
+          label: this.props.L('是否禁用')
         },
         {
           condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
           name: 'IsBuiltIn',
           type: 'switch',
-          label: window.L('系统内置'),
+          label: this.props.L('系统内置'),
           props: {
             disabled: true
           }
@@ -158,7 +158,7 @@ export default class User extends React.Component {
                   assignRecord: record
                 }, this.fetchUserAssigns)
               },
-              tooltip: window.L('角色分配')
+              tooltip: this.props.L('角色分配')
             }
           ]}
           beforeSave={values => {
@@ -172,7 +172,7 @@ export default class User extends React.Component {
         <Modal
           width={600}
           maskClosable={false}
-          title={window.L('角色分配')}
+          title={this.props.L('角色分配')}
           visible={!!assignRecord}
           onOk={this.handleAssignOk}
           onCancel={this.handleAssignCancel}
@@ -185,7 +185,7 @@ export default class User extends React.Component {
             <Transfer
               rowKey={record => record.ID}
               dataSource={roles}
-              titles={[window.L('系统角色'), window.L('已分配角色')]}
+              titles={[this.props.L('系统角色'), this.props.L('已分配角色')]}
               showSearch
               filterOption={(inputValue, option) => option.Name.includes(inputValue)}
               targetKeys={userAssignsRolesKey}
@@ -200,3 +200,5 @@ export default class User extends React.Component {
     )
   }
 }
+
+export default withLocale(User)
