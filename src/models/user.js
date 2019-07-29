@@ -4,9 +4,17 @@ import config from '@/config'
 import { get, post, config as toolsConfig } from 'kuu-tools'
 import { setLocale } from 'umi-plugin-locale'
 
-const cacheLocaleMessages = window.localStorage.getItem(config.storageLocaleMessagesKey)
+const {
+  storageLocaleKey = 'kuu_locale',
+  storageLocaleMessagesKey = 'kuu_locale_messages',
+  storageTokenKey = 'token',
+  loginPathname = '/login'
+} = config
+
+const cacheLocaleMessages = window.localStorage.getItem(storageLocaleMessagesKey)
 const localeMessages = JSON.parse(cacheLocaleMessages || '{}')
-const cacheLocale = window.localStorage.getItem(config.storageLocaleKey)
+const cacheLocale = window.localStorage.getItem(storageLocaleKey)
+
 if (cacheLocale) {
   setLocale(cacheLocale, false)
 }
@@ -20,13 +28,13 @@ export default {
   reducers: {
     LOGIN (state, { payload: { loginData, loginOrg } }) {
       if (_.get(loginData, 'Token')) {
-        window.localStorage.setItem(config.storageTokenKey, loginData.Token)
+        window.localStorage.setItem(storageTokenKey, loginData.Token)
         if (loginData.Lang) {
           setLocale(loginData.Lang, false)
-          window.localStorage.setItem(config.storageLocaleKey, loginData.Lang)
+          window.localStorage.setItem(storageLocaleKey, loginData.Lang)
         }
       } else {
-        window.localStorage.removeItem(config.storageTokenKey)
+        window.localStorage.removeItem(storageTokenKey)
       }
       return { ...state, loginData, loginOrg }
     },
@@ -35,7 +43,7 @@ export default {
     },
     SET_LANGMSGS (state, { payload: msgs }) {
       window[_.get(toolsConfig, 'localeMessagesKey', 'localeMessages')] = msgs
-      window.localStorage.setItem(config.storageLocaleMessagesKey, JSON.stringify(msgs))
+      window.localStorage.setItem(storageLocaleMessagesKey, JSON.stringify(msgs))
       return { ...state, localeMessages: msgs }
     }
   },
@@ -47,8 +55,8 @@ export default {
         yield put({ type: 'layout/CLEAR' })
         window.localStorage.removeItem('panes:data')
       }
-      if (window.location.pathname !== config.loginPathname) {
-        yield router.replace(config.loginPathname)
+      if (window.location.pathname !== loginPathname) {
+        yield router.replace(loginPathname)
       }
     },
     * valid ({ payload }, { put, call }) {
