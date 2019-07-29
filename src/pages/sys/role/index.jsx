@@ -67,7 +67,7 @@ class Role extends React.Component {
           type: 'treeselect',
           label: this.props.L('kuu_role_op', 'Menu Privileges'),
           props: {
-            url: '/api/menu?range=ALL&sort=Sort',
+            url: '/menu?range=ALL&sort=Sort',
             titleKey: 'Name',
             valueKey: 'Code',
             arrayToTree: true,
@@ -114,7 +114,7 @@ class Role extends React.Component {
                             config={{
                               props: {
                                 style: { width: 120 },
-                                url: '/api/org?range=ALL&sort=Sort',
+                                url: '/org?range=ALL&sort=Sort',
                                 titleKey: 'Name',
                                 valueKey: 'ID',
                                 arrayToTree: true,
@@ -220,9 +220,9 @@ class Role extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/api/role'}
+          url={'/role'}
           drawerWidth={600}
-          listUrl={'GET /api/role?preload=OperationPrivileges,DataPrivileges'}
+          listUrl={'GET /role?preload=OperationPrivileges,DataPrivileges'}
           onFormRecord={record => {
             record.ViewOperationPrivileges = _.chain(record)
               .get('OperationPrivileges', [])

@@ -49,7 +49,7 @@ export default {
   },
   effects: {
     * logout ({ payload }, { put, call }) {
-      const json = yield call(post, '/api/logout', undefined, { rawData: true })
+      const json = yield call(post, '/logout', undefined, { rawData: true })
       if (json.data || json.code === 555) {
         yield put({ type: 'LOGIN', payload: { loginData: undefined, loginOrg: undefined } })
         yield put({ type: 'layout/CLEAR' })
@@ -60,10 +60,10 @@ export default {
       }
     },
     * valid ({ payload }, { put, call }) {
-      const data = yield call(post, '/api/valid')
-      const org = yield call(get, '/api/org/current')
+      const data = yield call(post, '/valid')
+      const org = yield call(get, '/org/current')
       if (data) {
-        const langmsgs = yield call(get, '/api/langmsgs')
+        const langmsgs = yield call(get, '/langmsgs')
         yield put({ type: 'LOGIN', payload: { loginData: data, loginOrg: org } })
         yield put({ type: 'SET_LANGMSGS', payload: _.get(langmsgs, data.Lang) })
       }

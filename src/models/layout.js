@@ -80,7 +80,7 @@ export default {
   },
   effects: {
     * loadMenus ({ payload }, { put, call, select }) {
-      const data = yield call(get, '/api/user/menus')
+      const data = yield call(get, '/user/menus')
       const menus = Array.isArray(data) ? data : []
       yield put({ type: 'SET_MENUS', payload: menus })
     },

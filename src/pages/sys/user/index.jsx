@@ -94,7 +94,7 @@ class User extends React.Component {
 
   fetchUserAssigns () {
     this.setState({ assignLoading: true }, async () => {
-      const userAssigns = await get(`/api/user/role_assigns/${_.get(this.state.assignRecord, 'ID')}`)
+      const userAssigns = await get(`/user/role_assigns/${_.get(this.state.assignRecord, 'ID')}`)
       const userAssignsRolesKey = userAssigns.map(item => item.RoleID)
       this.setState({ userAssigns, userAssignsRolesKey, assignLoading: false })
     })
@@ -149,7 +149,7 @@ class User extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/api/user'}
+          url={'/user'}
           rowActions={[
             {
               icon: 'key',

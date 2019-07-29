@@ -77,7 +77,7 @@ class Param extends React.Component {
     return (
       <div className={styles.param}>
         <FanoTable
-          url={'/api/param'}
+          url={'/param'}
           columns={columns}
           form={form}
         />

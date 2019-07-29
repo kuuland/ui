@@ -17,7 +17,7 @@ class OrgModal extends React.Component {
 
   fetchOrgs () {
     this.setState({ orgs: undefined, orgID: undefined }, async () => {
-      let orgs = await get('/api/org/list')
+      let orgs = await get('/org/list')
       const total = _.size(orgs)
       if (_.isEmpty(orgs) && !_.get(this.props.loginData, 'IsBuiltIn', false)) {
         if (_.isFunction(this.props.onError)) {
@@ -60,7 +60,7 @@ class OrgModal extends React.Component {
     this.setState({ loading: true }, async () => {
       let loginOrg = {}
       if (this.state.orgID) {
-        loginOrg = await post('/api/org/login', { org_id: this.state.orgID })
+        loginOrg = await post('/org/login', { org_id: this.state.orgID })
         if (!loginOrg) {
           return
         }

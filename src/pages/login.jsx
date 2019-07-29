@@ -42,7 +42,7 @@ class Login extends React.Component {
       }
       this.setState({ loginLoading: true }, async () => {
         values.password = md5(values.password)
-        const data = await post('/api/login', values)
+        const data = await post('/login', values)
         if (!_.get(data, 'Token')) {
           this.setState({ loginLoading: false })
           return
@@ -59,7 +59,7 @@ class Login extends React.Component {
   }
 
   async checkAutoOrgLogin () {
-    const data = await get('/api/org/current')
+    const data = await get('/org/current')
     return data
   }
 
@@ -78,7 +78,7 @@ class Login extends React.Component {
   }
 
   async handleCancel () {
-    await post('/api/logout')
+    await post('/logout')
     this.setState({
       orgModalVisible: false,
       loginLoading: false,

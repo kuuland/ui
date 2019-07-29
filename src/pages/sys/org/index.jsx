@@ -39,7 +39,7 @@ class Org extends React.Component {
           type: 'treeselect',
           label: this.props.L('kuu_org_parent', 'Parent'),
           props: {
-            url: '/api/org?range=ALL&sort=Sort&project=ID,Code,Name,Pid',
+            url: '/org?range=ALL&sort=Sort&project=ID,Code,Name,Pid',
             titleKey: 'Name',
             valueKey: 'ID'
           }
@@ -73,7 +73,7 @@ class Org extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/api/org?range=ALL&sort=Sort'}
+          url={'/org?range=ALL&sort=Sort'}
           pagination={false}
           expandAllRows
           arrayToTree

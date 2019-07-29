@@ -106,10 +106,10 @@ class I18n extends React.Component {
           columns={columns}
           form={form}
           rowKey={'Key'}
-          listUrl={'GET /api/langtrans'}
-          createUrl={'POST /api/langtrans'}
-          deleteUrl={'DELETE /api/languagemessage'}
-          updateUrl={'POST /api/langtrans'}
+          listUrl={'GET /langtrans'}
+          createUrl={'POST /langtrans'}
+          deleteUrl={'DELETE /languagemessage'}
+          updateUrl={'POST /langtrans'}
           beforeUpdate={(body, formRecord) => {
             return { ...formRecord, ...body.doc }
           }}

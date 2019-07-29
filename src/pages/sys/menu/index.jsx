@@ -64,7 +64,7 @@ class Menu extends React.Component {
           type: 'treeselect',
           label: this.props.L('kuu_menu_parent', 'Parent Menu'),
           props: {
-            url: '/api/user/menus',
+            url: '/user/menus',
             titleKey: 'Name',
             valueKey: 'ID',
             titleRender: (title, item) => {
@@ -144,7 +144,7 @@ class Menu extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/api/menu?range=ALL&sort=Sort'}
+          url={'/menu?range=ALL&sort=Sort'}
           pagination={false}
           expandAllRows
           arrayToTree
