@@ -15,8 +15,11 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_name', 'Name'),
         dataIndex: 'Name',
-        width: 280,
-        render: (t, r) => r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
+        width: 340,
+        render: (t, r) => {
+          t = this.props.L(r.LocaleKey, t)
+          return r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
+        }
       },
       {
         title: this.props.L('kuu_menu_uri', 'URI'),
@@ -39,7 +42,7 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_detail', 'Detail'),
         dataIndex: 'Detail',
-        width: 300,
+        width: 400,
         align: 'center',
         render: (t, r) => {
           return (
