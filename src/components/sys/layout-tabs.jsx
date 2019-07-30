@@ -1,15 +1,25 @@
 import React from 'react'
 import _ from 'lodash'
-import { Menu, Dropdown, Tabs, Icon, Breadcrumb } from 'antd'
+import { Menu, Dropdown, Tabs, Icon, Breadcrumb, Empty } from 'antd'
 import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './layout-tabs.less'
 
 export default withLocale(props => {
+  let { panes, activeKey, empty = false } = props
+  if (_.isEmpty(panes)) {
+    empty = true
+    panes = [{
+      ID: 'empty',
+      Closeable: false,
+      Content: <Empty />
+    }]
+    activeKey = panes[0].ID
+  }
   return (
-    <div className={styles.layoutTabs}>
+    <div className={`${styles.layoutTabs} ${empty ? 'kuu-layout-tabs-empty' : ''}`}>
       <Tabs
         size='default'
-        activeKey={props.activeKey}
+        activeKey={activeKey}
         onChange={props.onChange}
         onEdit={props.onEdit}
         type='editable-card'
@@ -18,7 +28,7 @@ export default withLocale(props => {
         tabBarExtraContent={props.tabBarExtraContent}
         tabBarStyle={{ paddingLeft: props.siderCollapsed ? 50 : 0 }}
       >
-        {props.panes.map((pane, index) => (
+        {panes.map((pane, index) => (
           <Tabs.TabPane
             tab={
               <Dropdown
@@ -46,7 +56,7 @@ export default withLocale(props => {
               </Dropdown>
             }
             key={pane.ID}
-            closable={pane.Closeable !== false}
+            closable={pane.Closeable}
           >
             {_.size(props.breadcrumbs) > 1 && (
               <Breadcrumb className={styles.breadcrumbs}>
