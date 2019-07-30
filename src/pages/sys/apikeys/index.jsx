@@ -10,91 +10,88 @@ import styles from './index.less'
 class APIKeys extends React.Component {
   constructor (props) {
     super(props)
-
-    this.state = {
-      columns: [
-        {
-          title: this.props.L('kuu_apikeys_desc', 'Description'),
-          dataIndex: 'Desc',
-          render: t => (t || this.props.L('kuu_apikeys_desc_render', 'User login'))
-        },
-        {
-          title: this.props.L('kuu_apikeys_state', 'State'),
-          dataIndex: 'State',
-          render: 'switch'
-        },
-        {
-          title: this.props.L('kuu_apikeys_exp', 'Exp'),
-          dataIndex: 'Exp',
-          render: t => moment.unix(t).diff(moment(), 'years') > 100 ? this.props.L('kuu_apikeys_exp_never_exp', 'Never Expire') : moment.unix(t).format('YYYY-MM-DD HH:mm:ss')
-        },
-        {
-          title: this.props.L('kuu_apikeys_createdat', 'Created At'),
-          dataIndex: 'CreatedAt',
-          render: t => moment(t).fromNow()
-        }
-      ],
-      form: [
-        {
-          name: 'Desc',
-          type: 'textarea',
-          label: this.props.L('kuu_apikeys_desc', 'Description'),
-          props: {
-            rows: 2,
-            placeholder: this.props.L('kuu_apikeys_desc_placeholder', 'Optional: e.g. This key is used by the cron service to trigger jobs'),
-            fieldOptions: {
-              rules: [
-                {
-                  required: true,
-                  message: this.props.L('kuu_apikeys_desc_required', 'Please enter a description')
-                }
-              ]
-            }
-          }
-        },
-        {
-          name: 'Exp',
-          type: 'radio',
-          label: this.props.L('kuu_apikeys_exp', 'Exp'),
-          props: {
-            options: [
-              {
-                label: this.props.L('kuu_apikeys_exp_options_never', 'Never'),
-                value: 'never'
-              },
-              {
-                label: this.props.L('kuu_apikeys_exp_options_day', 'A day from now'),
-                value: 'day'
-              },
-              {
-                label: this.props.L('kuu_apikeys_exp_options_week', 'A week from now'),
-                value: 'week'
-              },
-              {
-                label: this.props.L('kuu_apikeys_exp_options_month', 'A month from now'),
-                value: 'month'
-              },
-              {
-                label: this.props.L('kuu_apikeys_exp_options_year', 'A year from now'),
-                value: 'year'
-              }
-            ],
-            fieldOptions: {
-              rules: [
-                {
-                  required: true,
-                  message: this.props.L('kuu_apikeys_exp_required', 'Please select automatic expiration time')
-                }
-              ]
-            }
-          }
-        }
-      ]
-    }
+    this.state = {}
   }
 
   render () {
-    const { columns, form } = this.state
+    const columns = [
+      {
+        title: this.props.L('kuu_apikeys_desc', 'Description'),
+        dataIndex: 'Desc',
+        render: t => (t || this.props.L('kuu_apikeys_desc_render', 'User login'))
+      },
+      {
+        title: this.props.L('kuu_apikeys_state', 'State'),
+        dataIndex: 'State',
+        render: 'switch'
+      },
+      {
+        title: this.props.L('kuu_apikeys_exp', 'Exp'),
+        dataIndex: 'Exp',
+        render: t => moment.unix(t).diff(moment(), 'years') > 100 ? this.props.L('kuu_apikeys_exp_never_exp', 'Never Expire') : moment.unix(t).format('YYYY-MM-DD HH:mm:ss')
+      },
+      {
+        title: this.props.L('kuu_apikeys_createdat', 'Created At'),
+        dataIndex: 'CreatedAt',
+        render: t => moment(t).fromNow()
+      }
+    ]
+    const form = [
+      {
+        name: 'Desc',
+        type: 'textarea',
+        label: this.props.L('kuu_apikeys_desc', 'Description'),
+        props: {
+          rows: 2,
+          placeholder: this.props.L('kuu_apikeys_desc_placeholder', 'Optional: e.g. This key is used by the cron service to trigger jobs'),
+          fieldOptions: {
+            rules: [
+              {
+                required: true,
+                message: this.props.L('kuu_apikeys_desc_required', 'Please enter a description')
+              }
+            ]
+          }
+        }
+      },
+      {
+        name: 'Exp',
+        type: 'radio',
+        label: this.props.L('kuu_apikeys_exp', 'Exp'),
+        props: {
+          options: [
+            {
+              label: this.props.L('kuu_apikeys_exp_options_never', 'Never'),
+              value: 'never'
+            },
+            {
+              label: this.props.L('kuu_apikeys_exp_options_day', 'A day from now'),
+              value: 'day'
+            },
+            {
+              label: this.props.L('kuu_apikeys_exp_options_week', 'A week from now'),
+              value: 'week'
+            },
+            {
+              label: this.props.L('kuu_apikeys_exp_options_month', 'A month from now'),
+              value: 'month'
+            },
+            {
+              label: this.props.L('kuu_apikeys_exp_options_year', 'A year from now'),
+              value: 'year'
+            }
+          ],
+          fieldOptions: {
+            rules: [
+              {
+                required: true,
+                message: this.props.L('kuu_apikeys_exp_required', 'Please select automatic expiration time')
+              }
+            ]
+          }
+        }
+      }
+    ]
     return (
       <div className={styles.apikey}>
         <FanoTable

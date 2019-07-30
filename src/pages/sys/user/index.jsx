@@ -11,71 +11,6 @@ class User extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      columns: [
-        {
-          title: this.props.L('kuu_user_username', 'Username'),
-          dataIndex: 'Username'
-        },
-        {
-          title: this.props.L('kuu_user_name', 'Real name'),
-          dataIndex: 'Name'
-        },
-        {
-          title: this.props.L('kuu_user_disable', 'Disable'),
-          dataIndex: 'Disable',
-          render: 'switch'
-        },
-        {
-          title: this.props.L('kuu_user_builtin', 'Built-in'),
-          dataIndex: 'IsBuiltIn',
-          render: 'switch'
-        },
-        {
-          title: this.props.L('kuu_user_createdat', 'Created At'),
-          dataIndex: 'CreatedAt',
-          render: t => moment(t).fromNow()
-        }
-      ],
-      form: [
-        {
-          name: 'Username',
-          type: 'input',
-          label: this.props.L('kuu_user_username', 'Username'),
-          props: {
-            disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
-          }
-        },
-        {
-          name: 'Name',
-          type: 'input',
-          label: this.props.L('kuu_user_name', 'Real name'),
-          props: {
-            disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
-          }
-        },
-        {
-          name: 'Password',
-          type: 'input',
-          label: this.props.L('kuu_user_password', 'Password'),
-          props: {
-            type: 'password'
-          }
-        },
-        {
-          name: 'Disable',
-          type: 'switch',
-          label: this.props.L('kuu_user_disable', 'Disable')
-        },
-        {
-          condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
-          name: 'IsBuiltIn',
-          type: 'switch',
-          label: this.props.L('kuu_user_builtin', 'Built-in'),
-          props: {
-            disabled: true
-          }
-        }
-      ],
       assignLoading: true
     }
 
@@ -138,12 +73,76 @@ class User extends React.Component {
 
   render () {
     const {
-      columns,
-      form,
       roles = [],
       userAssignsRolesKey = [],
       assignRecord
     } = this.state
+
+    const columns = [
+      {
+        title: this.props.L('kuu_user_username', 'Username'),
+        dataIndex: 'Username'
+      },
+      {
+        title: this.props.L('kuu_user_name', 'Real name'),
+        dataIndex: 'Name'
+      },
+      {
+        title: this.props.L('kuu_user_disable', 'Disable'),
+        dataIndex: 'Disable',
+        render: 'switch'
+      },
+      {
+        title: this.props.L('kuu_user_builtin', 'Built-in'),
+        dataIndex: 'IsBuiltIn',
+        render: 'switch'
+      },
+      {
+        title: this.props.L('kuu_user_createdat', 'Created At'),
+        dataIndex: 'CreatedAt',
+        render: t => moment(t).fromNow()
+      }
+    ]
+    const form = [
+      {
+        name: 'Username',
+        type: 'input',
+        label: this.props.L('kuu_user_username', 'Username'),
+        props: {
+          disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
+        }
+      },
+      {
+        name: 'Name',
+        type: 'input',
+        label: this.props.L('kuu_user_name', 'Real name'),
+        props: {
+          disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
+        }
+      },
+      {
+        name: 'Password',
+        type: 'input',
+        label: this.props.L('kuu_user_password', 'Password'),
+        props: {
+          type: 'password'
+        }
+      },
+      {
+        name: 'Disable',
+        type: 'switch',
+        label: this.props.L('kuu_user_disable', 'Disable')
+      },
+      {
+        condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
+        name: 'IsBuiltIn',
+        type: 'switch',
+        label: this.props.L('kuu_user_builtin', 'Built-in'),
+        props: {
+          disabled: true
+        }
+      }
+    ]
     return (
       <div className={styles.user}>
         <FanoTable
