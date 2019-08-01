@@ -4,6 +4,7 @@ import 'fano-antd/lib/index.less'
 
 message.config({ maxCount: 1 })
 config({
+  prefix: window.localStorage.getItem('KUU_END') || _.get(config(), 'prefix'),
   messageHandlers: {
     error: msg => message.error(msg)
   }

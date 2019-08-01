@@ -122,6 +122,7 @@ class Navbar extends React.Component {
             ),
             onOk: async () => {
               config({ prefix: this.state.apiPrefix })
+              window.localStorage.setItem('KUU_END', this.state.apiPrefix)
               this.setState({ apiPrefix: undefined })
             }
           })

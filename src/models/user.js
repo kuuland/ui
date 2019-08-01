@@ -11,7 +11,11 @@ const {
   loginPathname = '/login'
 } = config
 
-const cacheLocaleMessages = window.localStorage.getItem(storageLocaleMessagesKey)
+let cacheLocaleMessages = window.localStorage.getItem(storageLocaleMessagesKey)
+if (cacheLocaleMessages === 'undefined') {
+  window.localStorage.removeItem(storageLocaleMessagesKey)
+  cacheLocaleMessages = undefined
+}
 const localeMessages = JSON.parse(cacheLocaleMessages || '{}')
 const cacheLocale = window.localStorage.getItem(storageLocaleKey)
 
@@ -65,7 +69,10 @@ export default {
       if (data) {
         const langmsgs = yield call(get, '/langmsgs')
         yield put({ type: 'LOGIN', payload: { loginData: data, loginOrg: org } })
-        yield put({ type: 'SET_LANGMSGS', payload: _.get(langmsgs, data.Lang) })
+        const msgs = _.get(langmsgs, data.Lang)
+        if (!_.isEmpty(msgs)) {
+          yield put({ type: 'SET_LANGMSGS', payload: msgs })
+        }
       }
     }
   },
