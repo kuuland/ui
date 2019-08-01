@@ -2,8 +2,8 @@ import React from 'react'
 import _ from 'lodash'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
-import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio } from 'antd'
-import { get, update, withLocale } from 'kuu-tools'
+import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio, Input } from 'antd'
+import { get, update, withLocale, config } from 'kuu-tools'
 import OrgModal from './org-modal'
 import styles from './navbar.less'
 
@@ -12,10 +12,31 @@ class Navbar extends React.Component {
     super(props)
 
     this.state = {
-      menuKeyPrefix: 'menu-'
+      menuKeyPrefix: 'menu-',
+      development: _.get(process, 'env.NODE_ENV', _.get(window, 'process.env.NODE_ENV', 'development')) === 'development'
     }
     this.handleMenuClick = this.handleMenuClick.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
+  }
+
+  onKeyDown (e) {
+    this.setState({ showEndpoint: e.altKey })
+  }
+
+  onKeyUp (e) {
+    this.setState({ showEndpoint: e.altKey })
+  }
+
+  componentDidMount () {
+    document.addEventListener('keydown', this.onKeyDown)
+    document.addEventListener('keyup', this.onKeyUp)
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.onKeyDown)
+    document.removeEventListener('keyup', this.onKeyUp)
   }
 
   handleMenuClick (e) {
@@ -66,7 +87,6 @@ class Navbar extends React.Component {
                   })
                   this.setState({ selectLang: undefined })
                 }
-                // window.g_app._store.dispatch({ type: 'layout/SET_PANES', payload: [] })
               }
             })
           })
@@ -82,6 +102,27 @@ class Navbar extends React.Component {
               Icon: 'key',
               Name: this.props.L('kuu_navbar_apikeys', 'API & Keys'),
               URI: '/sys/apikeys'
+            }
+          })
+          break
+        case 'apiendpoint':
+          Modal.info({
+            title: this.props.L('kuu_navbar_apiendpoint', 'API Endpoint'),
+            icon: 'api',
+            maskClosable: true,
+            width: 460,
+            content: (
+              <Input
+                defaultValue={_.get(config(), 'prefix')}
+                onChange={e => {
+                  this.setState({ apiPrefix: e.target.value })
+                }}
+                placeholder={this.props.L('kuu_navbar_apiendpoint_placeholder', 'Optional: e.g. https://kuu.example.com/api')}
+              />
+            ),
+            onOk: async () => {
+              config({ prefix: this.state.apiPrefix })
+              this.setState({ apiPrefix: undefined })
             }
           })
           break
@@ -102,7 +143,7 @@ class Navbar extends React.Component {
   }
 
   render () {
-    const { menuKeyPrefix, orgModalVisible = false } = this.state
+    const { menuKeyPrefix, orgModalVisible = false, showEndpoint, development } = this.state
     const { menusTree, loginOrg, loginData } = this.props
     const activeMenuIndex = this.props.activeMenuIndex >= menusTree.length ? 0 : this.props.activeMenuIndex
     const avatarProps = {}
@@ -137,6 +178,11 @@ class Navbar extends React.Component {
               <Menu.Item key={'apikeys'}>
                 <Icon type='key' />{this.props.L('kuu_navbar_apikeys', 'API & Keys')}
               </Menu.Item>
+              {!development && showEndpoint && (
+                <Menu.Item key={'apiendpoint'}>
+                  <Icon type='api' />{this.props.L('kuu_navbar_apiendpoint', 'API Endpoint')}
+                </Menu.Item>
+              )}
               <Menu.Divider />
               <Menu.Item key={'logout'}>
                 <Icon type='logout' />{this.props.L('kuu_navbar_logout', 'Logout')}
@@ -172,7 +218,9 @@ class Navbar extends React.Component {
       }
     }
     return (
-      <div className={styles.navbar}>
+      <div
+        className={styles.navbar}
+      >
         <OrgModal
           visible={orgModalVisible}
           loginData={loginData}
