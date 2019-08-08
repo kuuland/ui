@@ -144,7 +144,7 @@ class Navbar extends React.Component {
 
   render () {
     const { menuKeyPrefix, orgModalVisible = false, showEndpoint } = this.state
-    const { menusTree, loginOrg, loginData } = this.props
+    const { menusTree, loginData } = this.props
     const activeMenuIndex = this.props.activeMenuIndex >= menusTree.length ? 0 : this.props.activeMenuIndex
     const avatarProps = {}
     if (_.get(loginData, 'Avatar')) {
@@ -153,14 +153,14 @@ class Navbar extends React.Component {
       avatarProps.icon = 'user'
     }
     const rawItems = []
-    if (_.get(loginOrg, 'Name')) {
+    if (_.get(loginData, 'ActOrgName')) {
       rawItems.push(
         <div
           key={'org'}
           className={styles.item}
           onClick={() => this.setState({ orgModalVisible: true })}
         >
-          <Icon type='home' style={{ fontSize: 17 }} /> {loginOrg.Name}
+          <Icon type='home' style={{ fontSize: 17 }} /> {loginData.ActOrgName}
         </div>
       )
     }
@@ -205,7 +205,9 @@ class Navbar extends React.Component {
         >
           <div className={styles.userinfo}>
             <Avatar {...avatarProps} className={styles.avatar} />
-            <span className={styles.username}>{loginData.Name} <Icon type='down' style={{ fontSize: 12 }} /></span>
+            <span className={styles.username}>{_.get(loginData, 'Name') || loginData.Username} <Icon
+              type='down' style={{ fontSize: 12 }}
+            /></span>
           </div>
         </Dropdown>
       </div>
@@ -224,11 +226,9 @@ class Navbar extends React.Component {
         <OrgModal
           visible={orgModalVisible}
           loginData={loginData}
-          loginOrg={loginOrg}
-          onOk={loginOrg => {
+          onOk={() => {
             window.g_app._store.dispatch({
-              type: 'user/LOGIN_ORG',
-              payload: loginOrg
+              type: 'user/valid'
             })
             this.setState({ orgModalVisible: false })
           }}
@@ -244,7 +244,6 @@ class Navbar extends React.Component {
 function mapStateToProps (state) {
   return {
     loginData: state.user.loginData || {},
-    loginOrg: state.user.loginOrg || {},
     menusTree: state.layout.menusTree || [],
     activeMenuIndex: state.layout.activeMenuIndex
   }

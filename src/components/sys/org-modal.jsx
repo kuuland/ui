@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
 import { Modal, Button, TreeSelect, message } from 'antd'
-import { get, post, withLocale } from 'kuu-tools'
+import { update, get, post, withLocale } from 'kuu-tools'
 
 class OrgModal extends React.Component {
   constructor (props) {
@@ -28,7 +28,7 @@ class OrgModal extends React.Component {
         }
         return
       }
-      const defaultOrgID = _.get(this.props.loginOrg, 'ID', _.get(_.head(orgs), 'ID'))
+      const defaultOrgID = _.get(this.props.loginData, 'ActOrgID', _.get(_.head(orgs), 'ID'))
       let visible = _.size(orgs) > 1
       if (this.props.source !== 'login') {
         visible = true
@@ -58,16 +58,15 @@ class OrgModal extends React.Component {
       return
     }
     this.setState({ loading: true }, async () => {
-      let loginOrg = {}
       if (this.state.orgID) {
-        loginOrg = await post('/org/login', { org_id: this.state.orgID })
-        if (!loginOrg) {
+        const ret = await update('user', { ID: this.props.loginData.UID }, { ActOrgID: this.state.orgID })
+        if (!ret) {
           return
         }
       }
       this.setState({ orgs: undefined, orgID: undefined, loading: false, visible: false })
       if (_.isFunction(this.props.onOk)) {
-        this.props.onOk(loginOrg)
+        this.props.onOk()
       } else {
         console.warn('组织选择框未指定 onOk 回调')
       }

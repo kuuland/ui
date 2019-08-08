@@ -36,22 +36,26 @@ export default withLocale(props => {
                   <Menu>
                     <Menu.Item
                       key='refresh'
-                      onClick={() => props.onContext(pane, index, 'refresh')}>
+                      onClick={() => props.onContext(pane, index, 'refresh')}
+                    >
                       <Icon type='reload' />{props.L('kuu_layout_tabs_refresh', 'Refresh')}
                     </Menu.Item>
                     <Menu.Item
                       key='close-others'
-                      onClick={() => props.onContext(pane, index, 'close-others')}>
+                      onClick={() => props.onContext(pane, index, 'close-others')}
+                    >
                       <Icon type='close-circle' />{props.L('kuu_layout_tabs_close_others', 'Close Others')}
                     </Menu.Item>
                     <Menu.Item
                       key='close-left'
-                      onClick={() => props.onContext(pane, index, 'close-left')}>
+                      onClick={() => props.onContext(pane, index, 'close-left')}
+                    >
                       <Icon type='left-circle' />{props.L('kuu_layout_tabs_close_left', 'Close All to the Left')}
                     </Menu.Item>
                     <Menu.Item
                       key='close-right'
-                      onClick={() => props.onContext(pane, index, 'close-right')}>
+                      onClick={() => props.onContext(pane, index, 'close-right')}
+                    >
                       <Icon type='right-circle' />{props.L('kuu_layout_tabs_close_right', 'Close All to the Right')}
                     </Menu.Item>
                   </Menu>

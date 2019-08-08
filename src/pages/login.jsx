@@ -5,21 +5,16 @@ import _ from 'lodash'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import styles from './login.less'
 import { get, post, withLocale } from 'kuu-tools'
-import OrgModal from '@/components/sys/org-modal'
 import config from '@/config'
 
 class Login extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      loginLoading: false,
-      orgModalVisible: false,
-      orgLoginLoading: false
+      loginLoading: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleCancel = this.handleCancel.bind(this)
-    this.handleOk = this.handleOk.bind(this)
     this.ensureLogout()
   }
 
@@ -47,23 +42,12 @@ class Login extends React.Component {
           this.setState({ loginLoading: false })
           return
         }
-        // 配合后端组织自动登录
-        const loginOrg = await this.checkAutoOrgLogin()
-        if (loginOrg && loginOrg.ID) {
-          this.handleOk(loginOrg, data)
-          return
-        }
-        this.setState({ loginData: data, orgModalVisible: true })
+        this.handleRedirect()
       })
     })
   }
 
-  async checkAutoOrgLogin () {
-    const data = await get('/org/current')
-    return data
-  }
-
-  handleLoginRedirect () {
+  handleRedirect () {
     const redirectUri = _.get(this.props, 'location.query.redirect_uri')
     if (!redirectUri) {
       router.push('/')
@@ -77,19 +61,6 @@ class Login extends React.Component {
     }
   }
 
-  async handleCancel () {
-    await post('/logout')
-    this.setState({
-      orgModalVisible: false,
-      loginLoading: false,
-      loginData: undefined
-    })
-  }
-
-  handleOk (loginOrg, loginData) {
-    this.handleLoginRedirect()
-  }
-
   render () {
     const { getFieldDecorator } = this.props.form
     const style = {}
@@ -98,14 +69,6 @@ class Login extends React.Component {
     }
     return (
       <div className={styles.login} style={style}>
-        <OrgModal
-          source='login'
-          visible={this.state.orgModalVisible}
-          loginData={this.state.loginData}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          onError={this.handleCancel}
-        />
         <div className={styles.content}>
           <div className={styles.title}>{config.fullName}</div>
           <p className={styles.welcome} style={{ display: styles.welcome ? 'block' : 'none' }}>{config.welcome}</p>

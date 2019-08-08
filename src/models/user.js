@@ -26,11 +26,10 @@ if (cacheLocale) {
 export default {
   state: {
     loginData: undefined,
-    loginOrg: undefined,
     localeMessages: localeMessages
   },
   reducers: {
-    LOGIN (state, { payload: { loginData, loginOrg } }) {
+    LOGIN (state, { payload: { loginData } }) {
       if (_.get(loginData, 'Token')) {
         window.localStorage.setItem(storageTokenKey, loginData.Token)
         if (loginData.Lang) {
@@ -40,10 +39,7 @@ export default {
       } else {
         window.localStorage.removeItem(storageTokenKey)
       }
-      return { ...state, loginData, loginOrg }
-    },
-    LOGIN_ORG (state, { payload: loginOrg }) {
-      return { ...state, loginOrg }
+      return { ...state, loginData }
     },
     SET_LANGMSGS (state, { payload: msgs }) {
       window[_.get(toolsConfig, 'localeMessagesKey', 'localeMessages')] = msgs
@@ -55,7 +51,7 @@ export default {
     * logout ({ payload }, { put, call }) {
       const json = yield call(post, '/logout', undefined, { rawData: true })
       if (json.data || json.code === 555) {
-        yield put({ type: 'LOGIN', payload: { loginData: undefined, loginOrg: undefined } })
+        yield put({ type: 'LOGIN', payload: { loginData: undefined } })
         yield put({ type: 'layout/CLEAR' })
         window.localStorage.removeItem('panes:data')
       }
@@ -65,10 +61,9 @@ export default {
     },
     * valid ({ payload }, { put, call }) {
       const data = yield call(post, '/valid')
-      const org = yield call(get, '/org/current')
       if (data) {
         const langmsgs = yield call(get, '/langmsgs')
-        yield put({ type: 'LOGIN', payload: { loginData: data, loginOrg: org } })
+        yield put({ type: 'LOGIN', payload: { loginData: data } })
         const msgs = _.get(langmsgs, data.Lang)
         if (!_.isEmpty(msgs)) {
           yield put({ type: 'SET_LANGMSGS', payload: msgs })

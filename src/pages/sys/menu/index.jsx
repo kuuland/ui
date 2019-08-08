@@ -15,7 +15,7 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_name', 'Name'),
         dataIndex: 'Name',
-        width: 340,
+        width: 400,
         render: (t, r) => {
           t = this.props.L(r.LocaleKey, t)
           return r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
@@ -24,6 +24,7 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_uri', 'URI'),
         dataIndex: 'URI',
+        width: 350,
         render: t => <Button type={'link'} size={'small'}>{t}</Button>
       },
       {
@@ -34,32 +35,14 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_disable', 'Disable'),
         dataIndex: 'Disable',
-        width: 60,
+        width: 100,
         align: 'center',
         render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 18 }} />
           : <Icon type='eye' style={{ color: '#52c41a', fontSize: 18 }} />
       },
       {
-        title: this.props.L('kuu_menu_detail', 'Detail'),
-        dataIndex: 'Detail',
-        width: 400,
-        align: 'center',
-        render: (t, r) => {
-          return (
-            <div>
-              <Checkbox checked={!!r.IsLink}>{this.props.L('kuu_menu_external', 'External link')}</Checkbox>
-              <Checkbox
-                checked={!!r.IsDefaultOpen}
-              >{this.props.L('kuu_menu_defaultopen', 'Open by default')}</Checkbox>
-              <Checkbox
-                checked={r.Closeable === undefined || !!r.Closeable}
-              >{this.props.L('kuu_menu_closeable', 'Closeable')}</Checkbox>
-            </div>
-          )
-        }
-      },
-      {
         title: this.props.L('kuu_menu_code', 'Permission Code'),
+        width: 150,
         dataIndex: 'Code'
       }
     ]

@@ -218,7 +218,7 @@ class Role extends React.Component {
           columns={columns}
           form={form}
           url={'/role'}
-          drawerWidth={600}
+          drawerWidth={700}
           listUrl={'GET /role?preload=OperationPrivileges,DataPrivileges'}
           onFormRecord={record => {
             record.ViewOperationPrivileges = _.chain(record)

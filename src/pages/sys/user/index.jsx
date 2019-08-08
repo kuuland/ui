@@ -157,7 +157,7 @@ class User extends React.Component {
                   assignRecord: record
                 }, this.fetchUserAssigns)
               },
-              tooltip: this.props.L('kuu_user_role_assigns', 'Role Assignments')
+              text: this.props.L('kuu_user_role_assigns', 'Role Assignments')
             }
           ]}
           beforeSave={values => {
