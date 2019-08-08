@@ -37,5 +37,8 @@ export default {
       target: 'http://localhost:8080/',
       changeOrigin: true
     }
+  },
+  targets: {
+    ie: 11
   }
 }
