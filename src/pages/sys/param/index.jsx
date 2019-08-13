@@ -1,6 +1,5 @@
 import React from 'react'
 import _ from 'lodash'
-import { Button } from 'antd'
 import { FanoTable, types } from 'fano-antd'
 import moment from 'moment'
 import { withLocale } from 'kuu-tools'
