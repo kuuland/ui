@@ -52,7 +52,6 @@ class I18n extends React.Component {
       {
         title: this.props.L('kuu_i18n_key', 'Key'),
         dataIndex: 'Key',
-        width: 300,
         ...this.filterProps('Key')
       }
     ]
@@ -78,7 +77,7 @@ class I18n extends React.Component {
       columns.push({
         title: lang.LangName,
         dataIndex,
-        width: 400,
+        width: 160,
         ...this.filterProps(dataIndex)
       })
       form.push({

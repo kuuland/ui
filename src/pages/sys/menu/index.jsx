@@ -15,7 +15,6 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_name', 'Name'),
         dataIndex: 'Name',
-        width: 350,
         render: (t, r) => {
           t = this.props.L(r.LocaleKey, t)
           return r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
@@ -24,7 +23,6 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_uri', 'URI'),
         dataIndex: 'URI',
-        width: 350,
         render: t => <Button type={'link'} size={'small'}>{t}</Button>
       },
       {
@@ -42,7 +40,7 @@ class Menu extends React.Component {
       },
       {
         title: this.props.L('kuu_menu_code', 'Permission Code'),
-        width: 150,
+        width: 120,
         dataIndex: 'Code'
       }
     ]

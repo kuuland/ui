@@ -15,13 +15,11 @@ class Org extends React.Component {
       {
         title: this.props.L('kuu_org_name', 'Name', this.props.localeMessages),
         dataIndex: 'Name',
-        sorter: false,
-        width: 500
+        sorter: false
       },
       {
         title: this.props.L('kuu_org_code', 'Code'),
-        dataIndex: 'Code',
-        width: 150
+        dataIndex: 'Code'
       },
       {
         title: this.props.L('kuu_org_sort', 'Sort'),

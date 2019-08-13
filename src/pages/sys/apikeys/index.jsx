@@ -136,6 +136,7 @@ class APIKeys extends React.Component {
           rowActions={[
             {
               icon: 'copy',
+              text: this.props.L('kuu_apikeys_token_copy_txt', 'Copy'),
               wrapper: (children, record) => {
                 return (
                   <CopyToClipboard
@@ -150,6 +151,7 @@ class APIKeys extends React.Component {
             },
             {
               icon: 'stop',
+              text: this.props.L('kuu_apikeys_token_exp_txt', 'Expire'),
               style: {
                 color: '#ff4d4f'
               },
@@ -168,6 +170,7 @@ class APIKeys extends React.Component {
             {
               icon: 'rollback',
               show: record => !record.State && moment().isBefore(moment.unix(record.Exp)),
+              text: this.props.L('kuu_apikeys_token_enable_txt', 'Enable'),
               popconfirm: record => ({
                 title: this.props.L('kuu_apikeys_token_enable_confirm', 'Are you sure to re-enable the token?'),
                 onConfirm: async () => {
