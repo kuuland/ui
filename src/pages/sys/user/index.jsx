@@ -18,10 +18,6 @@ class User extends React.Component {
     this.handleAssignCancel = this.handleAssignCancel.bind(this)
   }
 
-  componentDidMount () {
-    this.fetchRoles()
-  }
-
   async fetchRoles () {
     const data = await list('role', { range: 'ALL' })
     this.setState({ roles: _.get(data, 'list', []) })
@@ -153,9 +149,10 @@ class User extends React.Component {
             {
               icon: 'key',
               onClick: record => {
-                this.setState({
-                  assignRecord: record
-                }, this.fetchUserAssigns)
+                this.setState({ assignRecord: record }, () => {
+                  this.fetchUserAssigns()
+                  this.fetchRoles()
+                })
               },
               text: this.props.L('kuu_user_role_assigns', 'Role Assignments')
             }

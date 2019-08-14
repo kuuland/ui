@@ -14,8 +14,7 @@ class Org extends React.Component {
     const columns = [
       {
         title: this.props.L('kuu_org_name', 'Name', this.props.localeMessages),
-        dataIndex: 'Name',
-        sorter: false
+        dataIndex: 'Name'
       },
       {
         title: this.props.L('kuu_org_code', 'Code'),
