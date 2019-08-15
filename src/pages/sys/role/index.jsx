@@ -69,7 +69,7 @@ class Role extends React.Component {
         type: 'treeselect',
         label: this.props.L('kuu_role_op', 'Menu Privileges'),
         props: {
-          url: '/menu?range=ALL&sort=Sort',
+          url: '/user/menus',
           titleKey: 'Name',
           valueKey: 'Code',
           arrayToTree: true,
