@@ -13,7 +13,7 @@ class Org extends React.Component {
   render () {
     const columns = [
       {
-        title: this.props.L('kuu_org_name', 'Name', this.props.localeMessages),
+        title: this.props.L('kuu_org_name', 'Name'),
         dataIndex: 'Name'
       },
       {

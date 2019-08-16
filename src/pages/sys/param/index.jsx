@@ -252,6 +252,9 @@ class Param extends React.Component {
           onFormRecord={record => {
             record.Type = record.Type || 'input'
           }}
+          formInitialValue={{
+            Type: 'input'
+          }}
           drawerWidth={650}
           beforeUpdate={body => {
             body.doc = this.transferDoc(body.doc)
