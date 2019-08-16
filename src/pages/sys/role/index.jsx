@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, Input, Select, Button } from 'antd'
 import { FanoTable, FanoTreeSelect } from 'fano-antd'
-import { parseIcon, withLocale } from 'kuu-tools'
+import { parseIcon, withLocale, orgField, orgColumn } from 'kuu-tools'
 import _ from 'lodash'
 import moment from 'moment'
 import styles from './index.less'
@@ -22,6 +22,7 @@ class Role extends React.Component {
         title: this.props.L('kuu_role_code', 'Code'),
         dataIndex: 'Code'
       },
+      orgColumn(this.props.L),
       {
         title: this.props.L('kuu_role_builtin', 'Built-in'),
         dataIndex: 'IsBuiltIn',
@@ -34,6 +35,7 @@ class Role extends React.Component {
       }
     ]
     const form = [
+      orgField(this.props.L),
       {
         name: 'Name',
         type: 'input',
@@ -218,7 +220,7 @@ class Role extends React.Component {
           columns={columns}
           form={form}
           url={'/role'}
-          listUrl={'GET /role?preload=OperationPrivileges,DataPrivileges'}
+          listUrl={'GET /role?preload=Org,OperationPrivileges,DataPrivileges'}
           drawerWidth={700}
           onFormRecord={record => {
             record.ViewOperationPrivileges = _.chain(record)

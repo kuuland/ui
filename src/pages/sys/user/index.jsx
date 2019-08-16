@@ -3,7 +3,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { Transfer, Modal, Icon, Spin } from 'antd'
 import md5 from 'blueimp-md5'
-import { get, list, update, withLocale } from 'kuu-tools'
+import { get, list, update, withLocale, orgField, orgColumn } from 'kuu-tools'
 import { FanoTable } from 'fano-antd'
 import styles from './index.less'
 
@@ -83,6 +83,7 @@ class User extends React.Component {
         title: this.props.L('kuu_user_name', 'Real name'),
         dataIndex: 'Name'
       },
+      orgColumn(this.props.L),
       {
         title: this.props.L('kuu_user_disable', 'Disable'),
         dataIndex: 'Disable',
@@ -100,6 +101,7 @@ class User extends React.Component {
       }
     ]
     const form = [
+      orgField(this.props.L),
       {
         name: 'Username',
         type: 'input',
@@ -145,6 +147,7 @@ class User extends React.Component {
           columns={columns}
           form={form}
           url={'/user'}
+          listUrl={'/user?preload=Org'}
           rowActions={[
             {
               icon: 'key',

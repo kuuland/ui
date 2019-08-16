@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { FanoTable, types } from 'fano-antd'
 import moment from 'moment'
-import { withLocale } from 'kuu-tools'
+import { withLocale, orgField, orgColumn } from 'kuu-tools'
 import styles from './index.less'
 
 class Param extends React.Component {
@@ -122,6 +122,7 @@ class Param extends React.Component {
         dataIndex: 'IsBuiltIn',
         render: 'switch'
       },
+      orgColumn(this.props.L),
       {
         title: this.props.L('kuu_param_createdat', 'Created At'),
         dataIndex: 'CreatedAt',
@@ -129,6 +130,7 @@ class Param extends React.Component {
       }
     ]
     const form = [
+      orgField(this.props.L),
       {
         name: 'Type',
         type: 'select',
@@ -244,6 +246,7 @@ class Param extends React.Component {
       <div className={styles.param}>
         <FanoTable
           url={'/param'}
+          listUrl={'/param?preload=Org'}
           columns={columns}
           form={form}
           onFormRecord={record => {
