@@ -1,30 +1,29 @@
 // ref: https://umijs.org/config/
 export default {
   treeShaking: true,
+  hash: true,
+  targets: {
+    ie: 11
+  },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
       'umi-plugin-react',
       {
         antd: true,
-        dva: true,
-        dynamicImport: false,
-        title: 'Kuu',
-        dll: false,
-        routes: {
-          exclude: [
-            /models\//,
-            /services\//,
-            /model\.(t|j)sx?$/,
-            /service\.(t|j)sx?$/,
-            /components\//
-          ]
+        dva: {
+          hmr: true
         },
+        title: 'Kuu',
         locale: {
           default: 'en-US',
           baseNavigator: true,
           antd: true
-        }
+        },
+        dynamicImport: {
+          webpackChunkName: true
+        },
+        chunks: ['vendors', 'umi']
       }
     ]
   ],
@@ -38,7 +37,21 @@ export default {
       changeOrigin: true
     }
   },
-  targets: {
-    ie: 11
+  chainWebpack (config) {
+    config.optimization.splitChunks({
+      cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          chunks: 'all',
+          test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom)[\\/]/
+        },
+        commons: {
+          name: 'commons',
+          chunks: 'async',
+          minChunks: 2,
+          minSize: 0
+        }
+      }
+    })
   }
 }
