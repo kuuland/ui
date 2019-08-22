@@ -136,9 +136,15 @@ export default {
   subscriptions: {
     setup (ctx) {
       const { dispatch, history } = ctx
+      const { layout, user } = window.g_app._store.getState()
+      // 查询国际化
+      if (_.isEmpty(user.localeMessages)) {
+        dispatch({
+          type: 'user/langmsgs'
+        })
+      }
       const listener = route => {
         if (route.pathname !== config.loginPathname && !isWhiteRoute(route.pathname)) {
-          const { layout, user } = window.g_app._store.getState()
           // 校验令牌
           if (!user.loginData) {
             dispatch({

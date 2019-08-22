@@ -48,6 +48,14 @@ export default {
     }
   },
   effects: {
+    * langmsgs ({ payload }, { put, call }) {
+      const langmsgs = yield call(get, '/langmsgs')
+      const lang = _.chain(langmsgs).keys().head().value()
+      const msgs = _.get(langmsgs, lang)
+      if (!_.isEmpty(msgs)) {
+        yield put({ type: 'SET_LANGMSGS', payload: msgs })
+      }
+    },
     * logout ({ payload }, { put, call }) {
       const json = yield call(post, '/logout', undefined, { rawData: true })
       if (json.data || json.code === 555) {
@@ -62,12 +70,8 @@ export default {
     * valid ({ payload }, { put, call }) {
       const data = yield call(post, '/valid')
       if (data) {
-        const langmsgs = yield call(get, '/langmsgs')
         yield put({ type: 'LOGIN', payload: { loginData: data } })
-        const msgs = _.get(langmsgs, data.Lang)
-        if (!_.isEmpty(msgs)) {
-          yield put({ type: 'SET_LANGMSGS', payload: msgs })
-        }
+        yield put({ type: 'langmsgs' })
       }
     }
   },
