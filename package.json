@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "@ant-design/icons": "^2.1.1",
-    "antd": "^3.20.7",
+    "antd": "^3.22.0",
     "array-to-tree": "^3.3.0",
-    "blueimp-md5": "^2.11.0",
+    "blueimp-md5": "^2.11.1",
     "dva": "^2.4.1",
     "fano-antd": "latest",
     "fano-react": "latest",
@@ -22,17 +22,17 @@
     "mime": "^2.4.4",
     "mitt": "^1.1.3",
     "moment": "^2.24.0",
-    "qs": "^6.7.0",
-    "react": "^16.8.6",
+    "qs": "^6.8.0",
+    "react": "^16.9.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-document-title": "^2.0.3",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.9.0"
   },
   "devDependencies": {
-    "husky": "^3.0.1",
-    "standard": "^13.1.0",
-    "umi": "^2.8.15",
-    "umi-plugin-react": "^1.9.13"
+    "husky": "^3.0.4",
+    "standard": "^14.0.0",
+    "umi": "^2.8.20",
+    "umi-plugin-react": "^1.9.19"
   },
   "husky": {
     "hooks": {
