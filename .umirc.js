@@ -13,7 +13,8 @@ export default {
         antd: true,
         dva: {
           hmr: true,
-          immer: true
+          immer: true,
+          dynamicImport: true
         },
         title: 'Kuu',
         locale: {
