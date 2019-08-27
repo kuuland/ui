@@ -84,7 +84,7 @@ export default {
       const menus = Array.isArray(data) ? data : []
       yield put({ type: 'SET_MENUS', payload: menus })
     },
-    * addPane ({ payload: value }, { put, select }) {
+    * openPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
       const { panes, menus, activePane: currentActivePane } = state
       let openKeys = state.openKeys
@@ -125,7 +125,7 @@ export default {
         }
         yield put({ type: 'SET_PANES', payload: panes })
         if (panes.length > 0) {
-          yield put({ type: 'addPane', payload: activePane })
+          yield put({ type: 'openPane', payload: activePane })
         } else {
           yield put({ type: 'SET_ACTIVE_PANE', payload: { activePane: undefined, openKeys: [], panes } })
         }

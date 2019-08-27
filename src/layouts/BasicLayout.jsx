@@ -99,7 +99,7 @@ class BasicLayout extends React.Component {
     if (!value) {
       return
     }
-    this.props.dispatch({ type: 'layout/addPane', payload: value })
+    this.props.dispatch({ type: 'layout/openPane', payload: value })
   }
 
   cacheMenuPaneContent (activePane) {
@@ -131,31 +131,19 @@ class BasicLayout extends React.Component {
         router.go(0)
         break
       case 'close-others':
-        newPanes = this.props.panes.filter(item => item.ID === pane.ID || item.Closeable === false)
+        newPanes = this.props.panes.filter(item => item.Closeable !== true || item.ID === pane.ID)
         break
       case 'close-left':
-        newPanes = []
-        for (let i = 0; i < this.props.panes.length; i++) {
-          const item = this.props.panes[i]
-          if (i >= index || item.Closeable === false) {
-            newPanes.push(item)
-          }
-        }
+        newPanes = this.props.panes.filter((item, i) => item.Closeable !== true || i >= index)
         break
       case 'close-right':
-        newPanes = []
-        for (let i = 0; i < this.props.panes.length; i++) {
-          const item = this.props.panes[i]
-          if (i <= index || item.Closeable === false) {
-            newPanes.push(item)
-          }
-        }
+        newPanes = this.props.panes.filter((item, i) => item.Closeable !== true || i <= index)
         break
     }
     if (Array.isArray(newPanes)) {
       this.props.dispatch({ type: 'layout/SET_PANES', payload: newPanes })
     }
-    this.props.dispatch({ type: 'layout/addPane', payload: pane })
+    this.props.dispatch({ type: 'layout/openPane', payload: pane })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -170,7 +158,7 @@ class BasicLayout extends React.Component {
       })
       if (nextActivePane && nextActivePane.URI) {
         if (_.get(this.props.activePane, 'URI') !== nextActivePane.URI) {
-          this.props.dispatch({ type: 'layout/addPane', payload: nextActivePane })
+          this.props.dispatch({ type: 'layout/openPane', payload: nextActivePane })
         }
       }
     }
