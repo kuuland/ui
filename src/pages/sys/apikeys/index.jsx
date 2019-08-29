@@ -59,6 +59,7 @@ class APIKeys extends React.Component {
         type: 'radio',
         label: this.props.L('kuu_apikeys_exp', 'Exp'),
         props: {
+          className: 'apikeys-radio',
           options: [
             {
               label: this.props.L('kuu_apikeys_exp_options_never', 'Never'),
@@ -93,7 +94,7 @@ class APIKeys extends React.Component {
       }
     ]
     return (
-      <div className={styles.apikey}>
+      <div className={styles.apikeys}>
         <FanoTable
           ref={instance => {
             this.table = instance

@@ -255,7 +255,6 @@ class Param extends React.Component {
           formInitialValue={{
             Type: 'input'
           }}
-          drawerWidth={650}
           beforeUpdate={body => {
             body.doc = this.transferDoc(body.doc)
           }}
