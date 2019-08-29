@@ -2,6 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
+import router from 'umi/router'
 import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio, Input } from 'antd'
 import { get, update, withLocale, config } from 'kuu-tools'
 import OrgModal from './org-modal'
@@ -227,10 +228,7 @@ class Navbar extends React.Component {
           visible={orgModalVisible}
           loginData={loginData}
           onOk={() => {
-            window.g_app._store.dispatch({
-              type: 'user/valid'
-            })
-            this.setState({ orgModalVisible: false })
+            router.go(0)
           }}
           onCancel={() => this.setState({ orgModalVisible: false })}
           onError={this.handleLogout}
