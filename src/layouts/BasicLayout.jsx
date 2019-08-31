@@ -12,7 +12,7 @@ import config from '@/config'
 
 const { Sider } = Layout
 
-class BasicLayout extends React.Component {
+class BasicLayout extends React.PureComponent {
   constructor (props) {
     super(props)
 
@@ -217,8 +217,8 @@ class BasicLayout extends React.Component {
             <Menu
               className={`${styles.menu}`}
               mode='inline'
-              selectedKeys={selectedKeys}
               inlineIndent={6}
+              selectedKeys={selectedKeys}
               openKeys={openKeys}
               onOpenChange={openKeys => {
                 this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
