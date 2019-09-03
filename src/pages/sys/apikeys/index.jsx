@@ -104,6 +104,9 @@ class APIKeys extends React.Component {
           url={'/signsecret'}
           createUrl={'POST /apikeys'}
           rowClickToggleDrawer={false}
+          formInitialValue={{
+            Exp: 'never'
+          }}
           afterList={json => {
             if (!_.isEmpty(json.list)) {
               json.list.map(item => {
