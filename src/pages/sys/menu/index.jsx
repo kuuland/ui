@@ -9,10 +9,10 @@ class Menu extends React.Component {
     super(props)
     this.state = {}
 
-    this.handleAddChild = this.handleAddChild.bind(this)
+    this.handleAddSubmenu = this.handleAddSubmenu.bind(this)
   }
 
-  handleAddChild (record) {
+  handleAddSubmenu (record) {
     this.table.handleAdd({ Pid: _.get(record, 'ID') })
   }
 
@@ -139,8 +139,8 @@ class Menu extends React.Component {
             {
               key: 'add_submenu',
               icon: 'apartment',
-              onClick: this.handleAddChild,
-              text: this.props.L('kuu_menu_addchild', 'Add Submenu')
+              onClick: this.handleAddSubmenu,
+              text: this.props.L('kuu_menu_add_submenu', 'Add Submenu')
             }
           ]}
           pagination={false}
