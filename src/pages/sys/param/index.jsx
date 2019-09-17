@@ -122,7 +122,6 @@ class Param extends React.Component {
         dataIndex: 'IsBuiltIn',
         render: 'switch'
       },
-      orgColumn(this.props.L),
       {
         title: this.props.L('kuu_param_createdat', 'Created At'),
         dataIndex: 'CreatedAt',
@@ -130,7 +129,6 @@ class Param extends React.Component {
       }
     ]
     const form = [
-      orgField(this.props.L),
       {
         name: 'Type',
         type: 'select',

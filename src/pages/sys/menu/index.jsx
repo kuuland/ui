@@ -8,6 +8,12 @@ class Menu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {}
+
+    this.handleAddChild = this.handleAddChild.bind(this)
+  }
+
+  handleAddChild (record) {
+    this.table.handleAdd({ Pid: _.get(record, 'ID') })
   }
 
   render () {
@@ -15,6 +21,7 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_name', 'Name'),
         dataIndex: 'Name',
+        width: 300,
         render: (t, r) => {
           t = this.props.L(r.LocaleKey, t)
           return r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
@@ -23,6 +30,7 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_uri', 'URI'),
         dataIndex: 'URI',
+        width: 300,
         render: t => <Button type={'link'} size={'small'}>{t}</Button>
       },
       {
@@ -33,7 +41,7 @@ class Menu extends React.Component {
       {
         title: this.props.L('kuu_menu_disable', 'Disable'),
         dataIndex: 'Disable',
-        width: 100,
+        width: 150,
         align: 'center',
         render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 18 }} />
           : <Icon type='eye' style={{ color: '#52c41a', fontSize: 18 }} />
@@ -125,7 +133,16 @@ class Menu extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/menu?range=ALL&sort=Sort'}
+          url={'/user/menus?range=ALL'}
+          ref={table => this.table = table}
+          rowActions={[
+            {
+              key: 'add_submenu',
+              icon: 'apartment',
+              onClick: this.handleAddChild,
+              text: this.props.L('kuu_menu_addchild', 'Add Submenu')
+            }
+          ]}
           pagination={false}
           expandAllRows
           arrayToTree
