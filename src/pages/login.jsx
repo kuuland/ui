@@ -2,7 +2,7 @@ import React from 'react'
 import md5 from 'blueimp-md5'
 import router from 'umi/router'
 import _ from 'lodash'
-import { Form, Icon, Input, Button, Checkbox } from 'antd'
+import { Form, Icon, Input, Button, Checkbox, Row, Col } from 'antd'
 import styles from './login.less'
 import { get, post, withLocale } from 'kuu-tools'
 import config from '@/config'
@@ -15,6 +15,8 @@ class Login extends React.Component {
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleCaptcha = this.handleCaptcha.bind(this)
+    this.handleUsernameBlur = this.handleUsernameBlur.bind(this)
     this.ensureLogout()
   }
 
@@ -24,6 +26,20 @@ class Login extends React.Component {
         type: 'user/logout'
       })
     }
+  }
+
+  async fetchCaptcha (need = '') {
+    const data = await get(`/captcha?need=${need}`)
+    this.setState({ captcha: data })
+  }
+
+  handleCaptcha () {
+    this.fetchCaptcha()
+  }
+
+  handleUsernameBlur (e) {
+    const value = e.target.value
+    this.fetchCaptcha(value)
   }
 
   handleSubmit (e) {
@@ -40,6 +56,7 @@ class Login extends React.Component {
         const data = await post('/login', values)
         if (!_.get(data, 'Token')) {
           this.setState({ loginLoading: false })
+          this.fetchCaptcha(values.username)
           return
         }
         this.handleRedirect()
@@ -62,6 +79,7 @@ class Login extends React.Component {
   }
 
   render () {
+    const { captcha } = this.state
     const { getFieldDecorator } = this.props.form
     const style = {}
     if (config.loginBg) {
@@ -83,6 +101,7 @@ class Login extends React.Component {
                 <Input
                   prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
                   placeholder={this.props.L('kuu_login_username_placeholder', 'Username')}
+                  onBlur={this.handleUsernameBlur}
                 />
               )}
             </Form.Item>
@@ -93,12 +112,34 @@ class Login extends React.Component {
                   message: this.props.L('kuu_login_password_required', 'Please enter your password')
                 }]
               })(
-                <Input
+                <Input.Password
                   prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  type='password' placeholder={this.props.L('kuu_login_password_placeholder', 'Password')}
+                  placeholder={this.props.L('kuu_login_password_placeholder', 'Password')}
                 />
               )}
             </Form.Item>
+            {captcha && (
+              <Form.Item>
+                {getFieldDecorator('captcha_val', {
+                  rules: [{
+                    required: true,
+                    message: this.props.L('kuu_login_captcha_required', 'Please enter the captcha')
+                  }]
+                })(
+                  <Input
+                    prefix={<Icon type='robot' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                    addonAfter={
+                      <img
+                        className={styles.captcha}
+                        src={_.get(captcha, 'base64Str')}
+                        onClick={this.handleCaptcha}
+                      />
+                    }
+                    placeholder={this.props.L('kuu_login_captcha_placeholder', 'Captcha')}
+                  />
+                )}
+              </Form.Item>
+            )}
             <Form.Item>
               {getFieldDecorator('remember', {
                 valuePropName: 'checked',
