@@ -28,8 +28,8 @@ class Login extends React.Component {
     }
   }
 
-  async fetchCaptcha (need = '') {
-    const data = await get(`/captcha?need=${need}`)
+  async fetchCaptcha (user = '') {
+    const data = await get(`/captcha?user=${user}`)
     this.setState({ captcha: data })
   }
 
