@@ -57,12 +57,10 @@ export default {
       }
     },
     * logout ({ payload }, { put, call }) {
-      const json = yield call(post, '/logout', undefined, { rawData: true })
-      if (json.data || json.code === 555) {
-        yield put({ type: 'LOGIN', payload: { loginData: undefined } })
-        yield put({ type: 'layout/CLEAR' })
-        window.localStorage.removeItem('panes:data')
-      }
+      yield call(post, '/logout', undefined)
+      yield put({ type: 'LOGIN', payload: { loginData: undefined } })
+      yield put({ type: 'layout/CLEAR' })
+      window.localStorage.removeItem('panes:data')
       if (window.location.pathname !== loginPathname) {
         yield router.replace(loginPathname)
       }
