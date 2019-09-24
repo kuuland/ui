@@ -209,10 +209,8 @@ class BasicLayout extends React.PureComponent {
             width={config.siderWidth || 260}
             className={styles.sider}
           >
-            <div className={`${styles.header}`}>
-              <div className={`${styles.logo}`}>
-                <div className={`${styles.appName}`}>{config.shortName}</div>
-              </div>
+            <div className={`${styles.header}`} style={{ opacity: this.state.collapsed ? 0 : 1 }}>
+              <div className={`${styles.appName}`}>{config.shortName}</div>
             </div>
             <Menu
               className={`${styles.menu}`}
