@@ -38,14 +38,22 @@ class User extends React.Component {
       .groupBy('RoleID')
       .mapValues(values => _.head(values))
       .value()
+    console.log('hisAssigns...', hisAssigns)
     // 统计新的
     const newAssigns = userAssignsRolesKey.map(item => {
       const assign = { UserID: assignRecord.ID, RoleID: item }
-      if (_.get(hisAssigns, 'ID')) {
-        assign.ID = _.get(hisAssigns, 'ID')
+      const hisID = _.get(hisAssigns, `${item}.ID`)
+      if (hisID) {
+        assign.ID = hisID
+        delete hisAssigns[item]
       }
       return assign
     })
+    // 删除未选的
+    for (const roleID in hisAssigns) {
+      const item  = hisAssigns[roleID]
+      newAssigns.push({ ID: item.ID, DeletedAt: new Date().toISOString() })
+    }
     // 执行修改
     const data = await update(
       'user',
