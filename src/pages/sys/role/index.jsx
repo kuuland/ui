@@ -20,11 +20,6 @@ class Role extends React.Component {
       },
       orgColumn(this.props.L),
       {
-        title: this.props.L('kuu_role_builtin', 'Built-in'),
-        dataIndex: 'IsBuiltIn',
-        render: 'switch'
-      },
-      {
         title: this.props.L('kuu_role_createdat', 'Created At'),
         dataIndex: 'CreatedAt',
         render: t => moment(t).fromNow()
@@ -201,7 +196,7 @@ class Role extends React.Component {
           columns={columns}
           form={form}
           url={'/role'}
-          listUrl={'GET /role?preload=Org,OperationPrivileges,DataPrivileges'}
+          listUrl={'GET /role?preload=Org,OperationPrivileges,DataPrivileges&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
           onFormRecord={record => {
             record.ViewOperationPrivileges = _.chain(record)
               .get('OperationPrivileges', [])

@@ -51,7 +51,7 @@ class User extends React.Component {
     })
     // 删除未选的
     for (const roleID in hisAssigns) {
-      const item  = hisAssigns[roleID]
+      const item = hisAssigns[roleID]
       newAssigns.push({ ID: item.ID, DeletedAt: new Date().toISOString() })
     }
     // 执行修改
@@ -98,11 +98,6 @@ class User extends React.Component {
         render: 'switch'
       },
       {
-        title: this.props.L('kuu_user_builtin', 'Built-in'),
-        dataIndex: 'IsBuiltIn',
-        render: 'switch'
-      },
-      {
         title: this.props.L('kuu_user_createdat', 'Created At'),
         dataIndex: 'CreatedAt',
         render: t => moment(t).fromNow()
@@ -113,18 +108,12 @@ class User extends React.Component {
       {
         name: 'Username',
         type: 'input',
-        label: this.props.L('kuu_user_username', 'Username'),
-        props: {
-          disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
-        }
+        label: this.props.L('kuu_user_username', 'Username')
       },
       {
         name: 'Name',
         type: 'input',
-        label: this.props.L('kuu_user_name', 'Real name'),
-        props: {
-          disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`
-        }
+        label: this.props.L('kuu_user_name', 'Real name')
       },
       {
         name: 'Password',
@@ -138,15 +127,6 @@ class User extends React.Component {
         name: 'Disable',
         type: 'switch',
         label: this.props.L('kuu_user_disable', 'Disable')
-      },
-      {
-        condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
-        name: 'IsBuiltIn',
-        type: 'switch',
-        label: this.props.L('kuu_user_builtin', 'Built-in'),
-        props: {
-          disabled: true
-        }
       }
     ]
     return (
@@ -155,7 +135,7 @@ class User extends React.Component {
           columns={columns}
           form={form}
           url={'/user'}
-          listUrl={'/user?preload=Org'}
+          listUrl={'/user?preload=Org&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
           rowActions={[
             {
               icon: 'key',
@@ -186,7 +166,7 @@ class User extends React.Component {
           className={styles.assignModal}
         >
           <Spin
-            indicator={<Icon type='loading' style={{ fontSize: 24 }} spin />}
+            indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />}
             spinning={this.state.assignLoading}
           >
             <Transfer

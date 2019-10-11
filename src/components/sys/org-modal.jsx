@@ -19,7 +19,7 @@ class OrgModal extends React.Component {
     this.setState({ loading: true, orgs: undefined, orgID: undefined }, async () => {
       let orgs = await get('/org/loginable')
       const total = _.size(orgs)
-      if (_.isEmpty(orgs) && !_.get(this.props.loginData, 'IsBuiltIn', false)) {
+      if (_.isEmpty(orgs)) {
         if (_.isFunction(this.props.onError)) {
           message.error(this.props.L('kuu_org_unorganized', 'You have not assigned any organization'))
           this.props.onError()

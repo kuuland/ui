@@ -118,11 +118,6 @@ class Param extends React.Component {
         dataIndex: 'Name'
       },
       {
-        title: this.props.L('kuu_param_builtin', 'Built-in'),
-        dataIndex: 'IsBuiltIn',
-        render: 'switch'
-      },
-      {
         title: this.props.L('kuu_param_createdat', 'Created At'),
         dataIndex: 'CreatedAt',
         render: t => moment(t).fromNow()
@@ -134,7 +129,6 @@ class Param extends React.Component {
         type: 'select',
         label: this.props.L('kuu_param_type', 'Type'),
         props: {
-          disabled: `{{_.get(rootValue, 'IsBuiltIn') === true}}`,
           options: [
             {
               label: this.props.L('kuu_param_type_input', 'Input'),
@@ -229,22 +223,13 @@ class Param extends React.Component {
             return <Component {...this.getComponentProps(type, props)} />
           }
         }
-      },
-      {
-        condition: `{{!_.isEmpty(_.get(rootValue, 'ID'))}}`,
-        name: 'IsBuiltIn',
-        type: 'switch',
-        label: this.props.L('kuu_param_builtin', 'Built-in'),
-        props: {
-          disabled: true
-        }
       }
     ]
     return (
       <div className={styles.param}>
         <FanoTable
           url={'/param'}
-          listUrl={'/param?preload=Org'}
+          listUrl={'/param?preload=Org&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
           columns={columns}
           form={form}
           onFormRecord={record => {
@@ -259,7 +244,6 @@ class Param extends React.Component {
           beforeCreate={body => {
             this.transferDoc(body)
           }}
-          disabledRow={record => record.IsBuiltIn}
         />
       </div>
     )
