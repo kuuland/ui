@@ -109,6 +109,7 @@ class I18n extends React.Component {
           createUrl={'POST /langtrans'}
           deleteUrl={'DELETE /languagemessage'}
           updateUrl={'POST /langtrans'}
+          importUrl={'/langtrans/import'}
           beforeUpdate={(body, formRecord) => {
             return { ...formRecord, ...body.doc }
           }}
@@ -121,6 +122,9 @@ class I18n extends React.Component {
             },
             filter: {
               show: false
+            },
+            import: {
+              show: true
             }
           }}
           tableActions={[
