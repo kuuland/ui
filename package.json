@@ -32,7 +32,7 @@
     "husky": "^3.0.4",
     "standard": "^14.1.0",
     "umi": "^2.8.20",
-    "umi-plugin-react": "^1.9.19"
+    "umi-plugin-react": "1.10.1"
   },
   "husky": {
     "hooks": {

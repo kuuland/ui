@@ -18,10 +18,6 @@ class Role extends React.Component {
         title: this.props.L('kuu_role_name', 'Name'),
         dataIndex: 'Name'
       },
-      {
-        title: this.props.L('kuu_role_code', 'Code'),
-        dataIndex: 'Code'
-      },
       orgColumn(this.props.L),
       {
         title: this.props.L('kuu_role_builtin', 'Built-in'),
@@ -46,21 +42,6 @@ class Role extends React.Component {
               {
                 required: true,
                 message: this.props.L('kuu_role_name_required', 'Please enter a role name')
-              }
-            ]
-          }
-        }
-      },
-      {
-        name: 'Code',
-        type: 'input',
-        label: this.props.L('kuu_role_code', 'Code'),
-        props: {
-          fieldOptions: {
-            rules: [
-              {
-                required: true,
-                message: this.props.L('kuu_role_code_required', 'Please enter a role code')
               }
             ]
           }
@@ -133,7 +114,7 @@ class Role extends React.Component {
                           }}
                         />
                         <Select
-                          defaultValue='PERSONAL'
+                          defaultValue="PERSONAL"
                           placeholder={this.props.L('kuu_role_readable_range_placeholder', 'Please select a readable range')}
                           value={item.ReadableRange}
                           onChange={v => {
@@ -143,17 +124,17 @@ class Role extends React.Component {
                           }}
                         >
                           <Select.Option
-                            value='PERSONAL'
+                            value="PERSONAL"
                           >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
                           <Select.Option
-                            value='CURRENT'
+                            value="CURRENT"
                           >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
                           <Select.Option
-                            value='CURRENT_FOLLOWING'
+                            value="CURRENT_FOLLOWING"
                           >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
                         </Select>
                         <Select
-                          defaultValue='PERSONAL'
+                          defaultValue="PERSONAL"
                           placeholder={this.props.L('kuu_role_writable_range_placeholder', 'Please select a writable range')}
                           value={item.WritableRange}
                           onChange={v => {
@@ -163,13 +144,13 @@ class Role extends React.Component {
                           }}
                         >
                           <Select.Option
-                            value='PERSONAL'
+                            value="PERSONAL"
                           >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
                           <Select.Option
-                            value='CURRENT'
+                            value="CURRENT"
                           >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
                           <Select.Option
-                            value='CURRENT_FOLLOWING'
+                            value="CURRENT_FOLLOWING"
                           >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
                         </Select>
                         <Button
@@ -229,6 +210,7 @@ class Role extends React.Component {
               .value()
           }}
           beforeSave={(values, formRecord) => {
+            // 处理OperationPrivileges
             const viewOps = _.get(values, 'doc.ViewOperationPrivileges', values.ViewOperationPrivileges)
             if (viewOps) {
               const ops = []
@@ -256,12 +238,26 @@ class Role extends React.Component {
               if (_.has(values, 'doc')) {
                 // 修改
                 _.set(values, 'doc.OperationPrivileges', ops)
-                _.set(values, 'doc.OperationPrivileges', ops)
                 delete values.doc.ViewOperationPrivileges
               } else {
                 // 新增
                 _.set(values, 'OperationPrivileges', ops)
                 delete values.ViewOperationPrivileges
+              }
+            }
+            // 处理DataPrivileges
+            const dataOps = [...(_.get(values, 'doc.DataPrivileges', values.DataPrivileges) || [])]
+            const dataOpsMap = _.groupBy(dataOps, 'ID')
+            if (!_.isEmpty(formRecord.DataPrivileges)) {
+              for (const item of formRecord.DataPrivileges) {
+                if (_.isEmpty(dataOpsMap[item.ID])) {
+                  dataOps.push({ ID: item.ID, DeletedAt: moment().format() })
+                }
+              }
+              if (_.has(values, 'doc')) {
+                _.set(values, 'doc.DataPrivileges', dataOps)
+              } else {
+                _.set(values, 'DataPrivileges', dataOps)
               }
             }
           }}
