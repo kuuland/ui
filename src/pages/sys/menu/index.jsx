@@ -133,7 +133,8 @@ class Menu extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/user/menus?range=ALL'}
+          url={'/menu'}
+          listUrl={'/user/menus?range=ALL'}
           ref={table => this.table = table}
           rowActions={[
             {
