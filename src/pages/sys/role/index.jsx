@@ -241,18 +241,20 @@ class Role extends React.Component {
               }
             }
             // 处理DataPrivileges
-            const dataOps = [...(_.get(values, 'doc.DataPrivileges', values.DataPrivileges) || [])]
-            const dataOpsMap = _.groupBy(dataOps, 'ID')
-            if (!_.isEmpty(formRecord.DataPrivileges)) {
-              for (const item of formRecord.DataPrivileges) {
-                if (_.isEmpty(dataOpsMap[item.ID])) {
-                  dataOps.push({ ID: item.ID, DeletedAt: moment().format() })
+            if (_.has(values, 'doc.DataPrivileges') || _.has(values, 'DataPrivileges')) {
+              const dataOps = [...(_.get(values, 'doc.DataPrivileges', values.DataPrivileges) || [])]
+              const dataOpsMap = _.groupBy(dataOps, 'ID')
+              if (!_.isEmpty(formRecord.DataPrivileges)) {
+                for (const item of formRecord.DataPrivileges) {
+                  if (_.isEmpty(dataOpsMap[item.ID])) {
+                    dataOps.push({ ID: item.ID, DeletedAt: moment().format() })
+                  }
                 }
-              }
-              if (_.has(values, 'doc')) {
-                _.set(values, 'doc.DataPrivileges', dataOps)
-              } else {
-                _.set(values, 'DataPrivileges', dataOps)
+                if (_.has(values, 'doc')) {
+                  _.set(values, 'doc.DataPrivileges', dataOps)
+                } else {
+                  _.set(values, 'DataPrivileges', dataOps)
+                }
               }
             }
           }}
