@@ -104,12 +104,12 @@ class I18n extends React.Component {
           }}
           columns={columns}
           form={form}
-          rowKey={'Key'}
-          listUrl={'GET /langtrans'}
-          createUrl={'POST /langtrans'}
-          deleteUrl={'DELETE /languagemessage'}
-          updateUrl={'POST /langtrans'}
-          importUrl={'/langtrans/import'}
+          rowKey='Key'
+          listUrl='GET /langtrans'
+          createUrl='POST /langtrans'
+          deleteUrl='DELETE /languagemessage'
+          updateUrl='POST /langtrans'
+          importUrl='/langtrans/import'
           beforeUpdate={(body, formRecord) => {
             return { ...formRecord, ...body.doc }
           }}
@@ -117,15 +117,9 @@ class I18n extends React.Component {
             body.multi = true
           }}
           fillTAP={{
-            sort: {
-              show: false
-            },
-            filter: {
-              show: false
-            },
-            import: {
-              show: true
-            }
+            sort: false,
+            filter: false,
+            import: true
           }}
           tableActions={[
             {
@@ -138,7 +132,7 @@ class I18n extends React.Component {
         />
         <Modal
           title={this.props.L('kuu_i18n_actions_languages', 'Languages')}
-          icon={'global'}
+          icon='global'
           maskClosable
           width={420}
           visible={languagesModalVisible}
@@ -157,7 +151,7 @@ class I18n extends React.Component {
             dataSource={languagesModalList}
             footer={
               <Button
-                type={'primary'} icon={'plus'}
+                type='primary' icon='plus'
                 onClick={() => {
                   languagesModalList.push({
                     LangCode: undefined,
@@ -190,7 +184,7 @@ class I18n extends React.Component {
                   />
                   <Button
                     style={{ width: '10%' }}
-                    type={'danger'} icon={'minus'}
+                    type='danger' icon='minus'
                     onClick={() => {
                       languagesModalList.splice(index, 1)
                       this.setState({ languagesModalList })

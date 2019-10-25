@@ -6,7 +6,6 @@ import { FanoTable } from 'fano-antd'
 import { withLocale } from 'kuu-tools'
 import styles from './index.less'
 import moment from 'moment'
-import _ from 'lodash'
 
 class File extends React.Component {
   constructor (props) {
@@ -23,7 +22,7 @@ class File extends React.Component {
         render: (name, record) => (
           <a
             href={record.URL}
-            target={'_blank'}
+            target='_blank'
             onClick={e => {
               e.stopPropagation()
             }}
@@ -64,8 +63,8 @@ class File extends React.Component {
                 <Upload
                   multiple
                   showUploadList={false}
-                  name={'file'}
-                  action={'/api/upload'}
+                  name='file'
+                  action='/api/upload'
                   onChange={info => {
                     if (info.file.status === 'done') {
                       this.table.handleRefresh()
@@ -77,18 +76,10 @@ class File extends React.Component {
               )
             }
           ]}
-          fillTAP={{
-            add: {
-              show: false
-            }
-          }}
-          fillRAP={{
-            edit: {
-              show: false
-            }
-          }}
+          fillTAP={{ add: false }}
+          fillRAP={{ edit: false }}
           rowClickToggleDrawer={false}
-          url={'/file'}
+          url='/file'
         />
       </div>
     )

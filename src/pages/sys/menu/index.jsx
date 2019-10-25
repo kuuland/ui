@@ -31,7 +31,7 @@ class Menu extends React.Component {
         title: this.props.L('kuu_menu_uri', 'URI'),
         dataIndex: 'URI',
         width: 300,
-        render: t => <Button type={'link'} size={'small'}>{t}</Button>
+        render: t => <Button type="link" size="small">{t}</Button>
       },
       {
         title: this.props.L('kuu_menu_sort', 'Sort'),
@@ -43,8 +43,8 @@ class Menu extends React.Component {
         dataIndex: 'Disable',
         width: 150,
         align: 'center',
-        render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 18 }} />
-          : <Icon type='eye' style={{ color: '#52c41a', fontSize: 18 }} />
+        render: t => t ? <Icon type="eye-invisible" style={{ fontSize: 18 }} />
+          : <Icon type="eye" style={{ color: '#52c41a', fontSize: 18 }} />
       },
       {
         title: this.props.L('kuu_menu_code', 'Permission Code'),
@@ -70,7 +70,6 @@ class Menu extends React.Component {
       {
         name: 'Name',
         type: 'input',
-        label: this.props.L('kuu_menu_name', 'Name'),
         props: {
           fieldOptions: {
             rules: [
@@ -84,8 +83,7 @@ class Menu extends React.Component {
       },
       {
         name: 'URI',
-        type: 'input',
-        label: this.props.L('kuu_menu_uri', 'URI')
+        type: 'input'
       },
       {
         name: 'LocaleKey',
@@ -99,13 +97,11 @@ class Menu extends React.Component {
       },
       {
         name: 'Sort',
-        type: 'number',
-        label: this.props.L('kuu_menu_sort', 'Sort')
+        type: 'number'
       },
       {
         name: 'Code',
-        type: 'input',
-        label: this.props.L('kuu_menu_code', 'Permission Code')
+        type: 'input'
       },
       {
         name: 'Icon',
@@ -114,8 +110,7 @@ class Menu extends React.Component {
       },
       {
         name: 'Disable',
-        type: 'switch',
-        label: this.props.L('kuu_menu_disable', 'Disable')
+        type: 'switch'
       },
       {
         name: 'IsDefaultOpen',
@@ -133,9 +128,13 @@ class Menu extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/menu'}
-          listUrl={'/user/menus?range=ALL'}
+          url="/menu"
+          listUrl="/user/menus?range=ALL"
           ref={table => this.table = table}
+          fillTAP={{
+            filter: false,
+            sort: false
+          }}
           rowActions={[
             {
               key: 'add_submenu',

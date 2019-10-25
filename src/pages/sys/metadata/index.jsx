@@ -80,25 +80,17 @@ class Metadata extends React.Component {
     return (
       <div className={styles.metadata}>
         <FanoTable
-          rowKey={'Name'}
-          listUrl={'/meta?json=1'}
+          rowKey='Name'
+          listUrl='/meta?json=1'
           columns={columns}
           rowClickToggleDrawer={false}
           rowClickSelected={false}
           rowSelection={null}
           fillTAP={{
-            add: {
-              show: false
-            },
-            del: {
-              show: false
-            },
-            filter: {
-              show: false
-            },
-            sort: {
-              show: false
-            }
+            add: false,
+            del: false,
+            filter: false,
+            sort: false
           }}
           afterList={json => {
             this.setState({
@@ -109,10 +101,10 @@ class Metadata extends React.Component {
           expandedRowRender={record => {
             return (
               <Table
-                rowKey={'Code'}
+                rowKey='Code'
                 dataSource={record.Fields}
                 columns={fieldsColumns}
-                size={'small'}
+                size='small'
                 bordered
                 pagination={false}
               />

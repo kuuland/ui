@@ -45,18 +45,15 @@ class Org extends React.Component {
       },
       {
         name: 'Name',
-        type: 'input',
-        label: this.props.L('kuu_org_name', 'Name')
+        type: 'input'
       },
       {
         name: 'Code',
-        type: 'input',
-        label: this.props.L('kuu_org_code', 'Code')
+        type: 'input'
       },
       {
         name: 'Sort',
         type: 'number',
-        label: this.props.L('kuu_org_sort', 'Sort'),
         props: {
           precision: 0
         }

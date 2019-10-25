@@ -195,13 +195,11 @@ class Param extends React.Component {
       },
       {
         name: 'Code',
-        type: 'input',
-        label: this.props.L('kuu_param_code', 'Code')
+        type: 'input'
       },
       {
         name: 'Name',
-        type: 'input',
-        label: this.props.L('kuu_param_name', 'Name')
+        type: 'input'
       },
       {
         name: 'Value',
@@ -228,7 +226,7 @@ class Param extends React.Component {
     return (
       <div className={styles.param}>
         <FanoTable
-          url={'/param'}
+          url="/param"
           listUrl={'/param?preload=Org&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
           columns={columns}
           form={form}
