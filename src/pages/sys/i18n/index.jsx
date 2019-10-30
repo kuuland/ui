@@ -8,7 +8,11 @@ import styles from './index.less'
 class I18n extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      test: false // 为了使组件触发 render
+    }
+    this.pagination = {} // 传递给 FanoTable组件 内部的 pagination
+    this.total = 0 // 记录筛选结果条数
   }
 
   async componentDidMount () {
@@ -34,7 +38,22 @@ class I18n extends React.Component {
               placeholder={this.props.L('kuu_i18n_keyword_placeholder', 'Search keywords')}
               value={selectedKeys[0]}
               onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-              onPressEnter={confirm}
+              onPressEnter={() => {
+                // 筛选内容为 undefined时,将筛选相关数据重置
+                if ( !this.searchInput.state.value ) {
+                  this.total = 0
+                  this.pagination = {}
+                }
+
+                if (this.table && this.searchInput.state.value) {
+                  this.table.state.dataSource.forEach((_item) => {
+                    _item[dataIndex].toString().toLowerCase().includes(this.searchInput.state.value.toLowerCase()) ? this.total++ : ''
+                  })
+                  this.pagination={ total: this.total}
+                }
+                this.setState({test: !this.state.test}) // 无实际意义,为了触发 render
+                return confirm()
+              }}
             />
           </div>
         )
@@ -102,6 +121,7 @@ class I18n extends React.Component {
           ref={instance => {
             this.table = instance
           }}
+          pagination={this.pagination}
           columns={columns}
           form={form}
           rowKey='Key'
