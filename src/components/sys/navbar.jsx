@@ -4,7 +4,7 @@ import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
 import router from 'umi/router'
 import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio, Input } from 'antd'
-import { get, update, withLocale, config } from 'kuu-tools'
+import { get, post, withLocale, config } from 'kuu-tools'
 import OrgModal from './org-modal'
 import styles from './navbar.less'
 
@@ -80,7 +80,7 @@ class Navbar extends React.Component {
                 if (!loginData.UID || !this.state.selectLang) {
                   return
                 }
-                const ret = await update('user', { ID: loginData.UID }, { Lang: this.state.selectLang })
+                const ret = await post('/lang/switch', { Lang: this.state.selectLang })
                 if (ret) {
                   window.g_app._store.dispatch({
                     type: 'user/valid'
