@@ -16,6 +16,16 @@ class Menu extends React.Component {
     this.table.handleAdd({ Pid: _.get(record, 'ID') })
   }
 
+  // 处理菜单页直接跳转
+  handleOpenPane (pane) {
+    window.g_app._store.dispatch({
+      type: 'layout/openPane',
+      payload: {
+        ...pane
+      }
+    })
+  }
+
   render () {
     const columns = [
       {
@@ -24,15 +34,34 @@ class Menu extends React.Component {
         width: 300,
         render: (t, r) => {
           t = this.props.L(r.LocaleKey, t)
-          return r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
+          // return r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
+
+          let children = undefined
+          if (r.IsLink) {
+            if (r.URI) {
+              children = r.Icon
+                ? <span title={r.URI}>
+                    <a onClick={() =>this.handleOpenPane(r)}><Icon {...parseIcon(r.Icon)} /> {t}</a>
+                  </span>
+                : <span title={r.URI}>
+                    <a onClick={() =>this.handleOpenPane(r)}>{t}</a>
+                  </span>
+            } else {
+              children = r.Icon ? <span><Icon {...parseIcon(r.Icon)} />{t}</span> : t
+            }
+          } else {
+            children = r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
+          }
+
+          return children
         }
       },
-      {
-        title: this.props.L('kuu_menu_uri', 'URI'),
-        dataIndex: 'URI',
-        width: 300,
-        render: t => <Button type="link" size="small">{t}</Button>
-      },
+      // {
+      //   title: this.props.L('kuu_menu_uri', 'URI'),
+      //   dataIndex: 'URI',
+      //   width: 300,
+      //   render: t => <Button type="link" size="small">{t}</Button>
+      // },
       {
         title: this.props.L('kuu_menu_sort', 'Sort'),
         dataIndex: 'Sort',
