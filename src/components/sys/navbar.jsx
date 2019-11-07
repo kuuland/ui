@@ -161,7 +161,11 @@ class Navbar extends React.Component {
           className={styles.item}
           onClick={() => this.setState({ orgModalVisible: true })}
         >
-          <Icon type='home' style={{ fontSize: 17 }} /> {loginData.ActOrgName}
+          <div className={styles.org}>
+            <Icon type='apartment' />
+            <span>{loginData.ActOrgName}</span>
+            <Icon type='caret-down' />
+          </div>
         </div>
       )
     }
@@ -206,9 +210,9 @@ class Navbar extends React.Component {
         >
           <div className={styles.userinfo}>
             <Avatar {...avatarProps} className={styles.avatar} />
-            <span className={styles.username}>{_.get(loginData, 'Name') || loginData.Username} <Icon
-              type='down' style={{ fontSize: 12 }}
-            /></span>
+            <span className={styles.username}>
+              {_.get(loginData, 'Name') || loginData.Username} <Icon type='caret-down' />
+            </span>
           </div>
         </Dropdown>
       </div>
