@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
 import { Modal, Spin, TreeSelect, message } from 'antd'
-import { update, get, withLocale } from 'kuu-tools'
+import { get, post, withLocale } from 'kuu-tools'
 
 class OrgModal extends React.Component {
   constructor (props) {
@@ -55,7 +55,7 @@ class OrgModal extends React.Component {
     }
     this.setState({ confirmLoading: true }, async () => {
       if (this.state.orgID) {
-        const ret = await update('user', { ID: this.props.loginData.UID }, { ActOrgID: this.state.orgID })
+        const ret = await post('/org/switch', { ActOrgID: this.state.orgID })
         if (!ret) {
           return
         }
