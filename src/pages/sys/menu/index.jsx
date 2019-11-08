@@ -34,7 +34,6 @@ class Menu extends React.Component {
         width: 300,
         render: (t, r) => {
           t = this.props.L(r.LocaleKey, t)
-          // return r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
 
           let children = undefined
           if (r.IsLink) {
@@ -56,16 +55,11 @@ class Menu extends React.Component {
           return children
         }
       },
-      // {
-      //   title: this.props.L('kuu_menu_uri', 'URI'),
-      //   dataIndex: 'URI',
-      //   width: 300,
-      //   render: t => <Button type="link" size="small">{t}</Button>
-      // },
       {
         title: this.props.L('kuu_menu_sort', 'Sort'),
         dataIndex: 'Sort',
-        show: false
+        show: false,
+        width: 150
       },
       {
         title: this.props.L('kuu_menu_disable', 'Disable'),
@@ -112,7 +106,8 @@ class Menu extends React.Component {
       },
       {
         name: 'URI',
-        type: 'input'
+        type: 'input',
+        label: this.props.L('kuu_menu_uri', 'URI')
       },
       {
         name: 'LocaleKey',
