@@ -33,25 +33,19 @@ class Menu extends React.Component {
         dataIndex: 'Name',
         width: 300,
         render: (t, r) => {
-          t = this.props.L(r.LocaleKey, t)
+          let children = (
+            <span>
+              {r.Icon && <Icon {...parseIcon(r.Icon)} />} {this.props.L(r.LocaleKey, t)} {r.IsLink && <Icon type='link' />}
+            </span>
+          )
 
-          let children = undefined
-          if (r.IsLink) {
-            if (r.URI) {
-              children = r.Icon
-                ? <span title={r.URI}>
-                    <a onClick={() =>this.handleOpenPane(r)}><Icon {...parseIcon(r.Icon)} /> {t}</a>
-                  </span>
-                : <span title={r.URI}>
-                    <a onClick={() =>this.handleOpenPane(r)}>{t}</a>
-                  </span>
-            } else {
-              children = r.Icon ? <span><Icon {...parseIcon(r.Icon)} />{t}</span> : t
-            }
-          } else {
-            children = r.Icon ? <span><Icon {...parseIcon(r.Icon)} /> {t}</span> : t
+          if (r.URI) {
+            children = (
+              <a onClick={() => this.handleOpenPane(r)} title={r.URI}>
+                {children}
+              </a>
+            )
           }
-
           return children
         }
       },

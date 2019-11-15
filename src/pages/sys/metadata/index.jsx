@@ -93,9 +93,10 @@ class Metadata extends React.Component {
             sort: false
           }}
           afterList={json => {
+            const list = _.get(json, 'list', json)
             this.setState({
-              modules: Object.keys(_.groupBy(json, 'ModCode')),
-              metaNames: Object.keys(_.groupBy(json, 'Name'))
+              modules: Object.keys(_.groupBy(list, 'ModCode')),
+              metaNames: Object.keys(_.groupBy(list, 'Name'))
             })
           }}
           expandedRowRender={record => {
