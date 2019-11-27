@@ -83,85 +83,82 @@ class Role extends React.Component {
               <div>
                 {(props.value || []).map((item, index) => {
                   return (
-                    <div
+                    <Input.Group
                       className={styles.dpItem}
                       key={item.key || item.ID}
+                      compact
                     >
-                      <Input.Group
-                        compact
+                      <FanoTreeSelect
+                        config={{
+                          props: {
+                            style: { width: 120 },
+                            url: '/org?range=ALL&sort=Sort',
+                            titleKey: 'Name',
+                            valueKey: 'ID',
+                            arrayToTree: true,
+                            placeholder: this.props.L('kuu_role_select_org_placeholder', 'Please select an organization')
+                          }
+                        }}
+                        value={item.TargetOrgID}
+                        onChange={v => {
+                          const value = _.cloneDeep(props.value)
+                          _.set(value, `[${index}].TargetOrgID`, v)
+                          props.onChange(value)
+                        }}
+                      />
+                      <Select
+                        defaultValue="PERSONAL"
+                        placeholder={this.props.L('kuu_role_readable_range_placeholder', 'Please select a readable range')}
+                        value={item.ReadableRange}
+                        onChange={v => {
+                          const value = _.cloneDeep(props.value)
+                          _.set(value, `[${index}].ReadableRange`, v)
+                          props.onChange(value)
+                        }}
                       >
-                        <FanoTreeSelect
-                          config={{
-                            props: {
-                              style: { width: 120 },
-                              url: '/org?range=ALL&sort=Sort',
-                              titleKey: 'Name',
-                              valueKey: 'ID',
-                              arrayToTree: true,
-                              placeholder: this.props.L('kuu_role_select_org_placeholder', 'Please select an organization')
-                            }
-                          }}
-                          value={item.TargetOrgID}
-                          onChange={v => {
-                            const value = _.cloneDeep(props.value)
-                            _.set(value, `[${index}].TargetOrgID`, v)
-                            props.onChange(value)
-                          }}
-                        />
-                        <Select
-                          defaultValue="PERSONAL"
-                          placeholder={this.props.L('kuu_role_readable_range_placeholder', 'Please select a readable range')}
-                          value={item.ReadableRange}
-                          onChange={v => {
-                            const value = _.cloneDeep(props.value)
-                            _.set(value, `[${index}].ReadableRange`, v)
-                            props.onChange(value)
-                          }}
-                        >
-                          <Select.Option
-                            value="PERSONAL"
-                          >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
-                          <Select.Option
-                            value="CURRENT"
-                          >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
-                          <Select.Option
-                            value="CURRENT_FOLLOWING"
-                          >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
-                        </Select>
-                        <Select
-                          defaultValue="PERSONAL"
-                          placeholder={this.props.L('kuu_role_writable_range_placeholder', 'Please select a writable range')}
-                          value={item.WritableRange}
-                          onChange={v => {
-                            const value = _.cloneDeep(props.value)
-                            _.set(value, `[${index}].WritableRange`, v)
-                            props.onChange(value)
-                          }}
-                        >
-                          <Select.Option
-                            value="PERSONAL"
-                          >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
-                          <Select.Option
-                            value="CURRENT"
-                          >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
-                          <Select.Option
-                            value="CURRENT_FOLLOWING"
-                          >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
-                        </Select>
-                        <Button
-                          size={'small'}
-                          type={'danger'}
-                          icon={'minus'}
-                          shape={'circle'}
-                          className={styles.dpItemDel}
-                          onClick={() => {
-                            const value = _.cloneDeep(props.value)
-                            value.splice(index, 1)
-                            props.onChange(value)
-                          }}
-                        />
-                      </Input.Group>
-                    </div>
+                        <Select.Option
+                          value="PERSONAL"
+                        >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
+                        <Select.Option
+                          value="CURRENT"
+                        >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
+                        <Select.Option
+                          value="CURRENT_FOLLOWING"
+                        >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
+                      </Select>
+                      <Select
+                        defaultValue="PERSONAL"
+                        placeholder={this.props.L('kuu_role_writable_range_placeholder', 'Please select a writable range')}
+                        value={item.WritableRange}
+                        onChange={v => {
+                          const value = _.cloneDeep(props.value)
+                          _.set(value, `[${index}].WritableRange`, v)
+                          props.onChange(value)
+                        }}
+                      >
+                        <Select.Option
+                          value="PERSONAL"
+                        >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
+                        <Select.Option
+                          value="CURRENT"
+                        >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
+                        <Select.Option
+                          value="CURRENT_FOLLOWING"
+                        >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
+                      </Select>
+                      <Button
+                        size={'small'}
+                        type={'danger'}
+                        icon={'minus'}
+                        shape={'circle'}
+                        className={styles.dpItemDel}
+                        onClick={() => {
+                          const value = _.cloneDeep(props.value)
+                          value.splice(index, 1)
+                          props.onChange(value)
+                        }}
+                      />
+                    </Input.Group>
                   )
                 })}
                 <div className={styles.dpItemAdd}>

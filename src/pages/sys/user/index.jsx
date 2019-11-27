@@ -100,7 +100,7 @@ class User extends React.Component {
       {
         title: this.props.L('kuu_user_createdat', 'Created At'),
         dataIndex: 'CreatedAt',
-        render: t => moment(t).fromNow()
+        render: 'fromNow'
       }
     ]
     const form = [
