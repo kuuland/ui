@@ -78,7 +78,7 @@ class Permission extends React.Component {
       },
       {
         title: this.props.L('kuu_permission_code', 'Permission Code'),
-        width: 150,
+        width: 200,
         dataIndex: 'Code'
       }
     ]
