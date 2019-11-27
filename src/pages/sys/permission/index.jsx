@@ -113,7 +113,16 @@ class Permission extends React.Component {
       },
       {
         name: 'Code',
-        type: 'input'
+        type: 'input',
+        props: {
+          fieldOptions: {
+            rules: [
+              {
+                required: true
+              }
+            ]
+          }
+        }
       }
     ]
 

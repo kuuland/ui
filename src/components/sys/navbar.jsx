@@ -145,7 +145,8 @@ class Navbar extends React.Component {
 
   render () {
     const { menuKeyPrefix, orgModalVisible = false, showEndpoint } = this.state
-    const { menusTree, loginData } = this.props
+    const { loginData } = this.props
+    const menusTree = this.props.menusTree.filter(item => _.isEmpty(item.Pid))
     const activeMenuIndex = this.props.activeMenuIndex >= menusTree.length ? 0 : this.props.activeMenuIndex
     const avatarProps = {}
     if (_.get(loginData, 'Avatar')) {
@@ -157,7 +158,7 @@ class Navbar extends React.Component {
     if (_.get(loginData, 'ActOrgName')) {
       rawItems.push(
         <div
-          key={'org'}
+          key='org'
           className={styles.item}
           onClick={() => this.setState({ orgModalVisible: true })}
         >
@@ -170,26 +171,26 @@ class Navbar extends React.Component {
       )
     }
     rawItems.push(
-      <div className={styles.item} key={'username'}>
+      <div className={styles.item} key='username'>
         <Dropdown
           overlay={
             <Menu onClick={this.handleMenuClick}>
-              <Menu.Item key={'profile'}>
+              <Menu.Item key='profile'>
                 <Icon type='user' />{this.props.L('kuu_navbar_profile', 'Profile')}
               </Menu.Item>
-              <Menu.Item key={'i18n'}>
+              <Menu.Item key='i18n'>
                 <Icon type='global' />{this.props.L('kuu_navbar_languages', 'Languages')}
               </Menu.Item>
-              <Menu.Item key={'apikeys'}>
+              <Menu.Item key='apikeys'>
                 <Icon type='key' />{this.props.L('kuu_navbar_apikeys', 'API & Keys')}
               </Menu.Item>
               {showEndpoint && (
-                <Menu.Item key={'apiendpoint'}>
+                <Menu.Item key='apiendpoint'>
                   <Icon type='api' />{this.props.L('kuu_navbar_apiendpoint', 'API Endpoint')}
                 </Menu.Item>
               )}
               <Menu.Divider />
-              <Menu.Item key={'logout'}>
+              <Menu.Item key='logout'>
                 <Icon type='logout' />{this.props.L('kuu_navbar_logout', 'Logout')}
               </Menu.Item>
               {menusTree.length > 1 && <Menu.Divider />}

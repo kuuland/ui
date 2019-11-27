@@ -41,9 +41,6 @@ class BasicLayout extends React.PureComponent {
   }
 
   renderMenuChildren (values, breadcrumbs = []) {
-    values = _.chain(values)
-      .filter(item => !!item.Disable !== true || item.IsVirtual === true)
-      .sortBy('Sort').value()
     const groups = _.groupBy(values, 'Group')
     let arr = []
     for (const key in groups) {
@@ -197,9 +194,9 @@ class BasicLayout extends React.PureComponent {
           className={styles.loadingMask}
         >
           <Icon
-            className={'kuu-sider-trigger'}
+            className='kuu-sider-trigger'
             type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-            onClick={this.toggleSider}
+            onClick={() => this.toggleSider()}
           />
           <Sider
             collapsedWidth={0}

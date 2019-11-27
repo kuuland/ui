@@ -81,7 +81,18 @@ export default {
   effects: {
     * loadMenus ({ payload }, { put, call, select }) {
       const data = yield call(get, '/user/menus')
-      const menus = Array.isArray(data) ? data : []
+      let menus = Array.isArray(data) ? data : []
+      menus = _.chain(menus)
+        .filter(item => {
+          if (item.Disable === false) {
+            return false
+          }
+          if (item.IsVirtual === true) {
+            return false
+          }
+          return true
+        })
+        .sortBy('Sort').value()
       yield put({ type: 'SET_MENUS', payload: menus })
     },
     * openPane ({ payload: value }, { put, select }) {
@@ -118,7 +129,7 @@ export default {
       const { panes } = state
       const index = panes.findIndex(p => `${p.ID}` === targetKey)
       if (index >= 0) {
-        let activePane = _.get(panes, `[${index - 1}]`) || _.get(panes, `[${index + 1}]`) || _.get(panes, `[0]`) || null
+        let activePane = _.get(panes, `[${index - 1}]`) || _.get(panes, `[${index + 1}]`) || _.get(panes, '[0]') || null
         panes.splice(index, 1)
         if (_.includes(panes, state.activePane)) {
           activePane = state.activePane
