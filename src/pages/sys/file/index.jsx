@@ -48,7 +48,7 @@ class File extends React.Component {
       }
     ]
     return (
-      <div className={styles.file}>
+      <div className={`kuu-container ${styles.file}`}>
         <FanoTable
           ref={instance => {
             this.table = instance

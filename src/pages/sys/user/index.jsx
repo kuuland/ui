@@ -130,7 +130,7 @@ class User extends React.Component {
       }
     ]
     return (
-      <div className={styles.user}>
+      <div className={`kuu-container ${styles.user}`}>
         <FanoTable
           columns={columns}
           form={form}

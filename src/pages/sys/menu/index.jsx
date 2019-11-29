@@ -142,7 +142,7 @@ class Menu extends React.Component {
       }
     ]
     return (
-      <div className={styles.menu}>
+      <div className={`kuu-container ${styles.menu}`}>
         <FanoTable
           columns={columns}
           form={form}

@@ -4,7 +4,7 @@ import { Empty } from 'antd'
 
 export default function () {
   return (
-    <div className={styles.normal}>
+    <div className={`kuu-container ${styles.normal}`}>
       <Empty />
     </div>
   )

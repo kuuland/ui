@@ -188,7 +188,7 @@ class Role extends React.Component {
       }
     ]
     return (
-      <div className={styles.role}>
+      <div className={`kuu-container ${styles.role}`}>
         <FanoTable
           columns={columns}
           form={form}

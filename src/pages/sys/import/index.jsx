@@ -4,6 +4,7 @@ import { withLocale, get } from 'kuu-tools'
 import { Modal, Table, Button, Badge } from 'antd'
 import _ from 'lodash'
 import { exportTable } from '@/components/sys/import-template'
+import styles from '@/pages/sys/iframe/$id.less'
 
 class ImportRecords extends React.Component {
   constructor (props) {
@@ -160,7 +161,7 @@ class ImportRecords extends React.Component {
     )
 
     return (
-      <div>
+      <div className={`kuu-container`}>
         <FanoTable
           filterReplace
           filter={filter}

@@ -6,10 +6,11 @@ export default {
   htmlTitle: 'Kuu',
   simplePages: ['/login', '/test'],
   whiteRoutes: [],
+  noBreadcrumbsRoutes: [],
   loginPathname: '/login',
   storageTokenKey: 'token',
   storageLocaleKey: 'kuu_locale',
   storageLocaleMessagesKey: 'kuu_locale_messages',
-  copyright: <div>Copyright <Icon type='copyright' /> 2019 蚁群出品</div>,
+  copyright: <div>Copyright <Icon type="copyright" /> 2019 蚁群出品</div>,
   loginBg: ''
 }

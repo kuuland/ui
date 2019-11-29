@@ -78,7 +78,7 @@ class Metadata extends React.Component {
       }
     ]
     return (
-      <div className={styles.metadata}>
+      <div className={`kuu-container ${styles.metadata}`}>
         <FanoTable
           rowKey='Name'
           listUrl='/meta?json=1'

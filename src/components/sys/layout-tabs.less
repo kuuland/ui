@@ -1,4 +1,5 @@
 @import "../../theme";
+
 @header-height: 50px;
 .layoutTabs {
   height: 100%;
@@ -10,26 +11,6 @@
 
   .breadcrumbs {
     margin: 20px 20px 0 20px;
-  }
-
-  .container {
-    display: flex;
-    justify-content: center;
-  }
-
-  .content {
-    margin: 20px;
-    box-sizing: border-box;
-    background: #fff;
-    border: 1px solid #e8e8e8;
-    box-shadow: 0 2px 8px rgba(115, 115, 115, 0.08);
-    width: 100%;
-    max-width: 1400px;
-    overflow: hidden;
-
-    > div:first-child {
-      padding: 10px;
-    }
   }
 
   :global {
@@ -67,18 +48,14 @@
       &:hover {
         color: #fff;
         background: rgba(240, 242, 245, 0.15);
-
-        .ant-tabs-close-x {
-          color: rgba(255, 255, 255, 0.45);
-
-          &:hover {
-            color: rgba(255, 255, 255, 0.85);
-          }
-        }
       }
 
       .ant-tabs-close-x {
-        color: rgba(255, 255, 255, 0);
+        color: rgba(255, 255, 255, 0.45);
+
+        &:hover {
+          color: rgba(255, 255, 255, 0.85);
+        }
       }
     }
 

@@ -116,7 +116,7 @@ class I18n extends React.Component {
       })
     })
     return (
-      <div className={styles.i18n}>
+      <div className={`kuu-container ${styles.i18n}`}>
         <FanoTable
           ref={instance => {
             this.table = instance

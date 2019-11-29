@@ -94,7 +94,7 @@ class APIKeys extends React.Component {
       }
     ]
     return (
-      <div className={styles.apikeys}>
+      <div className={`kuu-container ${styles.apikeys}`}>
         <FanoTable
           ref={instance => {
             this.table = instance

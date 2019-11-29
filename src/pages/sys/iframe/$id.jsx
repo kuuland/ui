@@ -17,7 +17,7 @@ class IframePage extends React.Component {
     const { location, activePane } = this.props
     const menuData = location.state
     return (
-      <div className={styles.content}>
+      <div className={`kuu-container ${styles.content}`}>
         <div className={styles.skeleton} style={{ display: this.state.loading ? 'block' : 'none' }}>
           <Skeleton loading={this.state.loading} active />
           <Skeleton loading={this.state.loading} avatar={{ size: 'large' }} active />

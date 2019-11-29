@@ -224,7 +224,7 @@ class Param extends React.Component {
       }
     ]
     return (
-      <div className={styles.param}>
+      <div className={`kuu-container ${styles.param}`}>
         <FanoTable
           url="/param"
           listUrl={'/param?preload=Org&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}

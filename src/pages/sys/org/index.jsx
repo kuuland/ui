@@ -60,7 +60,7 @@ class Org extends React.Component {
       }
     ]
     return (
-      <div className={styles.org}>
+      <div className={`kuu-container ${styles.org}`}>
         <FanoTable
           columns={columns}
           form={form}

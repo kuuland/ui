@@ -1,8 +1,10 @@
 import React from 'react'
+import withRouter from 'umi/withRouter'
 import _ from 'lodash'
 import { Menu, Dropdown, Tabs, Icon, Breadcrumb, Empty } from 'antd'
 import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './layout-tabs.less'
+import config from '@/config'
 
 class LayoutTabs extends React.PureComponent {
   render () {
@@ -17,14 +19,17 @@ class LayoutTabs extends React.PureComponent {
       }]
       activeKey = panes[0].ID
     }
+    const pathname = _.get(this.props, 'location.pathname')
+    const noBreadcrumbRoute = _.includes(config.noBreadcrumbsRoutes, pathname)
+
     return (
       <div className={`${styles.layoutTabs} ${empty ? 'kuu-layout-tabs-empty' : ''}`}>
         <Tabs
-          size='default'
+          size="default"
           activeKey={activeKey}
           onChange={props.onChange}
           onEdit={props.onEdit}
-          type='editable-card'
+          type="editable-card"
           hideAdd
           tabBarGutter={0}
           tabBarExtraContent={props.tabBarExtraContent}
@@ -37,53 +42,50 @@ class LayoutTabs extends React.PureComponent {
                   overlay={
                     <Menu>
                       <Menu.Item
-                        key='refresh'
+                        key="refresh"
                         onClick={() => props.onContext(pane, index, 'refresh')}
                       >
-                        <Icon type='reload' />{props.L('kuu_layout_tabs_refresh', 'Refresh')}
+                        <Icon type="reload" />{props.L('kuu_layout_tabs_refresh', 'Refresh')}
                       </Menu.Item>
                       <Menu.Item
-                        key='close-others'
+                        key="close-others"
                         onClick={() => props.onContext(pane, index, 'close-others')}
                       >
-                        <Icon type='close-circle' />{props.L('kuu_layout_tabs_close_others', 'Close Others')}
+                        <Icon type="close-circle" />{props.L('kuu_layout_tabs_close_others', 'Close Others')}
                       </Menu.Item>
                       <Menu.Item
-                        key='close-left'
+                        key="close-left"
                         onClick={() => props.onContext(pane, index, 'close-left')}
                       >
-                        <Icon type='left-circle' />{props.L('kuu_layout_tabs_close_left', 'Close All to the Left')}
+                        <Icon type="left-circle" />{props.L('kuu_layout_tabs_close_left', 'Close All to the Left')}
                       </Menu.Item>
                       <Menu.Item
-                        key='close-right'
+                        key="close-right"
                         onClick={() => props.onContext(pane, index, 'close-right')}
                       >
-                        <Icon type='right-circle' />{props.L('kuu_layout_tabs_close_right', 'Close All to the Right')}
+                        <Icon type="right-circle" />{props.L('kuu_layout_tabs_close_right', 'Close All to the Right')}
                       </Menu.Item>
                     </Menu>
                   }
                   trigger={['contextMenu']}
                 >
-                <span className={styles.title}>
-                  <Icon {...parseIcon(pane.Icon)} />{props.L(pane.LocaleKey || pane.Name, pane.Name)}
-                </span>
+                  <span className={styles.title}>
+                    <Icon {...parseIcon(pane.Icon)} />{props.L(pane.LocaleKey || pane.Name, pane.Name)}
+                  </span>
                 </Dropdown>
               }
               key={pane.ID}
               closable={pane.Closeable}
             >
-              {_.size(props.breadcrumbs) > 1 && (
+              {_.size(props.breadcrumbs) > 1 && !noBreadcrumbRoute && (
                 <Breadcrumb className={styles.breadcrumbs}>
                   {props.breadcrumbs.map(item => <Breadcrumb.Item
                     key={item.LocaleKey || item.Name}
-                  >{props.L(item.LocaleKey || item.Name, item.Name)}</Breadcrumb.Item>)}
+                  >{props.L(item.LocaleKey || item.Name, item.Name)}
+                  </Breadcrumb.Item>)}
                 </Breadcrumb>
               )}
-              <div className={styles.container}>
-                <div className={styles.content}>
-                  {pane.Content}
-                </div>
-              </div>
+              {pane.Content}
             </Tabs.TabPane>
           ))}
         </Tabs>
@@ -92,4 +94,4 @@ class LayoutTabs extends React.PureComponent {
   }
 }
 
-export default withLocale(LayoutTabs)
+export default withLocale(withRouter(LayoutTabs))
