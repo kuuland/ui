@@ -31,7 +31,7 @@ export default {
   ],
   proxy: {
     '/api': {
-      target: 'https://asm.hofo.co/',
+      target: 'http://localhost:8080/',
       changeOrigin: true
     },
     '/assets': {
