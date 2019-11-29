@@ -15,7 +15,11 @@ class LayoutTabs extends React.PureComponent {
       panes = [{
         ID: 'empty',
         Closeable: false,
-        Content: <Empty description={null} />
+        Content: (
+          <div style={{ padding: 30 }}>
+            <Empty description={null} />
+          </div>
+        )
       }]
       activeKey = panes[0].ID
     }
