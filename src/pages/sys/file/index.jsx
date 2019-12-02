@@ -32,6 +32,12 @@ class File extends React.Component {
         )
       },
       {
+        title: this.props.L('kuu_file_preview', 'Preview'),
+        dataIndex: 'URL',
+        width: 300,
+        render: 'image'
+      },
+      {
         title: this.props.L('kuu_file_size', 'Size'),
         dataIndex: 'Size',
         render: t => filesize(t)
