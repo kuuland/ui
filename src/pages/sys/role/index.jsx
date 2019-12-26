@@ -221,7 +221,7 @@ class Role extends React.Component {
               if (!_.isEmpty(groupBy)) {
                 for (const code in groupBy) {
                   const item = _.get(groupBy, `[${code}][0]`)
-                  if (!item.ID) {
+                  if (!_.get(item, 'ID'))  {
                     continue
                   }
                   ops.push({ ID: item.ID, DeletedAt: moment().format() })
