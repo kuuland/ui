@@ -121,6 +121,7 @@ class I18n extends React.Component {
           ref={instance => {
             this.table = instance
           }}
+          filterForm={false}
           pagination={this.pagination}
           columns={columns}
           form={form}
