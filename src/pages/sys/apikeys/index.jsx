@@ -101,8 +101,8 @@ class APIKeys extends React.Component {
           }}
           columns={columns}
           form={form}
-          url={'/signsecret'}
-          createUrl={'POST /apikeys'}
+          url='/signsecret'
+          createUrl='POST /apikeys'
           rowClickToggleDrawer={false}
           formInitialValue={{
             Exp: 'never'

@@ -40,7 +40,7 @@ export default class BaseStatic extends React.Component {
     return (
       <div>
         <ReactEcharts
-          theme={'light'}
+          theme='light'
           option={getOption()}
           style={this.props.style}
           onEvents={onEvents}

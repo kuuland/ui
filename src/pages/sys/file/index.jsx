@@ -23,6 +23,7 @@ class File extends React.Component {
           <a
             href={record.URL}
             target='_blank'
+            rel='noopener noreferrer'
             onClick={e => {
               e.stopPropagation()
             }}

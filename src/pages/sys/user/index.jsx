@@ -1,6 +1,5 @@
 import React from 'react'
 import _ from 'lodash'
-import moment from 'moment'
 import { Transfer, Modal, Icon, Spin } from 'antd'
 import md5 from 'blueimp-md5'
 import { get, list, update, withLocale, orgField, orgColumn } from 'kuu-tools'
@@ -134,7 +133,7 @@ class User extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/user'}
+          url='/user'
           listUrl={'/user?preload=Org&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
           rowActions={[
             {
@@ -166,7 +165,7 @@ class User extends React.Component {
           className={styles.assignModal}
         >
           <Spin
-            indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />}
+            indicator={<Icon type='loading' style={{ fontSize: 24 }} spin />}
             spinning={this.state.assignLoading}
           >
             <Transfer

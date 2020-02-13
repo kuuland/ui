@@ -64,7 +64,7 @@ class Org extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/org?range=ALL&sort=Sort'}
+          url='/org?range=ALL&sort=Sort'
           pagination={false}
           expandAllRows
           arrayToTree

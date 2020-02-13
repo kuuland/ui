@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { FanoTable, types } from 'fano-antd'
 import moment from 'moment'
-import { withLocale, orgField, orgColumn } from 'kuu-tools'
+import { withLocale } from 'kuu-tools'
 import styles from './index.less'
 
 class Param extends React.Component {
@@ -226,7 +226,7 @@ class Param extends React.Component {
     return (
       <div className={`kuu-container ${styles.param}`}>
         <FanoTable
-          url="/param"
+          url='/param'
           listUrl={'/param?preload=Org&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
           columns={columns}
           form={form}

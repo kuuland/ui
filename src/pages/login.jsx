@@ -2,7 +2,7 @@ import React from 'react'
 import md5 from 'blueimp-md5'
 import router from 'umi/router'
 import _ from 'lodash'
-import { Form, Icon, Input, Button, Checkbox, Row, Col } from 'antd'
+import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import styles from './login.less'
 import { get, post, withLocale } from 'kuu-tools'
 import config from '@/config'
@@ -105,7 +105,7 @@ class Login extends React.Component {
                 }]
               })(
                 <Input
-                  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
                   placeholder={this.props.L('kuu_login_username_placeholder', 'Username')}
                   onBlur={this.handleUsernameBlur}
                 />
@@ -119,7 +119,7 @@ class Login extends React.Component {
                 }]
               })(
                 <Input.Password
-                  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
                   placeholder={this.props.L('kuu_login_password_placeholder', 'Password')}
                 />
               )}
@@ -133,7 +133,7 @@ class Login extends React.Component {
                   }]
                 })(
                   <Input
-                    prefix={<Icon type="robot" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                    prefix={<Icon type='robot' style={{ color: 'rgba(0,0,0,.25)' }} />}
                     addonAfter={
                       <img
                         className={styles.captcha}
@@ -154,12 +154,14 @@ class Login extends React.Component {
                 <Checkbox>{this.props.L('kuu_login_remember', 'Remember')}</Checkbox>
               )}
               <a
-                className={styles.forgot} href=""
-              >{this.props.L('kuu_login_password_forgot', 'Forgot your password?')}</a>
+                className={styles.forgot} href=''
+              >{this.props.L('kuu_login_password_forgot', 'Forgot your password?')}
+              </a>
               <Button
-                type="primary" htmlType="submit" loading={this.state.loginLoading}
+                type='primary' htmlType='submit' loading={this.state.loginLoading}
                 className={styles.submit}
-              >{this.props.L('kuu_login_btn_submit', 'Login')}</Button>
+              >{this.props.L('kuu_login_btn_submit', 'Login')}
+              </Button>
             </Form.Item>
           </Form>
         </div>

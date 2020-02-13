@@ -298,10 +298,10 @@ const Statics = ({ dispatch, statics }) => {
         render: () => (
           <span>
             <a>查看</a>
-            <Divider type="vertical" />
+            <Divider type='vertical' />
             <Dropdown overlay={menu}>
-              <a href="#">
-                更多 <Icon type="down" />
+              <a href='#'>
+                更多 <Icon type='down' />
               </a>
             </Dropdown>
           </span>
@@ -331,17 +331,17 @@ const Statics = ({ dispatch, statics }) => {
       <div className={styles.header}>
         <h3 style={{ fontWeight: '900' }}>系统监控</h3>
         <div className={styles.header_right}>
-          <Switch checkedChildren="实时日志" unCheckedChildren="历史日志" defaultChecked onChange={handleSwitch} />
+          <Switch checkedChildren='实时日志' unCheckedChildren='历史日志' defaultChecked onChange={handleSwitch} />
           <div style={{ marginLeft: '1em' }}>
-            <Tooltip title="这是一个提示信息">
-              <Icon type="question-circle" />
+            <Tooltip title='这是一个提示信息'>
+              <Icon type='question-circle' />
             </Tooltip>
           </div>
         </div>
       </div>
 
       <div style={{ margin: '1em 0' }}>
-        <Row type="flex" justify="space-between" align="middle">
+        <Row type='flex' justify='space-between' align='middle'>
           <Col span={5}>
             <BlockCard {...blockCardProps1} />
           </Col>
@@ -369,17 +369,17 @@ const Statics = ({ dispatch, statics }) => {
       />
 
       <div className={styles.footer}>
-        <Radio.Group onChange={handleTabChange} buttonStyle="solid" value={selectIndex} style={{ marginBottom: 8 }}>
-          <Radio.Button value="1">登录日志</Radio.Button>
-          <Radio.Button value="2">接口日志</Radio.Button>
-          <Radio.Button value="3">审计日志</Radio.Button>
-          <Radio.Button value="4">业务日志</Radio.Button>
+        <Radio.Group onChange={handleTabChange} buttonStyle='solid' value={selectIndex} style={{ marginBottom: 8 }}>
+          <Radio.Button value='1'>登录日志</Radio.Button>
+          <Radio.Button value='2'>接口日志</Radio.Button>
+          <Radio.Button value='3'>审计日志</Radio.Button>
+          <Radio.Button value='4'>业务日志</Radio.Button>
         </Radio.Group>
 
         <div style={{ padding: '1em' }}>
           <div style={{ display: 'flex', marginBottom: '1em' }}>
             <Input style={{ width: '200px' }} />
-            <Button type="primary" style={{ marginLeft: '1em' }}>查询</Button>
+            <Button type='primary' style={{ marginLeft: '1em' }}>查询</Button>
           </div>
           <Table
             columns={getColumns(selectIndex)}

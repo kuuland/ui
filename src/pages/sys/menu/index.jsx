@@ -1,5 +1,6 @@
 import React from 'react'
-import { Icon, Checkbox, Button } from 'antd'
+import _ from 'lodash'
+import { Icon } from 'antd'
 import { FanoTable } from 'fano-antd'
 import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './index.less'
@@ -60,8 +61,8 @@ class Menu extends React.Component {
         dataIndex: 'Disable',
         width: 150,
         align: 'center',
-        render: t => t ? <Icon type="eye-invisible" style={{ fontSize: 18 }} />
-          : <Icon type="eye" style={{ color: '#52c41a', fontSize: 18 }} />
+        render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 18 }} />
+          : <Icon type='eye' style={{ color: '#52c41a', fontSize: 18 }} />
       },
       {
         title: this.props.L('kuu_menu_code', 'Permission Code'),
@@ -146,9 +147,11 @@ class Menu extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url="/menu"
-          listUrl="/user/menus?range=ALL"
-          ref={table => this.table = table}
+          url='/menu'
+          listUrl='/user/menus?range=ALL'
+          ref={table => {
+            this.table = table
+          }}
           fillTAP={{
             filter: false,
             sort: false

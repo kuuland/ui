@@ -101,7 +101,7 @@ class OrgModal extends React.Component {
             placeholder={this.props.L('kuu_org_select_login', 'Please select a login organization')}
             treeDefaultExpandAll
             showSearch
-            treeNodeFilterProp={'title'}
+            treeNodeFilterProp='title'
             treeData={orgs}
           />
         </Spin>

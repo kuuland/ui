@@ -8,20 +8,23 @@ steps:
   - name: build
     image: node:carbon
     commands:
-      - yarn --registry https://registry.npm.taobao.org/
-      - yarn run build
+      - npm i --registry https://registry.npm.taobao.org/
+      - npm run build
+      - cp -r dist/ build/
 
   - name: docker
     image: plugins/docker
     settings:
       registry: registry.cn-hangzhou.aliyuncs.com
+      dockerfile: build/Dockerfile
+      context: build/
       mirror:
         from_secret: docker_mirror
       username:
         from_secret: docker_user
       password:
         from_secret: docker_pass
-      repo: registry.cn-hangzhou.aliyuncs.com/dexdev/kuu-ui
+      repo: registry.cn-hangzhou.aliyuncs.com/dexdev/${DRONE_REPO_NAME}
       tags: ${DRONE_COMMIT_BRANCH}-${DRONE_BUILD_NUMBER}
 
   - name: deploy
@@ -36,7 +39,7 @@ steps:
       data: |
         [
           {
-            "name": "kuu-ui",
-            "image": "registry.cn-hangzhou.aliyuncs.com/dexdev/kuu-ui:${DRONE_COMMIT_BRANCH}-${DRONE_BUILD_NUMBER}"
+            "name": "${DRONE_REPO_NAME}",
+            "image": "registry.cn-hangzhou.aliyuncs.com/dexdev/${DRONE_REPO_NAME}:${DRONE_COMMIT_BRANCH}-${DRONE_BUILD_NUMBER}"
           }
         ]

@@ -150,7 +150,7 @@ class ImportRecords extends React.Component {
     const footer = (
       <div>
         <Button
-          type="primary"
+          type='primary'
           onClick={() => this.handleDownload(modalColumns, dataSource, viewType)}
           style={{ marginRight: '0.5rem' }}
         >
@@ -160,7 +160,7 @@ class ImportRecords extends React.Component {
     )
 
     return (
-      <div className={`kuu-container`}>
+      <div className='kuu-container'>
         <FanoTable
           filterReplace
           filter={filter}
@@ -173,12 +173,12 @@ class ImportRecords extends React.Component {
           fillTAP={fillTAP}
           fillRAP={fillRAP}
           rowClickSelected={false}
-          listUrl="/importrecord"
-          url="/importrecord"
+          listUrl='/importrecord'
+          url='/importrecord'
         />
         <Modal
           title={viewType || ''}
-          width="60vw"
+          width='60vw'
           visible={visible}
           onCancel={() => this.setState({ visible: false })}
           footer={footer}
@@ -186,7 +186,7 @@ class ImportRecords extends React.Component {
           <Table
             columns={modalColumns}
             dataSource={dataSource}
-            size="small"
+            size='small'
           />
         </Modal>
       </div>

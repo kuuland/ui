@@ -107,7 +107,7 @@ class Role extends React.Component {
                         }}
                       />
                       <Select
-                        defaultValue="PERSONAL"
+                        defaultValue='PERSONAL'
                         placeholder={this.props.L('kuu_role_readable_range_placeholder', 'Please select a readable range')}
                         value={item.ReadableRange}
                         onChange={v => {
@@ -117,17 +117,20 @@ class Role extends React.Component {
                         }}
                       >
                         <Select.Option
-                          value="PERSONAL"
-                        >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
+                          value='PERSONAL'
+                        >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}
+                        </Select.Option>
                         <Select.Option
-                          value="CURRENT"
-                        >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
+                          value='CURRENT'
+                        >{this.props.L('kuu_role_data_range_current', 'CURRENT')}
+                        </Select.Option>
                         <Select.Option
-                          value="CURRENT_FOLLOWING"
-                        >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
+                          value='CURRENT_FOLLOWING'
+                        >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}
+                        </Select.Option>
                       </Select>
                       <Select
-                        defaultValue="PERSONAL"
+                        defaultValue='PERSONAL'
                         placeholder={this.props.L('kuu_role_writable_range_placeholder', 'Please select a writable range')}
                         value={item.WritableRange}
                         onChange={v => {
@@ -137,20 +140,23 @@ class Role extends React.Component {
                         }}
                       >
                         <Select.Option
-                          value="PERSONAL"
-                        >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}</Select.Option>
+                          value='PERSONAL'
+                        >{this.props.L('kuu_role_data_range_personal', 'PERSONAL')}
+                        </Select.Option>
                         <Select.Option
-                          value="CURRENT"
-                        >{this.props.L('kuu_role_data_range_current', 'CURRENT')}</Select.Option>
+                          value='CURRENT'
+                        >{this.props.L('kuu_role_data_range_current', 'CURRENT')}
+                        </Select.Option>
                         <Select.Option
-                          value="CURRENT_FOLLOWING"
-                        >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}</Select.Option>
+                          value='CURRENT_FOLLOWING'
+                        >{this.props.L('kuu_role_data_range_current_following', 'CURRENT_FOLLOWING')}
+                        </Select.Option>
                       </Select>
                       <Button
-                        size={'small'}
-                        type={'danger'}
-                        icon={'minus'}
-                        shape={'circle'}
+                        size='small'
+                        type='danger'
+                        icon='minus'
+                        shape='circle'
                         className={styles.dpItemDel}
                         onClick={() => {
                           const value = _.cloneDeep(props.value)
@@ -163,9 +169,9 @@ class Role extends React.Component {
                 })}
                 <div className={styles.dpItemAdd}>
                   <Button
-                    size={'small'}
-                    type={'link'}
-                    icon={'plus-circle'}
+                    size='small'
+                    type='link'
+                    icon='plus-circle'
                     onClick={() => {
                       const newVal = {
                         key: new Date().getTime(),
@@ -192,7 +198,7 @@ class Role extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url={'/role'}
+          url='/role'
           listUrl={'GET /role?preload=Org,OperationPrivileges,DataPrivileges&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
           onFormRecord={record => {
             record.ViewOperationPrivileges = _.chain(record)
@@ -221,7 +227,7 @@ class Role extends React.Component {
               if (!_.isEmpty(groupBy)) {
                 for (const code in groupBy) {
                   const item = _.get(groupBy, `[${code}][0]`)
-                  if (!_.get(item, 'ID'))  {
+                  if (!_.get(item, 'ID')) {
                     continue
                   }
                   ops.push({ ID: item.ID, DeletedAt: moment().format() })

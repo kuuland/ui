@@ -38,8 +38,8 @@ export default class BlockCard extends React.Component {
         <Card className={styles.blockCardItem} bordered={false} bodyStyle={{ padding: '10px 15px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div className={styles.title}>{title}</div>
-            <Tooltip title="这是一个提示信息">
-              <Icon type="question-circle" />
+            <Tooltip title='这是一个提示信息'>
+              <Icon type='question-circle' />
             </Tooltip>
           </div>
           <div style={{ padding: '0.5em' }}>

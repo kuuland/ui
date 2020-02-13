@@ -13,7 +13,7 @@ export function isWhiteRoute (pathname) {
 }
 
 function authCheck (target, type) {
-  const dataIndex = { 'permission': 'Permissions', 'role': 'RolesCode' }[type]
+  const dataIndex = { permission: 'Permissions', role: 'RolesCode' }[type]
   const total = _.result(window, `g_app._store.getState.user.loginData.${dataIndex}`)
 
   if (_.isString(target)) {

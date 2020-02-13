@@ -40,18 +40,21 @@ class I18n extends React.Component {
               onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
               onPressEnter={() => {
                 // 筛选内容为 undefined时,将筛选相关数据重置
-                if ( !this.searchInput.state.value ) {
+                if (!this.searchInput.state.value) {
                   this.total = 0
                   this.pagination = {}
                 }
 
                 if (this.table && this.searchInput.state.value) {
-                  this.table.state.dataSource.forEach((_item) => {
-                    _item[dataIndex].toString().toLowerCase().includes(this.searchInput.state.value.toLowerCase()) ? this.total++ : ''
-                  })
-                  this.pagination={ total: this.total}
+                  for (const item of this.table.state.dataSource) {
+                    const t = item[dataIndex].toString().toLowerCase()
+                    if (t.includes(this.searchInput.state.value.toLowerCase())) {
+                      this.total++
+                    }
+                  }
+                  this.pagination = { total: this.total }
                 }
-                this.setState({test: !this.state.test}) // 无实际意义,为了触发 render
+                this.setState({ test: !this.state.test }) // 无实际意义,为了触发 render
                 return confirm()
               }}
             />

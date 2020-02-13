@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { config } from 'kuu-tools'
 import { message } from 'antd'
 import 'fano-antd/lib/index.less'
