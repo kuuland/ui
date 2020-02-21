@@ -11,7 +11,9 @@ const activeMenuKey = 'active:menu'
 
 export default {
   state: {
-    topBarBgColor: '#4b65a9',
+    theme: {
+      topBarBgColor: '#4b65a9'
+    },
     menus: undefined,
     menusTree: undefined,
     activeMenuIndex: 0,
@@ -77,6 +79,9 @@ export default {
         panes: []
       }
       return { ...state, ...data }
+    },
+    SET_THEME (state, { payload: theme }) {
+      return { ...state, theme: { ...state.theme, ...theme } }
     }
   },
   effects: {
@@ -95,6 +100,17 @@ export default {
         })
         .sortBy('Sort').value()
       yield put({ type: 'SET_MENUS', payload: menus })
+    },
+    * loadTheme (args, { put, call }) {
+      const data = yield call(get, '/param?cond={"Code":"theme"}')
+      const value = _.get(data, 'list[0].Value')
+      let theme = {}
+      try {
+        theme = JSON.parse(value)
+      } catch (e) {}
+      if (!_.isEmpty(theme)) {
+        yield put({ type: 'SET_THEME', payload: theme })
+      }
     },
     * openPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
@@ -160,15 +176,12 @@ export default {
           const { layout, user } = window.g_app._store.getState()
           // 校验令牌
           if (!user.loginData) {
-            dispatch({
-              type: 'user/valid'
-            })
+            dispatch({ type: 'user/valid' })
           }
           // 加载菜单
           if (!layout.menus) {
-            dispatch({
-              type: 'loadMenus'
-            })
+            dispatch({ type: 'loadMenus' })
+            dispatch({ type: 'loadTheme' })
           }
         }
       }

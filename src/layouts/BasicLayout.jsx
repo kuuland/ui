@@ -206,7 +206,7 @@ class BasicLayout extends React.PureComponent {
             width={config.siderWidth || 260}
             className={styles.sider}
           >
-            <div className={`${styles.header}`} style={{ opacity: this.state.collapsed ? 0 : 1, backgroundColor: this.props.topBarBgColor }}>
+            <div className={`${styles.header}`} style={{ opacity: this.state.collapsed ? 0 : 1, backgroundColor: _.get(this.props.theme, 'topBarBgColor') }}>
               <div className={`${styles.appName}`}>{config.shortName}</div>
             </div>
             <Menu
@@ -227,7 +227,7 @@ class BasicLayout extends React.PureComponent {
               tabBarExtraContent={
                 <Navbar />
               }
-              topBarBgColor={this.props.topBarBgColor}
+              topBarBgColor={_.get(this.props.theme, 'topBarBgColor')}
               activeKey={`${_.get(activePane, 'ID', '')}`}
               panes={this.props.panes || []}
               onChange={this.handleTabsChange}
