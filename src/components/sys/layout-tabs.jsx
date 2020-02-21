@@ -37,7 +37,7 @@ class LayoutTabs extends React.PureComponent {
           hideAdd
           tabBarGutter={0}
           tabBarExtraContent={props.tabBarExtraContent}
-          tabBarStyle={{ paddingLeft: props.siderCollapsed ? 50 : 0 }}
+          tabBarStyle={{ paddingLeft: props.siderCollapsed ? 50 : 0, backgroundColor: this.props.topBarBgColor }}
         >
           {panes.map((pane, index) => (
             <Tabs.TabPane

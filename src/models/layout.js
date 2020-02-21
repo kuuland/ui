@@ -11,6 +11,7 @@ const activeMenuKey = 'active:menu'
 
 export default {
   state: {
+    topBarBgColor: '#4b65a9',
     menus: undefined,
     menusTree: undefined,
     activeMenuIndex: 0,
