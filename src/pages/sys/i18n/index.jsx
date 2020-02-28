@@ -69,7 +69,9 @@ class I18n extends React.Component {
   }
 
   render () {
-    const { languages = [], languagesModalList = [], languagesModalVisible = false } = this.state
+    const { languagesModalList = [], languagesModalVisible = false } = this.state
+    let { languages = [] } = this.state
+    languages = _.sortBy(languages, 'LangCode')
     const columns = [
       {
         title: this.props.L('kuu_i18n_key', 'Key'),
