@@ -113,7 +113,7 @@ class I18n extends React.Component {
             rules: [
               {
                 required: true,
-                message: this.props.L('kuu_i18n_key_required', 'Value is required')
+                message: this.props.L('kuu_i18n_value_required', 'Value is required')
               }
             ]
           }
