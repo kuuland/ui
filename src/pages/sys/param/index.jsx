@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { FanoTable, types } from 'fano-antd'
+import { connect } from 'dva'
 import moment from 'moment'
 import { withLocale } from 'kuu-tools'
 import styles from './index.less'
@@ -108,6 +109,10 @@ class Param extends React.Component {
   }
 
   render () {
+    let defaultCond = '{}'
+    if (!this.props.isRoot) {
+      defaultCond = '{"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'
+    }
     const columns = [
       {
         title: this.props.L('kuu_param_code', 'Code'),
@@ -227,7 +232,7 @@ class Param extends React.Component {
       <div className={`kuu-container ${styles.param}`}>
         <FanoTable
           url='/param'
-          listUrl={'/param?preload=Org&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
+          listUrl={`/param?preload=Org&cond=${defaultCond}`}
           columns={columns}
           form={form}
           onFormRecord={record => {
@@ -248,4 +253,11 @@ class Param extends React.Component {
   }
 }
 
-export default withLocale(Param)
+function mapStateToProps (state) {
+  return {
+    loginData: state.user.loginData || {},
+    isRoot: _.get(state, 'user.loginData.Username') === 'root'
+  }
+}
+
+export default withLocale(connect(mapStateToProps)(Param))

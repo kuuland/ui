@@ -1,7 +1,8 @@
 import React from 'react'
 import { Icon, Input, Select, Button } from 'antd'
 import { FanoTable, FanoTreeSelect } from 'fano-antd'
-import { parseIcon, withLocale, orgField, orgColumn } from 'kuu-tools'
+import { connect } from 'dva'
+import { parseIcon, withLocale, orgColumn } from 'kuu-tools'
 import _ from 'lodash'
 import moment from 'moment'
 import styles from './index.less'
@@ -13,20 +14,25 @@ class Role extends React.Component {
   }
 
   render () {
+    let defaultCond = '{}'
+    if (!this.props.isRoot) {
+      defaultCond = '{"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'
+    }
     const columns = [
       {
         title: this.props.L('kuu_role_name', 'Name'),
         dataIndex: 'Name'
-      },
-      orgColumn(this.props.L),
-      {
-        title: this.props.L('kuu_role_createdat', 'Created At'),
-        dataIndex: 'CreatedAt',
-        render: t => moment(t).fromNow()
       }
     ]
+    if (this.props.isRoot) {
+      columns.push(orgColumn(this.props.L))
+    }
+    columns.push({
+      title: this.props.L('kuu_role_createdat', 'Created At'),
+      dataIndex: 'CreatedAt',
+      render: t => moment(t).fromNow()
+    })
     const form = [
-      orgField(this.props.L),
       {
         name: 'Name',
         type: 'input',
@@ -193,13 +199,25 @@ class Role extends React.Component {
         }
       }
     ]
+    if (this.props.isRoot) {
+      form.unshift({
+        name: 'OrgID',
+        type: 'treeselect',
+        label: this.props.L('kuu_common_org', 'Organization'),
+        props: {
+          url: `/org?range=ALL&sort=Sort&project=ID,Code,Name,Pid&cond=${defaultCond}`,
+          titleKey: 'Name',
+          valueKey: 'ID'
+        }
+      })
+    }
     return (
       <div className={`kuu-container ${styles.role}`}>
         <FanoTable
           columns={columns}
           form={form}
           url='/role'
-          listUrl={'GET /role?preload=Org,OperationPrivileges,DataPrivileges&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
+          listUrl={`GET /role?preload=Org,OperationPrivileges,DataPrivileges&cond=${defaultCond}`}
           onFormRecord={record => {
             record.ViewOperationPrivileges = _.chain(record)
               .get('OperationPrivileges', [])
@@ -267,4 +285,11 @@ class Role extends React.Component {
   }
 }
 
-export default withLocale(Role)
+function mapStateToProps (state) {
+  return {
+    loginData: state.user.loginData || {},
+    isRoot: _.get(state, 'user.loginData.Username') === 'root'
+  }
+}
+
+export default withLocale(connect(mapStateToProps)(Role))

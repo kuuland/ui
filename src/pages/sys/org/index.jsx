@@ -1,8 +1,10 @@
 import React from 'react'
 import { FanoTable } from 'fano-antd'
+import { connect } from 'dva'
 import { withLocale } from 'kuu-tools'
 import styles from './index.less'
 import moment from 'moment'
+import _ from 'lodash'
 
 class Org extends React.Component {
   constructor (props) {
@@ -11,6 +13,10 @@ class Org extends React.Component {
   }
 
   render () {
+    let defaultCond = '{}'
+    if (!this.props.isRoot) {
+      defaultCond = '{"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'
+    }
     const columns = [
       {
         title: this.props.L('kuu_org_name', 'Name'),
@@ -38,7 +44,7 @@ class Org extends React.Component {
         type: 'treeselect',
         label: this.props.L('kuu_org_parent', 'Parent'),
         props: {
-          url: '/org?range=ALL&sort=Sort&project=ID,Code,Name,Pid',
+          url: `/org?range=ALL&sort=Sort&project=ID,Code,Name,Pid&cond=${defaultCond}`,
           titleKey: 'Name',
           valueKey: 'ID'
         }
@@ -64,7 +70,8 @@ class Org extends React.Component {
         <FanoTable
           columns={columns}
           form={form}
-          url='/org?range=ALL&sort=Sort'
+          url='/org'
+          listUrl={`/org?range=ALL&sort=Sort&cond=${defaultCond}`}
           pagination={false}
           expandAllRows
           arrayToTree
@@ -74,4 +81,11 @@ class Org extends React.Component {
   }
 }
 
-export default withLocale(Org)
+function mapStateToProps (state) {
+  return {
+    loginData: state.user.loginData || {},
+    isRoot: _.get(state, 'user.loginData.Username') === 'root'
+  }
+}
+
+export default withLocale(connect(mapStateToProps)(Org))

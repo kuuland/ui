@@ -1,8 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
 import { Transfer, Modal, Icon, Spin } from 'antd'
+import { connect } from 'dva'
 import md5 from 'blueimp-md5'
-import { get, list, update, withLocale, orgField, orgColumn } from 'kuu-tools'
+import { get, list, update, withLocale, orgColumn } from 'kuu-tools'
 import { FanoTable } from 'fano-antd'
 import styles from './index.less'
 
@@ -81,6 +82,11 @@ class User extends React.Component {
       assignRecord
     } = this.state
 
+    let defaultCond = '{}'
+    if (!this.props.isRoot) {
+      defaultCond = '{"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'
+    }
+
     const columns = [
       {
         title: this.props.L('kuu_user_username', 'Username'),
@@ -89,8 +95,12 @@ class User extends React.Component {
       {
         title: this.props.L('kuu_user_name', 'Real name'),
         dataIndex: 'Name'
-      },
-      orgColumn(this.props.L),
+      }
+    ]
+    if (this.props.isRoot) {
+      columns.push(orgColumn(this.props.L))
+    }
+    columns.push(
       {
         title: this.props.L('kuu_user_disable', 'Disable'),
         dataIndex: 'Disable',
@@ -101,9 +111,8 @@ class User extends React.Component {
         dataIndex: 'CreatedAt',
         render: 'fromNow'
       }
-    ]
+    )
     const form = [
-      orgField(this.props.L),
       {
         name: 'Username',
         type: 'input',
@@ -128,13 +137,26 @@ class User extends React.Component {
         label: this.props.L('kuu_user_disable', 'Disable')
       }
     ]
+    if (this.props.isRoot) {
+      form.unshift({
+        name: 'OrgID',
+        type: 'treeselect',
+        label: this.props.L('kuu_common_org', 'Organization'),
+        props: {
+          url: `/org?range=ALL&sort=Sort&project=ID,Code,Name,Pid&cond=${defaultCond}`,
+          titleKey: 'Name',
+          valueKey: 'ID'
+        }
+      })
+    }
     return (
       <div className={`kuu-container ${styles.user}`}>
         <FanoTable
           columns={columns}
           form={form}
+          actionsWidth={300}
           url='/user'
-          listUrl={'/user?preload=Org&cond={"$or":[{"IsBuiltIn":false},{"IsBuiltIn":{"$exists":false}}]}'}
+          listUrl={`/user?preload=Org&cond=${defaultCond}`}
           rowActions={[
             {
               icon: 'key',
@@ -187,4 +209,11 @@ class User extends React.Component {
   }
 }
 
-export default withLocale(User)
+function mapStateToProps (state) {
+  return {
+    loginData: state.user.loginData || {},
+    isRoot: _.get(state, 'user.loginData.Username') === 'root'
+  }
+}
+
+export default withLocale(connect(mapStateToProps)(User))
