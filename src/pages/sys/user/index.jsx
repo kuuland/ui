@@ -19,7 +19,7 @@ class User extends React.Component {
   }
 
   async fetchRoles () {
-    const data = await list('role', { range: 'ALL' })
+    const data = await list('role', { range: 'ALL', cond: this.props.isRoot ? {} : { $or: [{ IsBuiltIn: false }, { IsBuiltIn: { $exists: false } }] } })
     this.setState({ roles: _.get(data, 'list', []) })
   }
 
