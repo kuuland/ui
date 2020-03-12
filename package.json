@@ -8,7 +8,6 @@
     "lint:fix": "standard --fix"
   },
   "dependencies": {
-    "@ant-design/icons": "^2.1.1",
     "antd": "^3.26.9",
     "array-to-tree": "^3.3.2",
     "blueimp-md5": "^2.12.0",
@@ -17,7 +16,7 @@
     "echarts-for-react": "^2.0.15-beta.1",
     "fano-antd": "latest",
     "fano-react": "latest",
-    "filesize": "^6.0.1",
+    "filesize": "^6.1.0",
     "isomorphic-fetch": "^2.2.1",
     "kuu-tools": "latest",
     "lodash": "^4.17.15",
@@ -25,10 +24,10 @@
     "mitt": "^1.2.0",
     "moment": "^2.24.0",
     "qs": "^6.9.1",
-    "react": "^16.12.0",
+    "react": "^16.13.0",
     "react-copy-to-clipboard": "^5.0.2",
     "react-document-title": "^2.0.3",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.13.0"
   },
   "devDependencies": {
     "husky": "^4.2.3",

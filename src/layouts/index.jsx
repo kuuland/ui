@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { connect } from 'dva'
 import DocumentTitle from 'react-document-title'
-import { LocaleContext } from 'kuu-tools'
+import { getLocaleContext } from 'kuu-tools'
 import BlankLayout from './BlankLayout'
 import BasicLayout from './BasicLayout'
 import config from '@/config'
@@ -14,6 +14,7 @@ const IndexLayout = props => {
   ) : (
     <BasicLayout>{props.children}</BasicLayout>
   )
+  const LocaleContext = getLocaleContext()
   return (
     <LocaleContext.Provider value={props.localeMessages}>
       <DocumentTitle title={config.htmlTitle}>{children}</DocumentTitle>
