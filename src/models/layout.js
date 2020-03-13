@@ -5,10 +5,6 @@ import router from 'umi/router'
 import config from '@/config'
 import { isWhiteRoute } from '@/utils/tools'
 
-const cacheData = window.localStorage.getItem('panes:data')
-const panesData = JSON.parse(cacheData || '{}')
-const activeMenuKey = 'active:menu'
-
 export default {
   state: {
     theme: {
@@ -17,10 +13,9 @@ export default {
     menus: undefined,
     menusTree: undefined,
     activeMenuIndex: 0,
-    activePane: panesData.activePane,
-    openKeys: panesData.openKeys || [],
-    hasCache: !!cacheData,
-    panes: panesData.panes || []
+    activePane: undefined,
+    openKeys: [],
+    panes: []
   },
   reducers: {
     SET_MENUS (state, { payload: menus }) {
@@ -30,14 +25,9 @@ export default {
         childrenProperty: 'Children'
       })
       let { activeMenuIndex, openKeys } = state
-      const localActiveMenu = parseInt(window.localStorage.getItem(activeMenuKey))
-      if (_.isFinite(localActiveMenu)) {
-        activeMenuIndex = localActiveMenu
-      }
       if (activeMenuIndex < 0 || activeMenuIndex >= menusTree.length) {
         activeMenuIndex = 0
       }
-      saveActiveMenu(activeMenuIndex)
       if (_.isEmpty(openKeys)) {
         openKeys = _.get(menusTree, `[${activeMenuIndex}].Children`, []).map(item => `${item.ID}`)
       }
@@ -48,12 +38,10 @@ export default {
       if (_.isEmpty(panes)) {
         newState.activeMenuIndex = 0
         newState.activePane = undefined
-        window.localStorage.removeItem('panes:data')
       }
       return { ...state, ...newState }
     },
     SET_ACTIVE_MENU_INDEX (state, { payload: activeMenuIndex }) {
-      saveActiveMenu(activeMenuIndex)
       return { ...state, activeMenuIndex }
     },
     SET_OPEN_KEYS (state, { payload: openKeys }) {
@@ -62,10 +50,8 @@ export default {
     SET_ACTIVE_PANE (state, { payload }) {
       const { activePane, openKeys, panes } = payload
       if (_.isEmpty(openKeys)) {
-        savePanesData(activePane, [], panes)
         return { ...state, activePane, panes }
       }
-      savePanesData(activePane, openKeys, panes)
       return { ...state, activePane, openKeys, panes }
     },
     CLEAR (state) {
@@ -75,7 +61,6 @@ export default {
         activeMenuIndex: 0,
         activePane: undefined,
         openKeys: [],
-        hasCache: false,
         panes: []
       }
       return { ...state, ...data }
@@ -188,23 +173,6 @@ export default {
       history.listen(listener)
     }
   }
-}
-
-function saveActiveMenu (index) {
-  if (_.isFinite(index)) {
-    window.localStorage.setItem(activeMenuKey, index)
-  } else {
-    window.localStorage.removeItem(activeMenuKey)
-  }
-}
-
-function savePanesData (activePane, openKeys, panes) {
-  const panesData = {
-    activePane: _.omit(activePane, 'Content'),
-    panes: panes.map(item => _.omit(item, 'Content')),
-    openKeys
-  }
-  window.localStorage.setItem('panes:data', JSON.stringify(panesData))
 }
 
 function calcOpenKeys (activePane, menus) {

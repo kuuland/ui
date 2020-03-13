@@ -3,7 +3,7 @@ import _ from 'lodash'
 import router from 'umi/router'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
-import { Layout, Menu, Icon, Skeleton } from 'antd'
+import { Layout, Menu, Icon } from 'antd'
 import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './index.less'
 import LayoutTabs from '@/components/sys/layout-tabs'
@@ -167,7 +167,7 @@ class BasicLayout extends React.PureComponent {
       }
       const needOpenMenus = menus.filter(item => !!item.IsDefaultOpen).map(item => _.cloneDeep(item))
       const firstPane = _.get(needOpenMenus, '[0]')
-      if (firstPane && !this.props.hasCache) {
+      if (firstPane && _.isEmpty(this.props.panes)) {
         this.props.dispatch({ type: 'layout/SET_PANES', payload: needOpenMenus })
         this.handleMenuItemClick(firstPane)
       }
@@ -175,7 +175,7 @@ class BasicLayout extends React.PureComponent {
   }
 
   render () {
-    const { menusTree = [], activeMenuIndex, activePane, openKeys = [], logged } = this.props
+    const { menusTree = [], activeMenuIndex, activePane, openKeys = [] } = this.props
     if (activePane && activePane.ID && !this.panesContent[activePane.ID]) {
       this.cacheMenuPaneContent(activePane)
     }
@@ -187,57 +187,50 @@ class BasicLayout extends React.PureComponent {
     }
     return (
       <Layout className={`${styles.layout}`}>
-        <Skeleton
-          active
-          loading={logged !== 1}
-          paragraph={{ rows: 10 }}
-          className={styles.loadingMask}
+        <Icon
+          className='kuu-sider-trigger'
+          type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+          onClick={() => this.toggleSider()}
+        />
+        <Sider
+          collapsedWidth={0}
+          trigger={null}
+          collapsible
+          collapsed={this.state.collapsed}
+          width={config.siderWidth || 260}
+          className={styles.sider}
         >
-          <Icon
-            className='kuu-sider-trigger'
-            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-            onClick={() => this.toggleSider()}
-          />
-          <Sider
-            collapsedWidth={0}
-            trigger={null}
-            collapsible
-            collapsed={this.state.collapsed}
-            width={config.siderWidth || 260}
-            className={styles.sider}
+          <div className={`${styles.header}`} style={{ opacity: this.state.collapsed ? 0 : 1, backgroundColor: _.get(this.props.theme, 'topBarBgColor') }}>
+            <div className={`${styles.appName}`}>{config.shortName}</div>
+          </div>
+          <Menu
+            className={`${styles.menu}`}
+            mode='inline'
+            inlineIndent={6}
+            selectedKeys={selectedKeys}
+            openKeys={openKeys}
+            onOpenChange={openKeys => {
+              this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
+            }}
           >
-            <div className={`${styles.header}`} style={{ opacity: this.state.collapsed ? 0 : 1, backgroundColor: _.get(this.props.theme, 'topBarBgColor') }}>
-              <div className={`${styles.appName}`}>{config.shortName}</div>
-            </div>
-            <Menu
-              className={`${styles.menu}`}
-              mode='inline'
-              inlineIndent={6}
-              selectedKeys={selectedKeys}
-              openKeys={openKeys}
-              onOpenChange={openKeys => {
-                this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
-              }}
-            >
-              {menuChildren}
-            </Menu>
-          </Sider>
-          <Layout>
-            <LayoutTabs
-              tabBarExtraContent={
-                <Navbar />
-              }
-              topBarBgColor={_.get(this.props.theme, 'topBarBgColor')}
-              activeKey={`${_.get(activePane, 'ID', '')}`}
-              panes={this.props.panes || []}
-              onChange={this.handleTabsChange}
-              onContext={this.handleTabsContext}
-              onEdit={this.handleTabsRemove}
-              breadcrumbs={_.get(activePane, 'breadcrumbs')}
-              siderCollapsed={this.state.collapsed}
-            />
-          </Layout>
-        </Skeleton>
+            {menuChildren}
+          </Menu>
+        </Sider>
+        <Layout>
+          <LayoutTabs
+            tabBarExtraContent={
+              <Navbar />
+            }
+            topBarBgColor={_.get(this.props.theme, 'topBarBgColor')}
+            activeKey={`${_.get(activePane, 'ID', '')}`}
+            panes={this.props.panes || []}
+            onChange={this.handleTabsChange}
+            onContext={this.handleTabsContext}
+            onEdit={this.handleTabsRemove}
+            breadcrumbs={_.get(activePane, 'breadcrumbs')}
+            siderCollapsed={this.state.collapsed}
+          />
+        </Layout>
       </Layout>
     )
   }
@@ -245,8 +238,7 @@ class BasicLayout extends React.PureComponent {
 
 function mapStateToProps (state) {
   return {
-    ...state.layout,
-    logged: (window.localStorage.getItem(config.storageTokenKey) || _.get(state, 'user.loginData')) ? 1 : 2
+    ...state.layout
   }
 }
 

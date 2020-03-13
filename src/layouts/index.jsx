@@ -1,5 +1,8 @@
 import React from 'react'
 import _ from 'lodash'
+import { Spin } from 'antd'
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 import { connect } from 'dva'
 import DocumentTitle from 'react-document-title'
 import { getLocaleContext } from 'kuu-tools'
@@ -9,16 +12,30 @@ import config from '@/config'
 
 const IndexLayout = props => {
   const isSimple = config.simplePages.indexOf(props.location.pathname) >= 0
-  const children = isSimple ? (
-    <BlankLayout>{props.children}</BlankLayout>
-  ) : (
-    <BasicLayout>{props.children}</BasicLayout>
-  )
+  const LayoutContainer = isSimple ? BlankLayout : BasicLayout
   const LocaleContext = getLocaleContext()
+  const loadingStyle = {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
   return (
-    <LocaleContext.Provider value={props.localeMessages}>
-      <DocumentTitle title={config.htmlTitle}>{children}</DocumentTitle>
-    </LocaleContext.Provider>
+    <>
+      <PersistGate
+        persistor={persistStore(window.g_app._store)}
+        loading={<Spin style={loadingStyle} size='large' />}
+      >
+        <DocumentTitle title={config.htmlTitle}>
+          <LocaleContext.Provider value={props.localeMessages}>
+            <LayoutContainer>
+              {props.children}
+            </LayoutContainer>
+          </LocaleContext.Provider>
+        </DocumentTitle>
+      </PersistGate>
+    </>
   )
 }
 

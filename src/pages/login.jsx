@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'dva'
 import md5 from 'blueimp-md5'
 import router from 'umi/router'
 import _ from 'lodash'
@@ -17,11 +18,14 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleCaptcha = this.handleCaptcha.bind(this)
     this.handleUsernameBlur = this.handleUsernameBlur.bind(this)
+  }
+
+  componentDidMount () {
     this.ensureLogout()
   }
 
   ensureLogout () {
-    if (window.localStorage.getItem(config.storageTokenKey)) {
+    if (this.props.loginData.Token) {
       window.g_app._store.dispatch({
         type: 'user/logout'
       })
@@ -173,4 +177,10 @@ class Login extends React.Component {
   }
 }
 
-export default Form.create({ name: 'login' })(withLocale(Login))
+function mapStateToProps (state) {
+  return {
+    loginData: state.user.loginData || {}
+  }
+}
+
+export default withLocale(connect(mapStateToProps)(Form.create({ name: 'login' })(Login)))
