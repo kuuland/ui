@@ -10,7 +10,6 @@ const persistConfig = {
 
 export function persistEnhancer (createStore) {
   return (reducer, initialState, enhancer) => {
-    console.log('persistEnhancer...')
     const store = createStore(persistReducer(persistConfig, reducer), initialState, enhancer)
     const persist = persistStore(store, null)
     persistor = persist

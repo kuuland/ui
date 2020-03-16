@@ -21,7 +21,6 @@ const IndexLayout = props => {
     alignItems: 'center',
     justifyContent: 'center'
   }
-  console.log('IndexLayout.PersistGate...')
   return (
     <>
       <PersistGate
