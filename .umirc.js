@@ -14,7 +14,7 @@ export default {
         dva: {
           hmr: true,
           immer: false,
-          dynamicImport: undefined
+          dynamicImport: true
         },
         title: 'Kuu',
         locale: {

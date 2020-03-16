@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { Spin } from 'antd'
-import { persistStore } from 'redux-persist'
+import { getPersistor } from '@/utils/configureStore'
 import { PersistGate } from 'redux-persist/integration/react'
 import { connect } from 'dva'
 import DocumentTitle from 'react-document-title'
@@ -21,10 +21,11 @@ const IndexLayout = props => {
     alignItems: 'center',
     justifyContent: 'center'
   }
+  console.log('IndexLayout.PersistGate...')
   return (
     <>
       <PersistGate
-        persistor={persistStore(window.g_app._store)}
+        persistor={getPersistor()}
         loading={<Spin style={loadingStyle} size='large' />}
       >
         <DocumentTitle title={config.htmlTitle}>
