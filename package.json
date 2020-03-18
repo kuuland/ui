@@ -16,6 +16,7 @@
     "fano-antd": "latest",
     "fano-react": "latest",
     "filesize": "^6.1.0",
+    "jsog": "^1.0.7",
     "kuu-tools": "latest",
     "lodash": "^4.17.15",
     "mime": "^2.4.4",

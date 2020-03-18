@@ -44,7 +44,7 @@ class Navbar extends React.Component {
     const { loginData } = this.props
     if (e.key.startsWith(menuKeyPrefix)) {
       const activeMenuIndex = parseInt(e.key.substring(menuKeyPrefix.length))
-      window.g_app._store.dispatch({
+      this.props.dispatch({
         type: 'layout/SET_ACTIVE_MENU_INDEX',
         payload: activeMenuIndex
       })
@@ -82,7 +82,7 @@ class Navbar extends React.Component {
                 }
                 const ret = await post('/lang/switch', { Lang: this.state.selectLang })
                 if (ret) {
-                  window.g_app._store.dispatch({
+                  this.props.dispatch({
                     type: 'user/valid'
                   })
                   this.setState({ selectLang: undefined })
@@ -95,7 +95,7 @@ class Navbar extends React.Component {
           this.handleLogout()
           break
         case 'apikeys':
-          window.g_app._store.dispatch({
+          this.props.dispatch({
             type: 'layout/openPane',
             payload: {
               ID: 'apikeys',
@@ -137,7 +137,7 @@ class Navbar extends React.Component {
   }
 
   handleLogout () {
-    window.g_app._store.dispatch({
+    this.props.dispatch({
       type: 'user/logout'
     })
   }

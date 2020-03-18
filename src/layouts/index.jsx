@@ -40,5 +40,5 @@ const IndexLayout = props => {
 }
 
 export default connect(state => {
-  return { localeMessages: _.get(state, 'user.localeMessages') }
+  return { localeMessages: _.get(state, 'i18n.localeMessages') }
 })(IndexLayout)

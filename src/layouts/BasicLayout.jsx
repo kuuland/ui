@@ -238,7 +238,8 @@ class BasicLayout extends React.PureComponent {
 
 function mapStateToProps (state) {
   return {
-    ...state.layout
+    ...state.layout,
+    theme: state.theme
   }
 }
 

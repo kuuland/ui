@@ -18,18 +18,7 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleCaptcha = this.handleCaptcha.bind(this)
     this.handleUsernameBlur = this.handleUsernameBlur.bind(this)
-  }
-
-  componentDidMount () {
-    this.ensureLogout()
-  }
-
-  ensureLogout () {
-    if (this.props.loginData.Token) {
-      window.g_app._store.dispatch({
-        type: 'user/logout'
-      })
-    }
+    this.removeLogoutStorageFlag()
   }
 
   async fetchCaptcha (username) {
@@ -52,11 +41,16 @@ class Login extends React.Component {
     this.fetchCaptcha(value)
   }
 
+  removeLogoutStorageFlag () {
+    window.localStorage.removeItem('logout')
+  }
+
   handleSubmit (e) {
     e.preventDefault()
     if (this.state.loginLoading) {
       return
     }
+    this.removeLogoutStorageFlag()
     this.props.form.validateFields((err, values) => {
       if (err) {
         return

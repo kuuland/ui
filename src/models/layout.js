@@ -7,9 +7,6 @@ import { isWhiteRoute } from '@/utils/tools'
 
 export default {
   state: {
-    theme: {
-      topBarBgColor: '#4b65a9'
-    },
     menus: undefined,
     menusTree: undefined,
     activeMenuIndex: 0,
@@ -53,24 +50,25 @@ export default {
         return { ...state, activePane, panes }
       }
       return { ...state, activePane, openKeys, panes }
-    },
-    CLEAR (state) {
-      const data = {
-        menus: undefined,
-        menusTree: undefined,
-        activeMenuIndex: 0,
-        activePane: undefined,
-        openKeys: [],
-        panes: []
-      }
-      return { ...state, ...data }
-    },
-    SET_THEME (state, { payload: theme }) {
-      return { ...state, theme: { ...state.theme, ...theme } }
     }
   },
   effects: {
-    * loadMenus ({ payload }, { put, call, select }) {
+    * init ({ payload }, { put, call, select }) {
+      if (window.localStorage.getItem('logout')) {
+        return
+      }
+      const { user, layout } = yield select(state => state)
+      // 校验令牌
+      if (!user.loginData) {
+        yield put({ type: 'user/valid' })
+      }
+      // 加载菜单
+      if (!layout.menus) {
+        yield put({ type: 'loadMenus' })
+        yield put({ type: 'theme/loadTheme' })
+      }
+    },
+    * loadMenus ({ payload }, { put, call }) {
       const data = yield call(get, '/user/menus')
       let menus = Array.isArray(data) ? data : []
       menus = _.chain(menus)
@@ -85,17 +83,6 @@ export default {
         })
         .sortBy('Sort').value()
       yield put({ type: 'SET_MENUS', payload: menus })
-    },
-    * loadTheme (args, { put, call }) {
-      const data = yield call(get, '/param?cond={"Code":"theme"}')
-      const value = _.get(data, 'list[0].Value')
-      let theme = {}
-      try {
-        theme = JSON.parse(value)
-      } catch (e) {}
-      if (!_.isEmpty(theme)) {
-        yield put({ type: 'SET_THEME', payload: theme })
-      }
     },
     * openPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
@@ -151,23 +138,14 @@ export default {
       const { dispatch, history } = ctx
       const state = window.g_app._store.getState()
       // 查询国际化
-      if (_.isEmpty(_.get(state, 'user.localeMessages'))) {
+      if (_.isEmpty(_.get(state, 'i18n.localeMessages'))) {
         dispatch({
-          type: 'user/langmsgs'
+          type: 'i18n/langmsgs'
         })
       }
       const listener = route => {
         if (route.pathname !== config.loginPathname && !isWhiteRoute(route.pathname)) {
-          const { layout, user } = window.g_app._store.getState()
-          // 校验令牌
-          if (!user.loginData) {
-            dispatch({ type: 'user/valid' })
-          }
-          // 加载菜单
-          if (!layout.menus) {
-            dispatch({ type: 'loadMenus' })
-            dispatch({ type: 'loadTheme' })
-          }
+          dispatch({ type: 'init' })
         }
       }
       history.listen(listener)
