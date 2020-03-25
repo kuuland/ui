@@ -31,6 +31,7 @@ export default {
       return { ...state, menus, menusTree, openKeys, activeMenuIndex }
     },
     SET_PANES (state, { payload: panes }) {
+      panes = panes.filter(pane => !!pane)
       const newState = { panes }
       if (_.isEmpty(panes)) {
         newState.activeMenuIndex = 0
@@ -57,7 +58,7 @@ export default {
       if (window.localStorage.getItem('logout')) {
         return
       }
-      const { user, layout } = yield select(state => state)
+      const { user, layout, enums } = yield select(state => state)
       // 校验令牌
       if (!user.loginData) {
         yield put({ type: 'user/valid' })
@@ -66,6 +67,10 @@ export default {
       if (!layout.menus) {
         yield put({ type: 'loadMenus' })
         yield put({ type: 'theme/loadTheme' })
+      }
+      // 加载枚举
+      if (_.isEmpty(enums.enumMap)) {
+        yield put({ type: 'enums/loadAllEnums' })
       }
     },
     * loadMenus ({ payload }, { put, call }) {
@@ -76,17 +81,15 @@ export default {
           if (item.Disable === false) {
             return false
           }
-          if (item.IsVirtual === true) {
-            return false
-          }
-          return true
+          return item.IsVirtual !== true
         })
         .sortBy('Sort').value()
       yield put({ type: 'SET_MENUS', payload: menus })
     },
     * openPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
-      const { panes, menus, activePane: currentActivePane } = state
+      const { menus, activePane: currentActivePane } = state
+      const panes = state.panes.filter(pane => !!pane)
       let openKeys = state.openKeys
       let activePane = panes.find(p => `${p.ID}` === `${value.ID}`)
 
