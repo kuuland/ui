@@ -38,6 +38,6 @@ const IndexLayout = props => {
 export default connect(state => {
   return {
     localeMessages: _.get(state, 'i18n.localeMessages'),
-    loading: _.get(state, 'loading.effects["layout/init"]') || _.get(state, 'loading.models.user') || _.get(state, 'loading.models.i18n')
+    loading: _.get(state, 'loading.effects["layout/init"]') || _.get(state, 'loading.models.user') || _.get(state, 'loading.models.i18n') || _.get(state, 'loading.models.theme')
   }
 })(IndexLayout)

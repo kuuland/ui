@@ -54,3 +54,10 @@ export function hasPermission (permissions) {
 export function hasRole (rolesCode) {
   return authCheck(rolesCode, 'role')
 }
+
+export function translateAmount (data) {
+  if (!data) {
+    data = 0
+  }
+  return data.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
