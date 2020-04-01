@@ -12,6 +12,8 @@ import config from '@/config'
 
 const { Sider } = Layout
 
+const loginAs = window.sessionStorage.getItem('login_as')
+
 class BasicLayout extends React.PureComponent {
   constructor (props) {
     super(props)
@@ -186,52 +188,55 @@ class BasicLayout extends React.PureComponent {
       selectedKeys.push(`${_.get(activePane, 'ID')}`)
     }
     return (
-      <Layout className={`${styles.layout}`}>
-        <Icon
-          className='kuu-sider-trigger'
-          type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={() => this.toggleSider()}
-        />
-        <Sider
-          collapsedWidth={0}
-          trigger={null}
-          collapsible
-          collapsed={this.state.collapsed}
-          width={config.siderWidth || 260}
-          className={styles.sider}
-        >
-          <div className={`${styles.header}`} style={{ opacity: this.state.collapsed ? 0 : 1, backgroundColor: _.get(this.props.theme, 'topBarBgColor') }}>
-            <div className={`${styles.appName}`}>{config.shortName}</div>
-          </div>
-          <Menu
-            className={`${styles.menu}`}
-            mode='inline'
-            inlineIndent={6}
-            selectedKeys={selectedKeys}
-            openKeys={openKeys}
-            onOpenChange={openKeys => {
-              this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
-            }}
-          >
-            {menuChildren}
-          </Menu>
-        </Sider>
-        <Layout>
-          <LayoutTabs
-            tabBarExtraContent={
-              <Navbar />
-            }
-            topBarBgColor={_.get(this.props.theme, 'topBarBgColor')}
-            activeKey={`${_.get(activePane, 'ID', '')}`}
-            panes={this.props.panes || []}
-            onChange={this.handleTabsChange}
-            onContext={this.handleTabsContext}
-            onEdit={this.handleTabsRemove}
-            breadcrumbs={_.get(activePane, 'breadcrumbs')}
-            siderCollapsed={this.state.collapsed}
+      <>
+        {loginAs && <div className={`${styles.loginAs}`} />}
+        <Layout className={`${styles.layout}`}>
+          <Icon
+            className='kuu-sider-trigger'
+            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={() => this.toggleSider()}
           />
+          <Sider
+            collapsedWidth={0}
+            trigger={null}
+            collapsible
+            collapsed={this.state.collapsed}
+            width={config.siderWidth || 260}
+            className={styles.sider}
+          >
+            <div className={`${styles.header}`} style={{ opacity: this.state.collapsed ? 0 : 1, backgroundColor: _.get(this.props.theme, 'topBarBgColor') }}>
+              <div className={`${styles.appName}`}>{config.shortName}</div>
+            </div>
+            <Menu
+              className={`${styles.menu}`}
+              mode='inline'
+              inlineIndent={6}
+              selectedKeys={selectedKeys}
+              openKeys={openKeys}
+              onOpenChange={openKeys => {
+                this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
+              }}
+            >
+              {menuChildren}
+            </Menu>
+          </Sider>
+          <Layout>
+            <LayoutTabs
+              tabBarExtraContent={
+                <Navbar />
+              }
+              topBarBgColor={_.get(this.props.theme, 'topBarBgColor')}
+              activeKey={`${_.get(activePane, 'ID', '')}`}
+              panes={this.props.panes || []}
+              onChange={this.handleTabsChange}
+              onContext={this.handleTabsContext}
+              onEdit={this.handleTabsRemove}
+              breadcrumbs={_.get(activePane, 'breadcrumbs')}
+              siderCollapsed={this.state.collapsed}
+            />
+          </Layout>
         </Layout>
-      </Layout>
+      </>
     )
   }
 }

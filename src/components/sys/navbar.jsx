@@ -3,10 +3,11 @@ import _ from 'lodash'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
 import router from 'umi/router'
-import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio, Input } from 'antd'
-import { get, post, withLocale, config } from 'kuu-tools'
+import { Avatar, Menu, Dropdown, Icon, Divider, Modal, Radio, Input, Select } from 'antd'
+import { get, post, del, withLocale, config } from 'kuu-tools'
 import OrgModal from './org-modal'
 import styles from './navbar.less'
+import moment from 'moment'
 
 class Navbar extends React.Component {
   constructor (props) {
@@ -126,20 +127,80 @@ class Navbar extends React.Component {
             }
           })
           break
+        case 'login_as':
+          this.fetchUsers(users => {
+            const style = { width: '100%' }
+            Modal.info({
+              title: this.props.L('kuu_navbar_loginas', 'Login As'),
+              icon: 'thunderbolt',
+              maskClosable: true,
+              width: 400,
+              content: (
+                <Select
+                  style={style}
+                  allowClear
+                  showSearch
+                  placeholder={this.props.L('kuu_navbar_loginas_placeholder', 'Select a user')}
+                  filterOption={(inputValue, option) => {
+                    return option.props.children.includes(inputValue)
+                  }}
+                  onChange={v => this.setState({ loginAsUID: v })}
+                >
+                  {users.map(item => {
+                    const content = (
+                      <div>
+                        <span>{item.Username + `${item.Name ? `(${item.Name})` : ''}`}</span>
+                        <span style={{ color: 'rgba(34,34,34,0.3)', marginLeft: 10, fontSize: 12 }}>{moment.unix(item.Exp).fromNow()}</span>
+                      </div>
+                    )
+                    return (
+                      <Select.Option key={item.ID} title={content} value={item.ID}>{content}</Select.Option>
+                    )
+                  })}
+                </Select>
+              ),
+              onOk: async () => {
+                if (!this.state.loginAsUID) {
+                  return
+                }
+                const ret = await post('/login_as', { UID: this.state.loginAsUID })
+                if (ret) {
+                  window.sessionStorage.setItem('login_as', '1')
+                  router.go(0)
+                }
+              }
+            })
+          })
+          break
       }
     }
   }
 
   async fetchLanguages (callback) {
     const json = await get('/language', { range: 'ALL' })
-    const languages = _.get(json, 'list', [])
-    callback(languages)
+    const data = _.get(json, 'list', [])
+    callback(data)
+  }
+
+  async fetchUsers (callback) {
+    const data = await get('/login_as/users')
+    callback(data)
   }
 
   handleLogout () {
-    this.props.dispatch({
-      type: 'user/logout'
-    })
+    const loginAs = window.sessionStorage.getItem('login_as')
+    if (loginAs) {
+      del('/login_as').then(data => {
+        if (data) {
+          window.sessionStorage.removeItem('login_as')
+          router.go(0)
+        }
+      })
+    } else {
+      this.props.dispatch({
+        type: 'user/logout'
+      })
+    }
   }
 
   render () {
@@ -186,6 +247,11 @@ class Navbar extends React.Component {
               {showEndpoint && (
                 <Menu.Item key='apiendpoint'>
                   <Icon type='api' />{this.props.L('kuu_navbar_apiendpoint', 'API Endpoint')}
+                </Menu.Item>
+              )}
+              {this.props.isRoot && (
+                <Menu.Item key='login_as' style={{ color: '#2190ff' }}>
+                  <Icon type='thunderbolt' />{this.props.L('kuu_navbar_loginas', 'Login As')}
                 </Menu.Item>
               )}
               <Menu.Divider />
@@ -246,6 +312,7 @@ class Navbar extends React.Component {
 function mapStateToProps (state) {
   return {
     loginData: state.user.loginData || {},
+    isRoot: _.get(state, 'user.loginData.Username') === 'root',
     menusTree: state.layout.menusTree || [],
     activeMenuIndex: state.layout.activeMenuIndex
   }
