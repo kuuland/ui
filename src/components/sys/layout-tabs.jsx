@@ -3,7 +3,7 @@ import withRouter from 'umi/withRouter'
 import _ from 'lodash'
 import { Menu, Dropdown, Tabs, Icon, Breadcrumb, Empty } from 'antd'
 import { parseIcon, withLocale } from 'kuu-tools'
-import styles from './layout-tabs.less'
+import './layout-tabs.less'
 import config from '@/config'
 
 class LayoutTabs extends React.PureComponent {
@@ -27,7 +27,7 @@ class LayoutTabs extends React.PureComponent {
     const noBreadcrumbRoute = _.includes(config.noBreadcrumbsRoutes, pathname)
 
     return (
-      <div className={`${styles.layoutTabs} ${empty ? 'kuu-layout-tabs-empty' : ''}`}>
+      <div className={`kuu-layout-tabs ${empty ? 'kuu-layout-tabs-empty' : ''}`}>
         <Tabs
           size='default'
           activeKey={activeKey}
@@ -73,7 +73,7 @@ class LayoutTabs extends React.PureComponent {
                   }
                   trigger={['contextMenu']}
                 >
-                  <span className={styles.title}>
+                  <span className='kuu-layout-tabs-title'>
                     <Icon {...parseIcon(pane.Icon)} />{props.L(pane.LocaleKey || pane.Name, pane.Name)}
                   </span>
                 </Dropdown>
@@ -82,7 +82,7 @@ class LayoutTabs extends React.PureComponent {
               closable={pane.Closeable}
             >
               {_.size(props.breadcrumbs) > 1 && !noBreadcrumbRoute && (
-                <Breadcrumb className={styles.breadcrumbs}>
+                <Breadcrumb className='kuu-layout-tabs-breadcrumbs'>
                   {props.breadcrumbs.map(item => (
                     <Breadcrumb.Item
                       key={item.LocaleKey || item.Name}

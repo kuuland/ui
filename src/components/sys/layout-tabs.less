@@ -1,31 +1,47 @@
 @header-height: 50px;
-.layoutTabs {
-  height: 100%;
+:global {
+  .kuu-layout-tabs {
+    height: 100%;
 
-  .title {
-    user-select: none;
-    display: inline-block;
-  }
+    .kuu-layout-tabs-title {
+      user-select: none;
+      display: inline-block;
+    }
 
-  .breadcrumbs {
-    margin: 20px 20px 0 20px;
-  }
+    .kuu-layout-tabs-breadcrumbs {
+      margin: 20px 20px 0 20px;
+    }
 
-  :global {
-    .ant-tabs {
+    > .ant-tabs {
       height: 100%;
+
+      > .ant-tabs-bar {
+        > .ant-tabs-extra-content {
+          height: @header-height !important;
+          line-height: @header-height !important;
+        }
+
+        > .ant-tabs-nav-container {
+          height: fit-content !important;
+
+          > .ant-tabs-tab-prev, > .ant-tabs-tab-next {
+            color: rgba(255, 255, 255, 0.45);
+
+            &:hover {
+              color: rgba(255, 255, 255, 0.75);
+            }
+          }
+        }
+      }
+
+      > .ant-tabs-content {
+        height: calc(100% - 50px);
+        overflow: auto;
+        overflow-x: hidden;
+      }
     }
 
-    .ant-tabs-nav-container {
-      height: fit-content !important;
-    }
-
-    .ant-tabs-extra-content {
-      height: @header-height !important;
-      line-height: @header-height !important;
-    }
-
-    .ant-tabs-card > .ant-tabs-bar {
+    > .ant-tabs-card > .ant-tabs-bar {
       height: @header-height;
       line-height: @header-height;
       border-bottom: 1px solid transparent;
@@ -35,7 +51,7 @@
       margin-bottom: 0;
     }
 
-    .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+    > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
       background: transparent;
       border: 0;
       //border-bottom: 2px solid #4962a2;
@@ -57,7 +73,7 @@
       }
     }
 
-    .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
+    > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
       color: #1b2b46;
       background: #f0f2f5a6;
       height: @header-height;
@@ -76,24 +92,8 @@
         }
       }
     }
-
-    .ant-tabs-tab-prev, .ant-tabs-tab-next {
-      color: rgba(255, 255, 255, 0.45);
-
-      &:hover {
-        color: rgba(255, 255, 255, 0.75);
-      }
-    }
-
-    .ant-tabs-content {
-      height: calc(100% - 50px);
-      overflow: auto;
-      overflow-x: hidden;
-    }
   }
-}
 
-:global {
   .kuu-layout-tabs-empty {
     .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
       opacity: 0;
