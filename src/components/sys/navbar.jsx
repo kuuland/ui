@@ -142,7 +142,7 @@ class Navbar extends React.Component {
                   showSearch
                   placeholder={this.props.L('kuu_navbar_loginas_placeholder', 'Select a user')}
                   filterOption={(inputValue, option) => {
-                    return option.props.children.includes(inputValue)
+                    return option.props.keyword.includes(inputValue)
                   }}
                   onChange={v => this.setState({ loginAsUID: v })}
                 >
@@ -154,7 +154,7 @@ class Navbar extends React.Component {
                       </div>
                     )
                     return (
-                      <Select.Option key={item.ID} title={content} value={item.ID}>{content}</Select.Option>
+                      <Select.Option key={item.ID} title={content} value={item.ID} keyword={`${item.Username}${item.Name}`}>{content}</Select.Option>
                     )
                   })}
                 </Select>
