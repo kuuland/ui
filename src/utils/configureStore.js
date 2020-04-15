@@ -14,7 +14,7 @@ const persistConfig = {
   key: 'root',
   storage,
   transforms: [JSOGTransform],
-  blacklist: ['router', 'loading']
+  blacklist: ['router', 'loading', 'badge']
 }
 
 export function persistEnhancer (createStore) {

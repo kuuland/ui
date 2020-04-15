@@ -3,7 +3,7 @@ import _ from 'lodash'
 import router from 'umi/router'
 import { connect } from 'dva'
 import withRouter from 'umi/withRouter'
-import { Layout, Menu, Icon } from 'antd'
+import { Layout, Menu, Icon, Badge } from 'antd'
 import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './index.less'
 import LayoutTabs from '@/components/sys/layout-tabs'
@@ -26,6 +26,7 @@ class BasicLayout extends React.PureComponent {
     this.handleTabsChange = this.handleTabsChange.bind(this)
     this.handleTabsRemove = this.handleTabsRemove.bind(this)
     this.handleTabsContext = this.handleTabsContext.bind(this)
+    this.renderMenuChildren = this.renderMenuChildren.bind(this)
   }
 
   toggleSider () {
@@ -45,6 +46,7 @@ class BasicLayout extends React.PureComponent {
   renderMenuChildren (values, breadcrumbs = []) {
     const groups = _.groupBy(values, 'Group')
     let arr = []
+    let hasCount = false
     for (const key in groups) {
       const data = groups[key]
       const name = key !== 'undefined' ? key : null
@@ -54,10 +56,15 @@ class BasicLayout extends React.PureComponent {
         if (this.state.collapsed) {
           iconStyle.paddingLeft = 0
         }
-        const title = this.props.L(value.LocaleKey || value.Name, value.Name)
+        let title = this.props.L(value.LocaleKey || value.Name, value.Name)
+        const badgeCount = this.props.menuBadgeCount[`${value.Code || value.ID}`]
         value.breadcrumbs = breadcrumbs.concat([_.pick(value, ['LocaleKey', 'Name'])])
         if (value.Children) {
-          const sub = this.renderMenuChildren(value.Children, value.breadcrumbs)
+          const [sub, hasSubCount] = this.renderMenuChildren(value.Children, value.breadcrumbs)
+          hasCount = hasCount || hasSubCount
+          if (hasSubCount) {
+            title = <Badge dot offset={[2, 0]}>{title}</Badge>
+          }
           if (Array.isArray(sub) && sub.length > 0) {
             ret.push(
               <Menu.SubMenu
@@ -74,6 +81,10 @@ class BasicLayout extends React.PureComponent {
             )
           }
         } else {
+          if (_.isNumber(badgeCount) && _.isFinite(badgeCount) && badgeCount > 0) {
+            title = <Badge count={badgeCount} offset={[9, 0]}>{title}</Badge>
+            hasCount = true
+          }
           ret.push(
             <Menu.Item
               key={value.ID}
@@ -91,7 +102,7 @@ class BasicLayout extends React.PureComponent {
       }
       arr = arr.concat(ret)
     }
-    return arr
+    return [arr, hasCount]
   }
 
   handleMenuItemClick (value) {
@@ -182,7 +193,7 @@ class BasicLayout extends React.PureComponent {
       this.cacheMenuPaneContent(activePane)
     }
     const currentTree = _.cloneDeep(menusTree)
-    const menuChildren = this.renderMenuChildren(_.get(currentTree, `[${activeMenuIndex}].Children`, []))
+    const [menuChildren] = this.renderMenuChildren(_.get(currentTree, `[${activeMenuIndex}].Children`, []))
     const selectedKeys = []
     if (_.get(activePane, 'ID')) {
       selectedKeys.push(`${_.get(activePane, 'ID')}`)
@@ -244,6 +255,7 @@ class BasicLayout extends React.PureComponent {
 function mapStateToProps (state) {
   return {
     ...state.layout,
+    ...state.badge,
     theme: state.theme
   }
 }
