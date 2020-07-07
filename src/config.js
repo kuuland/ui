@@ -11,6 +11,6 @@ export default {
   storageTokenKey: 'token',
   storageLocaleKey: 'kuu_locale',
   storageLocaleMessagesKey: 'kuu_locale_messages',
-  copyright: <div>Copyright <Icon type='copyright' /> 2019 蚁群出品</div>,
+  copyright: <div><Icon type='copyright' /> {new Date().getFullYear()} <a rel='noopener noreferrer' target='_blank' href='https://www.hofo.co' style={{ color: 'rgba(0, 0, 0, 0.5)' }}>蚁群科技</a> 提供技术支持 | Powered by <a rel='noopener noreferrer' target='_blank' href='https://github.com/kuuland/kuu'><Icon type='github' /> Kuu</a>. All Rights Reserved</div>,
   loginBg: ''
 }
