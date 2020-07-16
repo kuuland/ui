@@ -116,7 +116,7 @@ class BasicLayout extends React.PureComponent {
     for (const pane of this.props.panes) {
       if (pane.ID === activePane.ID) {
         pane.Content = this.props.children
-        this.panesContent[pane.key] = pane.Content
+        this.panesContent[pane.key || pane.ID] = pane.Content
         break
       }
     }
@@ -170,19 +170,6 @@ class BasicLayout extends React.PureComponent {
         if (_.get(this.props.activePane, 'URI') !== nextActivePane.URI) {
           this.props.dispatch({ type: 'layout/openPane', payload: nextActivePane })
         }
-      }
-    }
-    if (this.props.menus === undefined && nextProps.menus !== undefined) {
-      // 菜单初始化完成
-      const menus = nextProps.menus
-      if (_.isEmpty(menus)) {
-        return
-      }
-      const needOpenMenus = menus.filter(item => !!item.IsDefaultOpen).map(item => _.cloneDeep(item))
-      const firstPane = _.get(needOpenMenus, '[0]')
-      if (firstPane && _.isEmpty(this.props.panes)) {
-        this.props.dispatch({ type: 'layout/SET_PANES', payload: needOpenMenus })
-        this.handleMenuItemClick(firstPane)
       }
     }
   }

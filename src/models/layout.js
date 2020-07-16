@@ -54,28 +54,11 @@ export default {
     }
   },
   effects: {
-    * init ({ payload }, { put, call, select }) {
-      if (window.localStorage.getItem('logout')) {
-        return
-      }
-      const { user, layout, enums } = yield select(state => state)
-      // 校验令牌
-      if (!user.loginData) {
-        yield put({ type: 'user/valid' })
-      }
-      // 加载菜单
-      if (!layout.menus) {
-        yield put({ type: 'loadMenus' })
-        yield put({ type: 'theme/loadTheme' })
-      }
-      // 加载枚举
-      if (_.isEmpty(enums.enumMap)) {
-        yield put({ type: 'enums/loadAllEnums' })
-      }
-    },
     * loadMenus ({ payload }, { put, call }) {
       const data = yield call(get, '/user/menus')
       let menus = Array.isArray(data) ? data : []
+      const needOpenMenus = menus.filter(item => !!item.IsDefaultOpen).map(item => _.cloneDeep(item))
+      const firstPane = _.get(needOpenMenus, '[0]')
       menus = _.chain(menus)
         .filter(item => {
           if (item.Disable === false) {
@@ -85,6 +68,9 @@ export default {
         })
         .sortBy('Sort').value()
       yield put({ type: 'SET_MENUS', payload: menus })
+      if (firstPane) {
+        yield put({ type: 'openPane', payload: firstPane })
+      }
     },
     * openPane ({ payload: value }, { put, select }) {
       const state = yield select(state => state.layout)
@@ -148,7 +134,23 @@ export default {
       }
       const listener = route => {
         if (route.pathname !== config.loginPathname && !isWhiteRoute(route.pathname)) {
-          dispatch({ type: 'init' })
+          const { layout, user, enums } = window.g_app._store.getState()
+          if (window.localStorage.getItem('logout')) {
+            return
+          }
+          // 校验令牌
+          if (!user.loginData) {
+            dispatch({ type: 'user/valid' })
+          }
+          // 加载菜单
+          if (!layout.menus) {
+            dispatch({ type: 'loadMenus' })
+            dispatch({ type: 'theme/loadTheme' })
+          }
+          // 加载枚举
+          if (_.isEmpty(enums.enumMap)) {
+            dispatch({ type: 'enums/loadAllEnums' })
+          }
         }
       }
       history.listen(listener)

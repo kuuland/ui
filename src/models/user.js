@@ -13,7 +13,7 @@ export default {
     LOGIN (state, { payload: { loginData } }) {
       if (_.get(loginData, 'Token')) {
         if (loginData.Lang) {
-          setLocale(loginData.Lang, false)
+          setLocale(loginData.Lang, true)
         }
       }
       return { ...state, loginData }
