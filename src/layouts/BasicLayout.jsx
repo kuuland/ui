@@ -21,7 +21,6 @@ class BasicLayout extends React.PureComponent {
     this.state = {
       collapsed: false
     }
-    this.panesContent = {}
     this.toggleSider = this.toggleSider.bind(this)
     this.handleTabsChange = this.handleTabsChange.bind(this)
     this.handleTabsRemove = this.handleTabsRemove.bind(this)
@@ -112,16 +111,6 @@ class BasicLayout extends React.PureComponent {
     this.props.dispatch({ type: 'layout/openPane', payload: value })
   }
 
-  cacheMenuPaneContent (activePane) {
-    for (const pane of this.props.panes) {
-      if (pane.ID === activePane.ID) {
-        pane.Content = this.props.children
-        this.panesContent[pane.key || pane.ID] = pane.Content
-        break
-      }
-    }
-  }
-
   handleTabsChange (targetKey) {
     const activePane = this.props.panes.find(p => `${p.ID}` === targetKey)
     this.handleMenuItemClick(activePane)
@@ -176,9 +165,6 @@ class BasicLayout extends React.PureComponent {
 
   render () {
     const { menusTree = [], activeMenuIndex, activePane, openKeys = [] } = this.props
-    if (activePane && activePane.ID && !this.panesContent[activePane.ID]) {
-      this.cacheMenuPaneContent(activePane)
-    }
     const currentTree = _.cloneDeep(menusTree)
     const [menuChildren] = this.renderMenuChildren(_.get(currentTree, `[${activeMenuIndex}].Children`, []))
     const selectedKeys = []
@@ -231,7 +217,9 @@ class BasicLayout extends React.PureComponent {
               onEdit={this.handleTabsRemove}
               breadcrumbs={_.get(activePane, 'breadcrumbs')}
               siderCollapsed={this.state.collapsed}
-            />
+            >
+              {this.props.children}
+            </LayoutTabs>
           </Layout>
         </Layout>
       </>

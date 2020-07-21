@@ -47,6 +47,9 @@ export default {
     },
     SET_ACTIVE_PANE (state, { payload }) {
       const { activePane, openKeys, panes } = payload
+      if (activePane) {
+        delete activePane.Content
+      }
       if (_.isEmpty(openKeys)) {
         return { ...state, activePane, panes }
       }
