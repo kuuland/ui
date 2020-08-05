@@ -2,7 +2,7 @@ import _ from 'lodash'
 import router from 'umi/router'
 import config from '@/config'
 import { getPersistor } from '@/utils/configureStore'
-import { post } from 'kuu-tools'
+import { post, convertLocaleCode } from 'kuu-tools'
 import { setLocale, getLocale } from 'umi-plugin-react/locale'
 
 export default {
@@ -12,7 +12,7 @@ export default {
   reducers: {
     LOGIN (state, { payload: { loginData } }) {
       if (_.get(loginData, 'Token')) {
-        const langCode = convertLangCode(loginData.Lang)
+        const langCode = convertLocaleCode(loginData.Lang) || getLocale()
         if (langCode) {
           setLocale(langCode, true)
         }
@@ -43,19 +43,4 @@ export default {
     }
   },
   subscriptions: {}
-}
-
-function convertLangCode (lang) {
-  if (!lang) {
-    return getLocale()
-  }
-  switch (lang) {
-    case 'zh-Hans':
-      return 'zh-CN'
-    case 'zh-Hant':
-      return 'zh-TW'
-    case 'en':
-      return 'en-US'
-  }
-  return lang
 }
