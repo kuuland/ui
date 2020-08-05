@@ -132,7 +132,7 @@ export default {
       // 查询国际化
       if (_.isEmpty(_.get(state, 'i18n.localeMessages'))) {
         dispatch({
-          type: 'i18n/langmsgs'
+          type: 'i18n/getIntlMessages'
         })
       }
       const listener = route => {

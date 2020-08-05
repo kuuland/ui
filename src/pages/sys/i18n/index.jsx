@@ -1,229 +1,226 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { get, withPrefix, withLocale } from 'kuu-tools'
 import _ from 'lodash'
-import { Icon, Input, Modal, List, Button } from 'antd'
+import { Popover, Radio, Upload, Button, Icon, message } from 'antd'
 import { FanoTable } from 'fano-antd'
-import { list, post, withLocale } from 'kuu-tools'
 import styles from './index.less'
 
-class I18n extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      test: false // 为了使组件触发 render
-    }
-    this.pagination = {} // 传递给 FanoTable组件 内部的 pagination
-    this.total = 0 // 记录筛选结果条数
-  }
+function Intl (props) {
+  const tableRef = useRef()
+  const [uploadPopoverVisible, setUploadPopoverVisible] = useState(false)
+  const [uploadLoading, setUploadLoading] = useState(false)
+  const [updateMethod, setUpdateMethod] = useState()
+  const [columns, setColumns] = useState([])
+  const [form, setForm] = useState([])
+  useEffect(() => {
+    fetchLanguages()
+  }, [])
 
-  async componentDidMount () {
-    await this.fetchLanguages()
-  }
-
-  async fetchLanguages (cb) {
-    const json = await list('language', { range: 'ALL' })
-    const arr = _.get(json, 'list', [])
-    this.setState({ languages: arr }, cb)
-  }
-
-  filterProps (dataIndex) {
-    return {
-      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
-        return (
-          <div style={{ padding: 8 }}>
-            <Input
-              allowClear
-              ref={node => {
-                this.searchInput = node
-              }}
-              placeholder={this.props.L('kuu_i18n_keyword_placeholder', 'Search keywords')}
-              value={selectedKeys[0]}
-              onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-              onPressEnter={() => {
-                // 筛选内容为 undefined时,将筛选相关数据重置
-                if (!this.searchInput.state.value) {
-                  this.total = 0
-                  this.pagination = {}
-                }
-
-                if (this.table && this.searchInput.state.value) {
-                  for (const item of this.table.state.dataSource) {
-                    const t = item[dataIndex].toString().toLowerCase()
-                    if (t.includes(this.searchInput.state.value.toLowerCase())) {
-                      this.total++
-                    }
-                  }
-                  this.pagination = { total: this.total }
-                }
-                this.setState({ test: !this.state.test }) // 无实际意义,为了触发 render
-                return confirm()
-              }}
-            />
-          </div>
-        )
-      },
-      filterIcon: filtered => (
-        <Icon type='search' style={{ color: filtered ? '#1890ff' : undefined }} />
-      ),
-      onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-    }
-  }
-
-  render () {
-    const { languagesModalList = [], languagesModalVisible = false } = this.state
-    let { languages = [] } = this.state
-    languages = _.sortBy(languages, 'LangCode')
-    const columns = [
-      {
-        title: this.props.L('kuu_i18n_key', 'Key'),
-        dataIndex: 'Key',
-        ...this.filterProps('Key')
-      }
-    ]
-    const form = [
-      {
-        name: 'Key',
-        type: 'input',
-        label: this.props.L('kuu_i18n_key', 'Key'),
-        props: {
-          fieldOptions: {
-            rules: [
-              {
-                required: true,
-                message: this.props.L('kuu_i18n_key_required', 'Key is required')
-              }
-            ]
-          }
+  const fetchLanguages = () => {
+    get('/intl/languages').then(data => {
+      const columns = [
+        {
+          title: 'Key',
+          dataIndex: 'key',
+          render: 'copy'
+        },
+        {
+          title: 'Description',
+          dataIndex: 'default'
+        },
+        {
+          title: 'English',
+          dataIndex: 'en'
+        },
+        {
+          title: '简体中文',
+          dataIndex: 'zh-Hans'
+        },
+        {
+          title: '繁體中文',
+          dataIndex: 'zh-Hant'
         }
-      }
-    ]
-    languages.map(lang => {
-      const dataIndex = `Lang_${lang.LangCode}_Value`
-      columns.push({
-        title: lang.LangName,
-        dataIndex,
-        width: 160,
-        ...this.filterProps(dataIndex)
-      })
-      form.push({
-        name: `Lang_${lang.LangCode}_Value`,
-        type: 'input',
-        label: lang.LangName,
-        props: {
-          fieldOptions: {
-            rules: [
-              {
-                required: true,
-                message: this.props.L('kuu_i18n_value_required', 'Value is required')
-              }
-            ]
-          }
+      ]
+      for (const item of data) {
+        if (['en', 'zh-Hans', 'zh-Hant'].includes(item.code)) {
+          continue
         }
-      })
+        columns.push({
+          title: item.name,
+          dataIndex: item.code
+        })
+      }
+      const form = columns.map(item => ({
+        name: item.dataIndex,
+        type: 'input',
+        label: item.title
+      }))
+      setColumns(columns)
+      setForm(form)
     })
-    return (
-      <div className={`kuu-container ${styles.i18n}`}>
-        <FanoTable
-          ref={instance => {
-            this.table = instance
-          }}
-          filterForm={false}
-          pagination={this.pagination}
-          columns={columns}
-          form={form}
-          rowKey='Key'
-          listUrl='GET /langtrans'
-          createUrl='POST /langtrans'
-          deleteUrl='DELETE /languagemessage'
-          updateUrl='POST /langtrans'
-          importUrl='/langtrans/import'
-          beforeUpdate={(body, formRecord) => {
-            return { ...formRecord, ...body.doc }
-          }}
-          beforeDelete={body => {
-            body.multi = true
-          }}
-          fillTAP={{
-            sort: false,
-            filter: false,
-            import: true
-          }}
-          tableActions={[
-            {
-              key: 'languages',
-              icon: 'global',
-              text: this.props.L('kuu_i18n_actions_languages', 'Languages'),
-              onClick: () => this.setState({ languagesModalVisible: true, languagesModalList: _.cloneDeep(languages) })
-            }
-          ]}
-        />
-        <Modal
-          title={this.props.L('kuu_i18n_actions_languages', 'Languages')}
-          icon='global'
-          maskClosable
-          width={420}
-          visible={languagesModalVisible}
-          onOk={async () => {
-            const ret = await post('/langlist', languagesModalList)
-            if (ret) {
-              this.fetchLanguages()
-              this.table.handleRefresh()
-              this.setState({ languagesModalVisible: false })
-            }
-          }}
-          onCancel={() => this.setState({ languagesModalVisible: false })}
-        >
-          <List
-            size='small'
-            dataSource={languagesModalList}
-            footer={
-              <Button
-                type='primary' icon='plus'
-                onClick={() => {
-                  languagesModalList.push({
-                    LangCode: undefined,
-                    LangName: undefined
-                  })
-                  this.setState({ languagesModalList })
-                }}
-              />
-            }
-            renderItem={(item, index) => (
-              <List.Item>
-                <Input.Group compact>
-                  <Input
-                    style={{ width: '40%' }} value={item.LangCode}
-                    onChange={e => {
-                      item.LangCode = e.target.value
-                      languagesModalList[index] = item
-                      this.setState({ languagesModalList })
-                    }}
-                    placeholder={this.props.L('kuu_i18n_languages_langcode', 'Language code')}
-                  />
-                  <Input
-                    style={{ width: '50%' }} value={item.LangName}
-                    onChange={e => {
-                      item.LangName = e.target.value
-                      languagesModalList[index] = item
-                      this.setState({ languagesModalList })
-                    }}
-                    placeholder={this.props.L('kuu_i18n_languages_langname', 'Language name')}
-                  />
-                  <Button
-                    style={{ width: '10%' }}
-                    type='danger' icon='minus'
-                    onClick={() => {
-                      languagesModalList.splice(index, 1)
-                      this.setState({ languagesModalList })
-                    }}
-                  />
-                </Input.Group>
-              </List.Item>
-            )}
-          />
-        </Modal>
-      </div>
-    )
   }
-}
 
-export default withLocale(I18n)
+  const beforeList = query => {
+    if (query.cond) {
+      const newQuery = {}
+      const cond = JSON.parse(query.cond)
+      const and = _.get(cond, '$and')
+      for (const item of and) {
+        for (const k in item) {
+          const v = _.get(item[k], '$regex')
+          if (v) {
+            switch (k) {
+              case 'key':
+                newQuery.prefix = v
+                break
+              case 'default':
+                newQuery.desc = v
+                break
+            }
+          }
+        }
+      }
+      return newQuery
+    }
+  }
+
+  const afterList = data => {
+    let dataSource = []
+    for (const key in data) {
+      const row = { key }
+      const values = data[key]
+      for (const lang in values) {
+        row[lang] = values[lang]
+      }
+      dataSource.push(row)
+    }
+    dataSource = _.sortBy(dataSource, 'key')
+    return { list: dataSource }
+  }
+  const filter = [
+    {
+      name: 'key',
+      props: {
+        placeholder: 'Key',
+        allowClear: true
+      }
+    },
+    {
+      name: 'default',
+      props: {
+        placeholder: 'Description',
+        allowClear: true
+      }
+    }
+  ]
+  const beforeUpdate = (body, record) => {
+    return { [body.cond.key]: body.doc }
+  }
+  const beforeDelete = (body, record) => {
+    let keys = _.get(body, 'cond.key.$in')
+    if (!_.isArray(keys)) {
+      const k = _.get(body, 'cond.key')
+      if (k) {
+        keys = [k]
+      }
+    }
+    if (!_.isArray(keys)) {
+      return false
+    }
+    const res = {}
+    for (const k of keys) {
+      res[k] = {
+        _dr: 'true'
+      }
+    }
+    return res
+  }
+
+  const uploadProps = {
+    name: 'file',
+    action: withPrefix('/intl/messages/upload'),
+    accept: '.xls,.xlsx,application/*',
+    showUploadList: false,
+    data: file => ({ method: updateMethod }),
+    onChange: info => {
+      if (info.file.status === 'done') {
+        if (_.get(info.file, 'response.code') === 0) {
+          tableRef.current.handleRefresh()
+        } else if (_.get(info.file, 'response.msg')) {
+          message.error(_.get(info.file, 'response.msg'))
+        }
+        setUploadLoading(false)
+      } else if (info.file.status === 'error') {
+        message.error(props.L('rest_import_failed', 'Upload failed.'))
+        setUploadLoading(false)
+      } else {
+        if (!uploadLoading) {
+          setUploadLoading(true)
+        }
+      }
+    }
+  }
+  const uploadMethodOptions = [
+    { label: 'Full Updates', value: 'full' },
+    { label: 'Incremental Updates', value: 'incr' }
+  ]
+  const uploadPopoverContent = (
+    <div>
+      <div>
+        <Radio.Group
+          options={uploadMethodOptions}
+          onChange={e => setUpdateMethod(e.target.value)}
+          value={updateMethod}
+          optionType='button'
+        />
+      </div>
+      <div style={{ marginTop: 20 }}>
+        <Upload {...uploadProps}>
+          <Button disabled={!updateMethod} loading={uploadLoading}>
+            {!uploadLoading && <Icon type='upload' />} Click to Upload
+          </Button>
+        </Upload>
+      </div>
+    </div>
+  )
+  const tableActions = [
+    {
+      key: 'import',
+      icon: 'import',
+      text: props.L('fano_table_actions_import', 'Import'),
+      wrapper: children => (
+        <Popover
+          placement='bottomLeft'
+          trigger='click'
+          visible={uploadPopoverVisible}
+          onVisibleChange={visible => setUploadPopoverVisible(visible)}
+          content={uploadPopoverContent}
+        >
+          {children}
+        </Popover>
+      )
+    }
+  ]
+  return (
+    <div className={`kuu-container ${styles.container}`}>
+      <FanoTable
+        ref={tableRef}
+        filterReplace
+        filter={filter}
+        rowKey='key'
+        columns={columns}
+        form={form}
+        tableActions={tableActions}
+        listUrl='GET /intl/messages'
+        beforeList={beforeList}
+        afterList={afterList}
+        createUrl='POST /intl/messages/save'
+        updateUrl='POST /intl/messages/save'
+        beforeUpdate={beforeUpdate}
+        deleteUrl='POST /intl/messages/save'
+        beforeDelete={beforeDelete}
+      />
+    </div>
+  )
+}
+export default withLocale(Intl)

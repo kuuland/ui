@@ -59,7 +59,7 @@ class Navbar extends React.Component {
               title: this.props.L('kuu_navbar_languages', 'Languages'),
               icon: 'global',
               maskClosable: true,
-              width: 400,
+              width: 500,
               content: (
                 <Radio.Group
                   onChange={e => {
@@ -69,10 +69,11 @@ class Navbar extends React.Component {
                 >
                   {languages.map(item => (
                     <Radio
-                      key={item.LangCode}
-                      value={item.LangCode}
+                      key={item.code}
+                      value={item.code}
+                      style={{ minWidth: 160 }}
                     >
-                      {item.LangName}
+                      {item.name}
                     </Radio>)
                   )}
                 </Radio.Group>
@@ -177,8 +178,7 @@ class Navbar extends React.Component {
   }
 
   async fetchLanguages (callback) {
-    const json = await get('/language', { range: 'ALL' })
-    const data = _.get(json, 'list', [])
+    const data = await get('/intl/languages')
     callback(data)
   }
 

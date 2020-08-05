@@ -1,27 +1,23 @@
 import _ from 'lodash'
 import { get, config as toolsConfig } from 'kuu-tools'
-import { setLocale } from 'umi-plugin-react/locale'
+import { getLocale } from 'umi-plugin-react/locale'
 
 export default {
   state: {
     localeMessages: {}
   },
   reducers: {
-    SET_LANGMSGS (state, { payload: msgs }) {
-      window[_.get(toolsConfig, 'localeMessagesKey', 'localeMessages')] = msgs
-      return { ...state, localeMessages: msgs }
+    UPDATE (state, { payload }) {
+      window[_.get(toolsConfig, 'localeMessagesKey', 'localeMessages')] = payload.localeMessages || {}
+      return { ...state, ...payload }
     }
   },
   effects: {
-    * langmsgs ({ payload }, { put, call }) {
-      const langmsgs = yield call(get, '/langmsgs')
-      const lang = _.chain(langmsgs).keys().head().value()
-      if (lang) {
-        setLocale(lang, false)
-        const msgs = _.get(langmsgs, lang)
-        if (!_.isEmpty(msgs)) {
-          yield put({ type: 'SET_LANGMSGS', payload: msgs })
-        }
+    * getIntlMessages ({ payload }, { put, call }) {
+      const langCode = getLocale()
+      const msgs = yield call(get, `/intl/messages?simple=true&langs=${langCode}`)
+      if (!_.isEmpty(msgs)) {
+        yield put({ type: 'UPDATE', payload: { localeMessages: msgs } })
       }
     }
   }

@@ -8,7 +8,14 @@ import 'fano-antd/lib/index.less'
 message.config({ maxCount: 1 })
 config({
   localeContext: React.createContext(),
-  messageHandler: (msg, code, json) => (code === 0 ? message.info(msg) : message.error(msg))
+  messageHandler: (msg, code, json) => (code === 0 ? message.info(msg) : message.error(msg)),
+  onLogout: url => {
+    if (!url.includes('/logout')) {
+      window.g_app._store.dispatch({
+        type: 'user/logout'
+      })
+    }
+  }
 })
 
 function resetEnhancer (next) {

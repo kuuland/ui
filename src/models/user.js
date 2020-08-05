@@ -3,7 +3,7 @@ import router from 'umi/router'
 import config from '@/config'
 import { getPersistor } from '@/utils/configureStore'
 import { post } from 'kuu-tools'
-import { setLocale } from 'umi-plugin-react/locale'
+import { setLocale, getLocale } from 'umi-plugin-react/locale'
 
 export default {
   state: {
@@ -12,8 +12,9 @@ export default {
   reducers: {
     LOGIN (state, { payload: { loginData } }) {
       if (_.get(loginData, 'Token')) {
-        if (loginData.Lang) {
-          setLocale(loginData.Lang, true)
+        const langCode = convertLangCode(loginData.Lang)
+        if (langCode) {
+          setLocale(langCode, true)
         }
       }
       return { ...state, loginData }
@@ -37,9 +38,24 @@ export default {
       const data = yield call(post, '/valid')
       if (data) {
         yield put({ type: 'LOGIN', payload: { loginData: data } })
-        yield put({ type: 'i18n/langmsgs' })
+        yield put({ type: 'i18n/getIntlMessages' })
       }
     }
   },
   subscriptions: {}
+}
+
+function convertLangCode (lang) {
+  if (!lang) {
+    return getLocale()
+  }
+  switch (lang) {
+    case 'zh-Hans':
+      return 'zh-CN'
+    case 'zh-Hant':
+      return 'zh-TW'
+    case 'en':
+      return 'en-US'
+  }
+  return lang
 }

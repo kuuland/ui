@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import withRouter from 'umi/withRouter'
+import { withRouter } from 'umi'
 import _ from 'lodash'
 import { Menu, Dropdown, Tabs, Icon, Breadcrumb, Empty } from 'antd'
 import { parseIcon, withLocale } from 'kuu-tools'

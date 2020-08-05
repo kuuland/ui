@@ -235,6 +235,7 @@ class Param extends React.Component {
           listUrl={`/param?preload=Org&cond=${defaultCond}`}
           columns={columns}
           form={form}
+          drawerWidth={800}
           onFormRecord={record => {
             record.Type = record.Type || 'input'
           }}
