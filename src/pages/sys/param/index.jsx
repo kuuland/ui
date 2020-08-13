@@ -115,12 +115,12 @@ class Param extends React.Component {
     }
     const columns = [
       {
-        title: this.props.L('kuu_param_code', 'Code'),
-        dataIndex: 'Code'
-      },
-      {
         title: this.props.L('kuu_param_name', 'Name'),
         dataIndex: 'Name'
+      },
+      {
+        title: this.props.L('kuu_param_code', 'Code'),
+        dataIndex: 'Code'
       },
       {
         title: this.props.L('kuu_param_createdat', 'Created At'),
@@ -199,11 +199,11 @@ class Param extends React.Component {
         }
       },
       {
-        name: 'Code',
+        name: 'Name',
         type: 'input'
       },
       {
-        name: 'Name',
+        name: 'Code',
         type: 'input'
       },
       {
