@@ -52,12 +52,6 @@ class Menu extends React.Component {
         }
       },
       {
-        title: this.props.L('kuu_menu_sort', 'Sort'),
-        dataIndex: 'Sort',
-        show: false,
-        width: 150
-      },
-      {
         title: this.props.L('kuu_menu_disable', 'Disable'),
         dataIndex: 'Disable',
         width: 150,
@@ -133,6 +127,7 @@ class Menu extends React.Component {
       {
         name: 'Sort',
         type: 'number',
+        label: this.props.L('kuu_menu_sort', 'Sort'),
         props: {
           layout: getResponsivePropsByColumns(2)
         }
@@ -226,6 +221,10 @@ class Menu extends React.Component {
         searchValue(dataSource)
         return newDataSource
       }
+      return dataSource
+    }
+    const afterList = data => {
+      return _.sortBy(data, 'Sort')
     }
     return (
       <div className={`kuu-container ${styles.menu}`}>
@@ -237,6 +236,7 @@ class Menu extends React.Component {
           listUrl='/user/menus?range=ALL'
           filter={filter}
           filterFormCols={2}
+          afterList={afterList}
           filterReplace
           onFilter={onFilter}
           ref={table => {
