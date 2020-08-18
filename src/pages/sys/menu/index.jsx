@@ -197,6 +197,36 @@ class Menu extends React.Component {
       Closeable: true,
       Icon: 'outlined:file'
     }
+    const filter = [
+      'Name',
+      'Code'
+    ]
+    const onFilter = (cond, dataSource) => {
+      const condValues = {}
+      for (const item of cond) {
+        condValues[item.name] = item.value
+      }
+      if (!_.isEmpty(condValues)) {
+        const newDataSource = []
+        const searchValue = (list) => {
+          for (const item of list) {
+            const title = this.props.L(item.LocaleKey, item.Name, null, true)
+            if (_.isEmpty(item.children)) {
+              if ((condValues.Name && title.includes(condValues.Name)) || (condValues.Code && item.Code.includes(condValues.Code))) {
+                newDataSource.push(item)
+              }
+            } else {
+              const sub = searchValue(item.children)
+              if (!_.isEmpty(sub)) {
+                newDataSource.push(item)
+              }
+            }
+          }
+        }
+        searchValue(dataSource)
+        return newDataSource
+      }
+    }
     return (
       <div className={`kuu-container ${styles.menu}`}>
         <FanoTable
@@ -205,6 +235,10 @@ class Menu extends React.Component {
           formInitialValue={formInitialValue}
           url='/menu'
           listUrl='/user/menus?range=ALL'
+          filter={filter}
+          filterFormCols={2}
+          filterReplace
+          onFilter={onFilter}
           ref={table => {
             this.table = table
           }}
