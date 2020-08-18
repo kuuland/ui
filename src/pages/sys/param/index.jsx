@@ -130,10 +130,37 @@ class Param extends React.Component {
     ]
     const form = [
       {
+        name: 'Name',
+        type: 'input',
+        props: {
+          layout: {
+            colProps: {
+              span: 12
+            }
+          }
+        }
+      },
+      {
+        name: 'Code',
+        type: 'input',
+        props: {
+          layout: {
+            colProps: {
+              span: 12
+            }
+          }
+        }
+      },
+      {
         name: 'Type',
         type: 'select',
         label: this.props.L('kuu_param_type', 'Type'),
         props: {
+          layout: {
+            colProps: {
+              span: 24
+            }
+          },
           options: [
             {
               label: this.props.L('kuu_param_type_input', 'Input'),
@@ -197,14 +224,6 @@ class Param extends React.Component {
             }
           ]
         }
-      },
-      {
-        name: 'Name',
-        type: 'input'
-      },
-      {
-        name: 'Code',
-        type: 'input'
       },
       {
         name: 'Value',
