@@ -45,6 +45,9 @@ class Role extends React.Component {
                 message: this.props.L('kuu_role_name_required', 'Please enter a role name')
               }
             ]
+          },
+          layout: {
+            span: 24
           }
         }
       },
@@ -65,12 +68,7 @@ class Role extends React.Component {
             </span>
           ),
           layout: {
-            colProps: {
-              span: 24
-            }
-          },
-          style: {
-            maxWidth: 808
+            span: 24
           }
         }
       },
@@ -80,9 +78,7 @@ class Role extends React.Component {
         label: this.props.L('kuu_role_dp', 'Data Privileges'),
         props: {
           layout: {
-            colProps: {
-              span: 24
-            }
+            span: 24
           },
           render: props => {
             return (
@@ -207,7 +203,10 @@ class Role extends React.Component {
         props: {
           url: `/org?range=ALL&sort=Sort&project=ID,Code,Name,Pid&cond=${defaultCond}`,
           titleKey: 'Name',
-          valueKey: 'ID'
+          valueKey: 'ID',
+          layout: {
+            span: 24
+          }
         }
       })
     }

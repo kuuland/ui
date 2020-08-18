@@ -134,9 +134,7 @@ class Param extends React.Component {
         type: 'input',
         props: {
           layout: {
-            colProps: {
-              span: 12
-            }
+            span: 12
           }
         }
       },
@@ -145,9 +143,7 @@ class Param extends React.Component {
         type: 'input',
         props: {
           layout: {
-            colProps: {
-              span: 12
-            }
+            span: 12
           }
         }
       },
@@ -157,9 +153,7 @@ class Param extends React.Component {
         label: this.props.L('kuu_param_type', 'Type'),
         props: {
           layout: {
-            colProps: {
-              span: 24
-            }
+            span: 24
           },
           options: [
             {
@@ -231,9 +225,7 @@ class Param extends React.Component {
         label: this.props.L('kuu_param_value', 'Value'),
         props: {
           layout: {
-            colProps: {
-              span: 24
-            }
+            span: 24
           },
           render: props => {
             const type = _.get(props, 'rootProps.value.Type') || 'input'
