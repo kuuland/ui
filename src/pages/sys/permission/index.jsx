@@ -14,7 +14,7 @@ class Permission extends React.Component {
   }
 
   handleAddSub (record) {
-    this.table.handleAdd({ Pid: _.get(record, 'ID') })
+    this.table.handleAdd({ ParentCode: _.get(record, 'Code') })
   }
 
   // 处理菜单页直接跳转
@@ -84,16 +84,21 @@ class Permission extends React.Component {
     ]
     const form = [
       {
-        name: 'Pid',
+        name: 'ParentCode',
         type: 'treeselect',
         label: this.props.L('kuu_permission_parent', 'Parent'),
         props: {
           url: '/user/menus',
           titleKey: 'Name',
-          valueKey: 'ID',
+          valueKey: 'Code',
           titleRender: (title, item) => {
             title = this.props.L(item.LocaleKey, title)
             return item.Icon ? <span><Icon {...parseIcon(item.Icon)} /> {title}</span> : title
+          },
+          arrayToTree: {
+            customID: 'Code',
+            parentProperty: 'ParentCode',
+            childrenProperty: 'children'
           }
         }
       },
@@ -134,7 +139,11 @@ class Permission extends React.Component {
         show: (record) => record.IsVirtual
       }
     }
-
+    const arrayToTree = {
+      customID: 'Code',
+      parentProperty: 'ParentCode',
+      childrenProperty: 'children'
+    }
     return (
       <div className={`kuu-container ${styles.menu}`}>
         <FanoTable
@@ -165,7 +174,7 @@ class Permission extends React.Component {
           ]}
           pagination={false}
           expandAllRows
-          arrayToTree
+          arrayToTree={arrayToTree}
         />
       </div>
     )

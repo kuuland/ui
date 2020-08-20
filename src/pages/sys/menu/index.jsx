@@ -2,7 +2,6 @@ import React from 'react'
 import _ from 'lodash'
 import { Icon } from 'antd'
 import { FanoTable } from 'fano-antd'
-import { getResponsivePropsByColumns } from 'fano-antd/lib/utils/tools'
 import { parseIcon, withLocale } from 'kuu-tools'
 import styles from './index.less'
 
@@ -15,7 +14,7 @@ class Menu extends React.Component {
   }
 
   handleAddSubmenu (record) {
-    this.table.handleAdd({ Pid: _.get(record, 'ID') })
+    this.table.handleAdd({ ParentCode: _.get(record, 'Code') || 'default' })
   }
 
   // 处理菜单页直接跳转
@@ -37,7 +36,8 @@ class Menu extends React.Component {
         render: (t, r) => {
           let children = (
             <span>
-              {r.Icon && <Icon {...parseIcon(r.Icon)} />} {this.props.L(r.LocaleKey, t)} {r.IsLink && <Icon type='link' />}
+              {r.Icon && <Icon {...parseIcon(r.Icon)} />} {this.props.L(
+                r.LocaleKey, t)} {r.IsLink && <Icon type='link' />}
             </span>
           )
 
@@ -67,21 +67,57 @@ class Menu extends React.Component {
     ]
     const form = [
       {
-        name: 'Pid',
+        name: 'ParentCode',
         type: 'treeselect',
         label: this.props.L('kuu_menu_parent', 'Parent Menu'),
         props: {
+          layout: {
+            span: 24
+          },
+          fieldOptions: {
+            rules: [
+              {
+                required: true,
+                message: this.props.L('kuu_menu_name_required', 'Please select a parent menu')
+              }
+            ]
+          },
           url: '/user/menus',
           titleKey: 'Name',
-          valueKey: 'ID',
+          valueKey: 'Code',
           titleRender: (title, item) => {
             title = this.props.L(item.LocaleKey, title)
-            return item.Icon ? <span><Icon {...parseIcon(item.Icon)} /> {title}</span> : title
+            return item.Icon
+              ? <span><Icon {...parseIcon(item.Icon)} /> {title}</span>
+              : title
           },
           filterTreeNode: (inputValue, treeNode) => {
             const item = treeNode.props
             const title = this.props.L(item.LocaleKey, item.Name, null, true)
-            return title && _.isFunction(title.includes) ? title.includes(inputValue) : false
+            return title && _.isFunction(title.includes) ? title.includes(
+              inputValue) : false
+          },
+          arrayToTree: {
+            customID: 'Code',
+            parentProperty: 'ParentCode',
+            childrenProperty: 'children'
+          }
+        }
+      },
+      {
+        name: 'Code',
+        type: 'input',
+        props: {
+          layout: {
+            span: 12
+          },
+          fieldOptions: {
+            rules: [
+              {
+                required: true,
+                message: this.props.L('kuu_menu_name_required', 'Please enter a menu name')
+              }
+            ]
           }
         }
       },
@@ -89,6 +125,9 @@ class Menu extends React.Component {
         name: 'Name',
         type: 'input',
         props: {
+          layout: {
+            span: 12
+          },
           fieldOptions: {
             rules: [
               {
@@ -102,7 +141,12 @@ class Menu extends React.Component {
       {
         name: 'URI',
         type: 'input',
-        label: this.props.L('kuu_menu_uri', 'URI')
+        label: this.props.L('kuu_menu_uri', 'URI'),
+        props: {
+          layout: {
+            span: 24
+          }
+        }
       },
       {
         name: 'LocaleKey',
@@ -129,14 +173,9 @@ class Menu extends React.Component {
         type: 'number',
         label: this.props.L('kuu_menu_sort', 'Sort'),
         props: {
-          layout: getResponsivePropsByColumns(2)
-        }
-      },
-      {
-        name: 'Code',
-        type: 'input',
-        props: {
-          layout: getResponsivePropsByColumns(2)
+          layout: {
+            span: 24
+          }
         }
       },
       {
@@ -189,6 +228,7 @@ class Menu extends React.Component {
       }
     ]
     const formInitialValue = {
+      ParentCode: 'default',
       Closeable: true,
       Icon: 'outlined:file'
     }
@@ -207,7 +247,8 @@ class Menu extends React.Component {
           for (const item of list) {
             const title = this.props.L(item.LocaleKey, item.Name, null, true)
             if (_.isEmpty(item.children)) {
-              if ((condValues.Name && title.includes(condValues.Name)) || (condValues.Code && item.Code.includes(condValues.Code))) {
+              if ((condValues.Name && title.includes(condValues.Name)) ||
+                (condValues.Code && item.Code.includes(condValues.Code))) {
                 newDataSource.push(item)
               }
             } else {
@@ -224,7 +265,12 @@ class Menu extends React.Component {
       return dataSource
     }
     const afterList = data => {
-      return _.sortBy(data, 'Sort')
+      return _.chain(data).filter(item => item.Code !== 'default').sortBy('Sort').value()
+    }
+    const arrayToTree = {
+      customID: 'Code',
+      parentProperty: 'ParentCode',
+      childrenProperty: 'children'
     }
     return (
       <div className={`kuu-container ${styles.menu}`}>
@@ -256,7 +302,7 @@ class Menu extends React.Component {
           ]}
           pagination={false}
           expandAllRows
-          arrayToTree
+          arrayToTree={arrayToTree}
         />
       </div>
     )

@@ -59,7 +59,6 @@ class Role extends React.Component {
           url: '/user/menus',
           titleKey: 'Name',
           valueKey: 'Code',
-          arrayToTree: true,
           multiple: true,
           treeCheckable: true,
           titleRender: (title, item) => (
@@ -67,6 +66,11 @@ class Role extends React.Component {
               <Icon {...parseIcon(item.Icon)} /> {this.props.L(item.LocaleKey || item.Name, item.Name)}
             </span>
           ),
+          arrayToTree: {
+            customID: 'Code',
+            parentProperty: 'ParentCode',
+            childrenProperty: 'children'
+          },
           layout: {
             span: 24
           }

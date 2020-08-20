@@ -206,7 +206,7 @@ class Navbar extends React.Component {
   render () {
     const { menuKeyPrefix, orgModalVisible = false, showEndpoint } = this.state
     const { loginData } = this.props
-    const menusTree = this.props.menusTree.filter(item => _.isEmpty(item.Pid))
+    const menusTree = this.props.menusTree.filter(item => _.isEmpty(item.ParentCode))
     const activeMenuIndex = this.props.activeMenuIndex >= menusTree.length ? 0 : this.props.activeMenuIndex
     const avatarProps = {}
     if (_.get(loginData, 'Avatar')) {

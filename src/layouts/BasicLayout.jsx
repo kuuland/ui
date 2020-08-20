@@ -48,7 +48,7 @@ class BasicLayout extends React.PureComponent {
     let hasCount = false
     for (const key in groups) {
       const data = groups[key]
-      const name = key !== 'undefined' ? key : null
+      const name = ['undefined', 'null', ''].includes(key) ? null : key
       let ret = []
       for (const value of data) {
         const iconStyle = {}

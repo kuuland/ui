@@ -17,8 +17,8 @@ export default {
   reducers: {
     SET_MENUS (state, { payload: menus }) {
       const menusTree = arrayToTree(_.cloneDeep(menus), {
-        customID: 'ID',
-        parentProperty: 'Pid',
+        customID: 'Code',
+        parentProperty: 'ParentCode',
         childrenProperty: 'Children'
       })
       let { activeMenuIndex, openKeys } = state
@@ -60,7 +60,7 @@ export default {
     * loadMenus ({ payload }, { put, call }) {
       const data = yield call(get, '/user/menus')
       let menus = Array.isArray(data) ? data : []
-      const needOpenMenus = menus.filter(item => !!item.IsDefaultOpen).map(item => _.cloneDeep(item))
+      const needOpenMenus = _.cloneDeep(menus).filter(item => !!item.IsDefaultOpen)
       const firstPane = _.get(needOpenMenus, '[0]')
       menus = _.chain(menus)
         .filter(item => {
@@ -91,9 +91,11 @@ export default {
           panes.push(value)
         }
       }
-      const newOpenKeys = calcOpenKeys(activePane, menus)
-      if (!_.isEmpty(newOpenKeys)) {
-        openKeys = newOpenKeys
+      if (_.size(panes) === 0) {
+        const newOpenKeys = calcOpenKeys(activePane, menus)
+        if (!_.isEmpty(newOpenKeys)) {
+          openKeys = newOpenKeys
+        }
       }
       // 更新启用标签
       yield put({ type: 'SET_ACTIVE_PANE', payload: { activePane, openKeys, panes } })
@@ -174,8 +176,8 @@ function calcOpenKeys (activePane, menus) {
     if (menusMap[menu.ID]) {
       openKeys.push(`${menu.ID}`)
     }
-    if (menu.Pid) {
-      pick(menusMap[menu.Pid], menusMap, openKeys)
+    if (menu.ParentCode) {
+      pick(menusMap[menu.ParentCode], menusMap, openKeys)
     }
   }
   pick(activePane, menusMap, openKeys)
