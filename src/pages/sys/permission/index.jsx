@@ -63,10 +63,9 @@ class Permission extends React.Component {
         }
       },
       {
-        title: this.props.L('kuu_permission_sort', 'Sort'),
-        dataIndex: 'Sort',
-        show: false,
-        width: 150
+        title: this.props.L('kuu_permission_code', 'Permission Code'),
+        width: 200,
+        dataIndex: 'Code'
       },
       {
         title: this.props.L('kuu_permission_disable', 'Disable'),
@@ -75,11 +74,6 @@ class Permission extends React.Component {
         align: 'center',
         render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 18 }} />
           : <Icon type='eye' style={{ color: '#52c41a', fontSize: 18 }} />
-      },
-      {
-        title: this.props.L('kuu_permission_code', 'Permission Code'),
-        width: 200,
-        dataIndex: 'Code'
       }
     ]
     const form = [
@@ -150,7 +144,7 @@ class Permission extends React.Component {
           columns={columns}
           form={form}
           url='/menu'
-          listUrl='/user/menus?range=ALL'
+          listUrl='/user/menus?default=false'
           ref={instance => {
             this.table = instance
           }}

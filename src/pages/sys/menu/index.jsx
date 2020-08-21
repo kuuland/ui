@@ -52,17 +52,17 @@ class Menu extends React.Component {
         }
       },
       {
+        title: this.props.L('kuu_menu_code', 'Permission Code'),
+        width: 120,
+        dataIndex: 'Code'
+      },
+      {
         title: this.props.L('kuu_menu_disable', 'Disable'),
         dataIndex: 'Disable',
         width: 150,
         align: 'center',
         render: t => t ? <Icon type='eye-invisible' style={{ fontSize: 18 }} />
           : <Icon type='eye' style={{ color: '#52c41a', fontSize: 18 }} />
-      },
-      {
-        title: this.props.L('kuu_menu_code', 'Permission Code'),
-        width: 120,
-        dataIndex: 'Code'
       }
     ]
     const form = [
@@ -105,7 +105,7 @@ class Menu extends React.Component {
         }
       },
       {
-        name: 'Code',
+        name: 'Name',
         type: 'input',
         props: {
           layout: {
@@ -122,7 +122,7 @@ class Menu extends React.Component {
         }
       },
       {
-        name: 'Name',
+        name: 'Code',
         type: 'input',
         props: {
           layout: {
@@ -264,9 +264,6 @@ class Menu extends React.Component {
       }
       return dataSource
     }
-    const afterList = data => {
-      return _.chain(data).filter(item => item.Code !== 'default').sortBy('Sort').value()
-    }
     const arrayToTree = {
       customID: 'Code',
       parentProperty: 'ParentCode',
@@ -279,10 +276,9 @@ class Menu extends React.Component {
           form={form}
           formInitialValue={formInitialValue}
           url='/menu'
-          listUrl='/user/menus?range=ALL'
+          listUrl='/user/menus?default=false'
           filter={filter}
           filterFormCols={2}
-          afterList={afterList}
           filterReplace
           onFilter={onFilter}
           ref={table => {
