@@ -269,6 +269,11 @@ class Menu extends React.Component {
       parentProperty: 'ParentCode',
       childrenProperty: 'children'
     }
+    const onFormValuesChange = (changedValues, allValues) => {
+      if (_.has(changedValues, 'Code')) {
+        this.table.setFormValue({ LocaleKey: `menu_${changedValues.Code}` })
+      }
+    }
     return (
       <div className={`kuu-container ${styles.menu}`}>
         <FanoTable
@@ -284,6 +289,7 @@ class Menu extends React.Component {
           ref={table => {
             this.table = table
           }}
+          onFormValuesChange={onFormValuesChange}
           fillTAP={{
             filter: false,
             sort: false

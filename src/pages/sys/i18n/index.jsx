@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { get, withPrefix, withLocale } from 'kuu-tools'
+import qs from 'qs'
 import _ from 'lodash'
 import { Popover, Radio, Upload, Button, Icon, message } from 'antd'
 import { FanoTable } from 'fano-antd'
@@ -20,12 +21,13 @@ function Intl (props) {
     get('/intl/languages').then(data => {
       const columns = [
         {
-          title: 'Key',
+          title: props.L('kuu_i18n_key', 'Key'),
           dataIndex: 'key',
-          render: 'copy'
+          render: 'copy',
+          exporter: t => t
         },
         {
-          title: 'Description',
+          title: props.L('kuu_i18n_description', 'Description'),
           dataIndex: 'default'
         },
         {
@@ -108,7 +110,7 @@ function Intl (props) {
     {
       name: 'default',
       props: {
-        placeholder: 'Description',
+        placeholder: props.L('kuu_i18n_description', 'Description'),
         allowClear: true
       }
     }
@@ -161,8 +163,8 @@ function Intl (props) {
     }
   }
   const uploadMethodOptions = [
-    { label: 'Full Updates', value: 'full' },
-    { label: 'Incremental Updates', value: 'incr' }
+    { label: props.L('kuu_i18n_overwrite_update', 'Overwrite Update'), value: 'overwrite' },
+    { label: props.L('kuu_i18n_incremental_update', 'Incremental Update'), value: 'incr' }
   ]
   const uploadPopoverContent = (
     <div>
@@ -177,7 +179,7 @@ function Intl (props) {
       <div style={{ marginTop: 20 }}>
         <Upload {...uploadProps}>
           <Button disabled={!updateMethod} loading={uploadLoading}>
-            {!uploadLoading && <Icon type='upload' />} Click to Upload
+            {!uploadLoading && <Icon type='upload' />} {props.L('kuu_i18n_upload', 'Click to Upload')}
           </Button>
         </Upload>
       </div>
@@ -211,7 +213,7 @@ function Intl (props) {
         columns={columns}
         form={form}
         tableActions={tableActions}
-        listUrl='GET /intl/messages'
+        listUrl={`GET /intl/messages?${qs.stringify(_.get(props, 'location.query'))}`}
         beforeList={beforeList}
         afterList={afterList}
         createUrl='POST /intl/messages/save'

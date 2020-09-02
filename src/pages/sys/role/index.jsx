@@ -22,6 +22,10 @@ class Role extends React.Component {
       {
         title: this.props.L('kuu_role_name', 'Name'),
         dataIndex: 'Name'
+      },
+      {
+        title: this.props.L('kuu_role_code', 'Code'),
+        dataIndex: 'Code'
       }
     ]
     if (this.props.isRoot) {
@@ -43,6 +47,24 @@ class Role extends React.Component {
               {
                 required: true,
                 message: this.props.L('kuu_role_name_required', 'Please enter a role name')
+              }
+            ]
+          },
+          layout: {
+            span: 24
+          }
+        }
+      },
+      {
+        name: 'Code',
+        type: 'input',
+        label: this.props.L('kuu_role_code', 'Code'),
+        props: {
+          fieldOptions: {
+            rules: [
+              {
+                required: true,
+                message: this.props.L('kuu_role_code_required', 'Please enter a role code')
               }
             ]
           },

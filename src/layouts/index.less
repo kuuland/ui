@@ -43,8 +43,12 @@
     border-right: 1px solid transparent;
     flex: 1;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
     max-height: calc(100% - @header-height);
+
+    &:hover {
+      overflow-y: auto;
+    }
   }
 
   .trigger:hover {

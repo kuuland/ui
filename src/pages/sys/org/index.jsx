@@ -27,11 +27,6 @@ class Org extends React.Component {
         dataIndex: 'Code'
       },
       {
-        title: this.props.L('kuu_org_sort', 'Sort'),
-        dataIndex: 'Sort',
-        show: false
-      },
-      {
         title: this.props.L('kuu_org_createdat', 'Sort'),
         dataIndex: 'CreatedAt',
         width: 100,
@@ -60,6 +55,7 @@ class Org extends React.Component {
       {
         name: 'Sort',
         type: 'number',
+        label: this.props.L('kuu_org_sort', 'Sort'),
         props: {
           precision: 0
         }

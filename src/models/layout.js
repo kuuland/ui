@@ -1,4 +1,5 @@
 import { get } from 'kuu-tools'
+import qs from 'qs'
 import _ from 'lodash'
 import arrayToTree from 'array-to-tree'
 import router from 'umi/router'
@@ -102,10 +103,9 @@ export default {
       // 路由跳转
       const pathname = value.IsLink ? `/sys/iframe/${value.ID}` : value.URI
       const data = _.omit(value, 'Content')
-      yield router.push({
-        pathname,
-        state: data
-      })
+      const routeData = parseMenuURI(pathname)
+      routeData.state = data
+      yield router.push(routeData)
     },
     * delPane ({ payload: targetKey }, { put, select }) {
       const state = yield select(state => state.layout)
@@ -182,4 +182,14 @@ function calcOpenKeys (activePane, menus) {
   }
   pick(activePane, menusMap, openKeys)
   return openKeys
+}
+
+function parseMenuURI (uri) {
+  const indexOf = uri.indexOf('?')
+  if (indexOf < 0) {
+    return { pathname: uri }
+  }
+  const pathname = uri.substring(0, indexOf)
+  const query = qs.parse(uri.substring(indexOf + 1))
+  return { pathname, query }
 }
