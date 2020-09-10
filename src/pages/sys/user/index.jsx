@@ -38,7 +38,6 @@ class User extends React.Component {
       .groupBy('RoleID')
       .mapValues(values => _.head(values))
       .value()
-    console.log('hisAssigns...', hisAssigns)
     // 统计新的
     const newAssigns = userAssignsRolesKey.map(item => {
       const assign = { UserID: assignRecord.ID, RoleID: item }

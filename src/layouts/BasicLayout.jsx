@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
 import router from 'umi/router'
 import { connect } from 'dva'
@@ -14,35 +14,41 @@ const { Sider } = Layout
 
 const loginAs = window.sessionStorage.getItem('login_as')
 
-class BasicLayout extends React.PureComponent {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      collapsed: false
-    }
-    this.toggleSider = this.toggleSider.bind(this)
-    this.handleTabsChange = this.handleTabsChange.bind(this)
-    this.handleTabsRemove = this.handleTabsRemove.bind(this)
-    this.handleTabsContext = this.handleTabsContext.bind(this)
-    this.renderMenuChildren = this.renderMenuChildren.bind(this)
+let latestMessageInterval
+const clearLatestMessageInterval = () => {
+  // @ts-ignore
+  if (latestMessageInterval) {
+    // @ts-ignore
+    clearInterval(latestMessageInterval)
   }
+}
 
-  toggleSider () {
-    this.setState({
-      collapsed: !this.state.collapsed
-    })
+function BasicLayout (props) {
+  const [collapsed, setCollapsed] = useState(false)
+  const toggleSider = () => {
+    setCollapsed(!collapsed)
   }
-
-  componentDidMount () {
+  useEffect(() => {
     const isDebug = _.get(process, 'env.NODE_ENV', _.get(window, 'process.env.NODE_ENV', 'development')) === 'development'
-    if (_.get(this.props, 'location.pathname') !== _.get(this.props, 'activePane.URI') && !isDebug) {
+    if (_.get(props, 'location.pathname') !== _.get(props, 'activePane.URI') && !isDebug) {
       console.warn('权限拦截：请新增菜单并分配权限，通过点击菜单跳转至页面')
-      router.replace(_.get(this.props, 'activePane.URI'))
+      router.replace(_.get(props, 'activePane.URI'))
     }
-  }
+  }, [])
 
-  renderMenuChildren (values, breadcrumbs = []) {
+  useEffect(() => {
+    if (props.loginData.UID > 0) {
+      clearLatestMessageInterval()
+      latestMessageInterval = setInterval(() => {
+        props.dispatch({ type: 'message/getLatestMessages' })
+      }, 10 * 1000)
+    }
+    return () => {
+      clearLatestMessageInterval()
+    }
+  }, [props.loginData])
+
+  const renderMenuChildren = (values, breadcrumbs = []) => {
     const groups = _.groupBy(values, 'Group')
     let arr = []
     let hasCount = false
@@ -52,14 +58,14 @@ class BasicLayout extends React.PureComponent {
       let ret = []
       for (const value of data) {
         const iconStyle = {}
-        if (this.state.collapsed) {
+        if (collapsed) {
           iconStyle.paddingLeft = 0
         }
-        let title = this.props.L(value.LocaleKey || value.Name, value.Name)
-        const badgeCount = this.props.menuBadgeCount[`${value.Code || value.ID}`]
+        let title = props.L(value.LocaleKey || value.Name, value.Name)
+        const badgeCount = props.menuBadgeCount[`${value.Code || value.ID}`]
         value.breadcrumbs = breadcrumbs.concat([_.pick(value, ['LocaleKey', 'Name'])])
         if (value.Children) {
-          const [sub, hasSubCount] = this.renderMenuChildren(value.Children, value.breadcrumbs)
+          const [sub, hasSubCount] = renderMenuChildren(value.Children, value.breadcrumbs)
           hasCount = hasCount || hasSubCount
           if (hasSubCount) {
             title = <Badge dot offset={[2, 0]}>{title}</Badge>
@@ -87,7 +93,7 @@ class BasicLayout extends React.PureComponent {
           ret.push(
             <Menu.Item
               key={value.ID}
-              onClick={() => this.handleMenuItemClick(value)}
+              onClick={() => handleMenuItemClick(value)}
               className={styles.menuTitle}
             >
               <Icon {...parseIcon(value.Icon)} style={iconStyle} />
@@ -97,141 +103,125 @@ class BasicLayout extends React.PureComponent {
         }
       }
       if (name) {
-        ret = <Menu.ItemGroup title={this.props.L(name)} key={name}>{ret}</Menu.ItemGroup>
+        ret = <Menu.ItemGroup title={props.L(name)} key={name}>{ret}</Menu.ItemGroup>
       }
       arr = arr.concat(ret)
     }
     return [arr, hasCount]
   }
 
-  handleMenuItemClick (value) {
+  const handleMenuItemClick = (value) => {
     if (!value) {
       return
     }
-    this.props.dispatch({ type: 'layout/openPane', payload: value })
+    props.dispatch({ type: 'layout/openPane', payload: value })
   }
 
-  handleTabsChange (targetKey) {
-    const activePane = this.props.panes.find(p => `${p.ID}` === targetKey)
-    this.handleMenuItemClick(activePane)
+  const handleTabsChange = (targetKey) => {
+    const activePane = props.panes.find(p => `${p.ID}` === targetKey)
+    handleMenuItemClick(activePane)
   }
 
-  handleTabsRemove (targetKey, action) {
+  const handleTabsRemove = (targetKey, action) => {
     if (action !== 'remove') {
       return
     }
-    this.props.dispatch({ type: 'layout/delPane', payload: targetKey })
+    props.dispatch({ type: 'layout/delPane', payload: targetKey })
   }
 
-  handleTabsContext (pane, index, action) {
+  const handleTabsContext = (pane, index, action) => {
     let newPanes
     switch (action) {
       case 'refresh':
         router.go(0)
         break
       case 'close-others':
-        newPanes = this.props.panes.filter(item => item.Closeable !== true || item.ID === pane.ID)
+        newPanes = props.panes.filter(item => item.Closeable !== true || item.ID === pane.ID)
         break
       case 'close-left':
-        newPanes = this.props.panes.filter((item, i) => item.Closeable !== true || i >= index)
+        newPanes = props.panes.filter((item, i) => item.Closeable !== true || i >= index)
         break
       case 'close-right':
-        newPanes = this.props.panes.filter((item, i) => item.Closeable !== true || i <= index)
+        newPanes = props.panes.filter((item, i) => item.Closeable !== true || i <= index)
         break
     }
     if (Array.isArray(newPanes)) {
-      this.props.dispatch({ type: 'layout/SET_PANES', payload: newPanes })
+      props.dispatch({ type: 'layout/SET_PANES', payload: newPanes })
     }
-    this.props.dispatch({ type: 'layout/openPane', payload: pane })
+    props.dispatch({ type: 'layout/openPane', payload: pane })
   }
-
-  componentWillReceiveProps (nextProps) {
-    // 处理直接输入地址进入页面的情况
-    if (this.props.location.pathname !== nextProps.location.pathname || !this.props.activePane) {
-      const nextActivePane = this.props.panes.find(p => {
-        if (p.IsLink) {
-          return p.ID === _.get(/^\/sys\/iframe\/(\w*).*$/i.exec(nextProps.location.pathname), '[1]')
-        } else {
-          return p.URI === nextProps.location.pathname
-        }
-      })
-      if (nextActivePane && nextActivePane.URI) {
-        if (_.get(this.props.activePane, 'URI') !== nextActivePane.URI) {
-          this.props.dispatch({ type: 'layout/openPane', payload: nextActivePane })
-        }
-      }
-    }
+  const { menusTree = [], activeMenuIndex, activePane, openKeys = [] } = props
+  const currentTree = _.cloneDeep(menusTree)
+  const [menuChildren] = renderMenuChildren(_.get(currentTree, `[${activeMenuIndex}].Children`, []))
+  const selectedKeys = []
+  if (_.get(activePane, 'ID')) {
+    selectedKeys.push(`${_.get(activePane, 'ID')}`)
   }
-
-  render () {
-    const { menusTree = [], activeMenuIndex, activePane, openKeys = [] } = this.props
-    const currentTree = _.cloneDeep(menusTree)
-    const [menuChildren] = this.renderMenuChildren(_.get(currentTree, `[${activeMenuIndex}].Children`, []))
-    const selectedKeys = []
-    if (_.get(activePane, 'ID')) {
-      selectedKeys.push(`${_.get(activePane, 'ID')}`)
-    }
-    return (
-      <>
-        {loginAs && <div className={`${styles.loginAs}`} />}
-        <Layout className={`${styles.layout}`}>
-          <Icon
-            className='kuu-sider-trigger'
-            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-            onClick={() => this.toggleSider()}
-          />
-          <Sider
-            collapsedWidth={0}
-            trigger={null}
-            collapsible
-            collapsed={this.state.collapsed}
-            width={config.siderWidth || 260}
-            className={styles.sider}
+  const headerStyle = {
+    opacity: collapsed ? 0 : 1,
+    backgroundColor: _.get(props.theme, 'topBarBgColor')
+  }
+  return (
+    <>
+      {loginAs && <div className={`${styles.loginAs}`} />}
+      <Layout className={`${styles.layout}`}>
+        <Icon
+          className='kuu-sider-trigger'
+          type={collapsed ? 'menu-unfold' : 'menu-fold'}
+          onClick={() => toggleSider()}
+        />
+        <Sider
+          collapsedWidth={0}
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          width={config.siderWidth || 260}
+          className={styles.sider}
+        >
+          <div className={`${styles.header}`} style={headerStyle}>
+            <div className={`${styles.appName}`}>{config.shortName}</div>
+          </div>
+          <Menu
+            className={`${styles.menu}`}
+            mode='inline'
+            inlineIndent={6}
+            selectedKeys={selectedKeys}
+            openKeys={openKeys}
+            onOpenChange={openKeys => {
+              props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
+            }}
           >
-            <div className={`${styles.header}`} style={{ opacity: this.state.collapsed ? 0 : 1, backgroundColor: _.get(this.props.theme, 'topBarBgColor') }}>
-              <div className={`${styles.appName}`}>{config.shortName}</div>
-            </div>
-            <Menu
-              className={`${styles.menu}`}
-              mode='inline'
-              inlineIndent={6}
-              selectedKeys={selectedKeys}
-              openKeys={openKeys}
-              onOpenChange={openKeys => {
-                this.props.dispatch({ type: 'layout/SET_OPEN_KEYS', payload: openKeys })
-              }}
-            >
-              {menuChildren}
-            </Menu>
-          </Sider>
-          <Layout>
-            <LayoutTabs
-              tabBarExtraContent={
-                <Navbar />
-              }
-              topBarBgColor={_.get(this.props.theme, 'topBarBgColor')}
-              activeKey={`${_.get(activePane, 'ID', '')}`}
-              panes={this.props.panes || []}
-              onChange={this.handleTabsChange}
-              onContext={this.handleTabsContext}
-              onEdit={this.handleTabsRemove}
-              breadcrumbs={_.get(activePane, 'breadcrumbs')}
-              siderCollapsed={this.state.collapsed}
-            >
-              {this.props.children}
-            </LayoutTabs>
-          </Layout>
+            {menuChildren}
+          </Menu>
+        </Sider>
+        <Layout>
+          <LayoutTabs
+            tabBarExtraContent={
+              <Navbar />
+            }
+            topBarBgColor={_.get(props.theme, 'topBarBgColor')}
+            activeKey={`${_.get(activePane, 'ID', '')}`}
+            panes={props.panes || []}
+            onChange={handleTabsChange}
+            onContext={handleTabsContext}
+            onEdit={handleTabsRemove}
+            breadcrumbs={_.get(activePane, 'breadcrumbs')}
+            siderCollapsed={collapsed}
+          >
+            {props.children}
+          </LayoutTabs>
         </Layout>
-      </>
-    )
-  }
+      </Layout>
+    </>
+  )
 }
 
 function mapStateToProps (state) {
   return {
     ...state.layout,
     ...state.badge,
-    theme: state.theme
+    theme: state.theme,
+    loginData: state.user.loginData || {}
   }
 }
 

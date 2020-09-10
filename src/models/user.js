@@ -4,10 +4,12 @@ import config from '@/config'
 import { getPersistor } from '@/utils/configureStore'
 import { post, convertLocaleCode } from 'kuu-tools'
 import { setLocale, getLocale } from 'umi-plugin-react/locale'
+import { isWhiteRoute } from '@/utils/tools'
 
 export default {
   state: {
-    loginData: undefined
+    loginData: undefined,
+    logout: false
   },
   reducers: {
     LOGIN (state, { payload: { loginData } }) {
@@ -18,6 +20,9 @@ export default {
         }
       }
       return { ...state, loginData }
+    },
+    UPDATE (state, { payload }) {
+      return { ...state, ...payload }
     }
   },
   effects: {
@@ -27,6 +32,7 @@ export default {
       const persistor = getPersistor()
       if (persistor) {
         yield put({ type: 'RESET' })
+        yield put({ type: 'UPDATE', payload: { logout: true } })
         yield persistor.purge()
         yield persistor.flush()
       }
@@ -37,10 +43,19 @@ export default {
     * valid ({ payload }, { put, call }) {
       const data = yield call(post, '/valid')
       if (data) {
-        yield put({ type: 'LOGIN', payload: { loginData: data } })
+        yield put({ type: 'LOGIN', payload: { loginData: data, logout: false } })
         yield put({ type: 'i18n/getIntlMessages' })
+        yield put({ type: 'message/getLatestMessages' })
       }
     }
   },
-  subscriptions: {}
+  subscriptions: {
+    setup (ctx) {
+      const { dispatch, history } = ctx
+      const pathname = _.get(history, 'location.pathname')
+      if (isWhiteRoute(pathname) || pathname === config.loginPathname) {
+        dispatch({ type: 'UPDATE', payload: { logout: true } })
+      }
+    }
+  }
 }

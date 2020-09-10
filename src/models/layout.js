@@ -125,7 +125,6 @@ export default {
         }
       }
     }
-
   },
   subscriptions: {
     setup (ctx) {

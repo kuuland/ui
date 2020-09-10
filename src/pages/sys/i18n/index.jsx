@@ -24,6 +24,7 @@ function Intl (props) {
           title: props.L('kuu_i18n_key', 'Key'),
           dataIndex: 'key',
           render: 'copy',
+          width: 340,
           exporter: t => t
         },
         {
@@ -32,14 +33,17 @@ function Intl (props) {
         },
         {
           title: 'English',
+          width: 340,
           dataIndex: 'en'
         },
         {
           title: '简体中文',
+          width: 340,
           dataIndex: 'zh-Hans'
         },
         {
           title: '繁體中文',
+          width: 340,
           dataIndex: 'zh-Hant'
         }
       ]
@@ -49,6 +53,7 @@ function Intl (props) {
         }
         columns.push({
           title: item.name,
+          width: 340,
           dataIndex: item.code
         })
       }

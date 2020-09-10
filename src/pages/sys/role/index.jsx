@@ -250,7 +250,7 @@ class Role extends React.Component {
               .map(item => item.MenuCode)
               .value()
           }}
-          beforeSave={(values, formRecord) => {
+          beforeSave={(values, formRecord = {}) => {
             // 处理OperationPrivileges
             const viewOps = _.get(values, 'doc.ViewOperationPrivileges', values.ViewOperationPrivileges)
             if (viewOps) {

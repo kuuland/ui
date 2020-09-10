@@ -61,3 +61,32 @@ export function translateAmount (data) {
   }
   return data.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
+
+export const normFile = (e) => {
+  console.log('Upload event:', e)
+  if (Array.isArray(e)) {
+    return e
+  }
+
+  return e && [_.get(e.file, 'response.data', e.file)]
+}
+
+export const normMultipleFiles = (e) => {
+  console.log('Upload event:', e)
+  if (Array.isArray(e)) {
+    return e
+  }
+  const list = []
+  for (let i = 0; i < e.fileList.length; i++) {
+    let item = e.fileList[i]
+    item = _.get(item, 'response.data', item)
+    list.push(item)
+  }
+
+  return list
+}
+
+export function onSuccessPayload (payload) {
+  const onSuccess = _.get(payload, 'onSuccess')
+  return [_.omit(payload, ['onSuccess']), _.isFunction(onSuccess) ? onSuccess : undefined]
+}

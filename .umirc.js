@@ -1,5 +1,7 @@
 // ref: https://umijs.org/config/
 export default {
+  base: '/admin/',
+  publicPath: '/admin/',
   treeShaking: true,
   hash: true,
   targets: {
@@ -16,7 +18,7 @@ export default {
           immer: false,
           dynamicImport: true
         },
-        title: 'Kuu',
+        title: 'Investor Portal Admin',
         locale: {
           default: 'en-US',
           baseNavigator: true,
@@ -30,6 +32,14 @@ export default {
     ]
   ],
   proxy: {
+    // '/api': {
+    //   target: 'https://main.alpha-fintech.com/',
+    //   changeOrigin: true
+    // },
+    // '/assets': {
+    //   target: 'https://main.alpha-fintech.com/',
+    //   changeOrigin: true
+    // }
     '/api': {
       target: 'http://localhost:8080/',
       changeOrigin: true
@@ -38,6 +48,9 @@ export default {
       target: 'http://localhost:8080/',
       changeOrigin: true
     }
+  },
+  theme: {
+    '@primary-color': '#4E74FF',
   },
   chainWebpack (config) {
     config.optimization.splitChunks({

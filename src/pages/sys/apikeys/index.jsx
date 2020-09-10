@@ -118,7 +118,6 @@ class APIKeys extends React.Component {
           beforeCreate={values => {
             switch (values.Exp) {
               case 'never':
-                console.log(moment().add(1000, 'years').format('YYYY-MM-DD HH:mm:ss'))
                 values.Exp = moment().add(1000, 'years').unix()
                 break
               case 'day':
