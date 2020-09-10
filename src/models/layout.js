@@ -70,6 +70,12 @@ export default {
           }
           return item.IsVirtual !== true
         })
+        .map(item => {
+          if (!item.Group) {
+            item.Group = null
+          }
+          return item
+        })
         .sortBy('Sort').value()
       yield put({ type: 'SET_MENUS', payload: menus })
       if (firstPane) {
@@ -105,6 +111,7 @@ export default {
       const data = _.omit(value, 'Content')
       const routeData = parseMenuURI(pathname)
       routeData.state = data
+      routeData.query = _.merge(routeData.query, _.get(value, 'query'))
       yield router.push(routeData)
     },
     * delPane ({ payload: targetKey }, { put, select }) {

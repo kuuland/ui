@@ -53,7 +53,7 @@ function BasicLayout (props) {
     let arr = []
     let hasCount = false
     for (const key in groups) {
-      const data = groups[key]
+      const data = _.sortBy(groups[key], 'Sort')
       const name = ['undefined', 'null', ''].includes(key) ? null : key
       let ret = []
       for (const value of data) {
