@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { withRouter } from 'umi'
 import _ from 'lodash'
+import qs from 'qs'
 import { Menu, Dropdown, Tabs, Icon, Breadcrumb, Empty } from 'antd'
 import { parseIcon, withLocale } from 'kuu-tools'
 import './layout-tabs.less'
@@ -16,8 +17,10 @@ function LayoutTabs (props) {
   }
 
   useEffect(() => {
-    if (!childrenCache[props.location.pathname]) {
-      childrenCache[props.location.pathname] = props.children
+    const query = _.get(props, 'location.query', {})
+    const key = `${props.location.pathname}?${qs.stringify(_.omit(query, ['__jsogObjectId']))}`
+    if (!childrenCache[key]) {
+      childrenCache[key] = props.children
     }
     setChildrenCache(childrenCache)
   }, [props.activeKey])
@@ -34,6 +37,7 @@ function LayoutTabs (props) {
         )
       }]
     }
+    console.log('panes', panes)
     return panes.map((pane, index) => (
       <Tabs.TabPane
         tab={
@@ -87,7 +91,7 @@ function LayoutTabs (props) {
             ))}
           </Breadcrumb>
         )}
-        {childrenCache[pane.URI] || props.children}
+        {childrenCache[`${pane.URI}?${qs.stringify(_.omit(pane.query, ['__jsogObjectId']))}`] || props.children}
       </Tabs.TabPane>
     ))
   }
