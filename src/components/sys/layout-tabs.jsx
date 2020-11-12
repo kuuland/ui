@@ -37,7 +37,6 @@ function LayoutTabs (props) {
         )
       }]
     }
-    console.log('panes', panes)
     return panes.map((pane, index) => (
       <Tabs.TabPane
         tab={
