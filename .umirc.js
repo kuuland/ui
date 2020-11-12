@@ -32,14 +32,6 @@ export default {
     ]
   ],
   proxy: {
-    // '/api': {
-    //   target: 'https://main.alpha-fintech.com/',
-    //   changeOrigin: true
-    // },
-    // '/assets': {
-    //   target: 'https://main.alpha-fintech.com/',
-    //   changeOrigin: true
-    // }
     '/api': {
       target: 'http://localhost:8080/',
       changeOrigin: true
