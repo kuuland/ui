@@ -27,7 +27,7 @@ export default {
   },
   effects: {
     * logout ({ payload }, { put, call }) {
-      window.localStorage.setItem('logout', '1')
+      // window.localStorage.setItem('logout', '1')
       yield call(post, '/logout', undefined)
       const persistor = getPersistor()
       if (persistor) {

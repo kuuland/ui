@@ -146,9 +146,9 @@ export default {
       const listener = route => {
         if (route.pathname !== config.loginPathname && !isWhiteRoute(route.pathname)) {
           const { layout, user, enums } = window.g_app._store.getState()
-          if (window.localStorage.getItem('logout')) {
-            return
-          }
+          // if (window.localStorage.getItem('logout')) {
+          //   return
+          // }
           // 校验令牌
           if (!user.loginData) {
             dispatch({ type: 'user/valid' })
